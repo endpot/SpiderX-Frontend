@@ -18,12 +18,12 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'BulletinPanel',
-    data() {
-      return {
-        activeName: '1'
-      };
+export default {
+  name: 'BulletinPanel',
+  data() {
+    return {
+      activeName: '1'
     }
   }
+}
 </script>
