@@ -30,9 +30,9 @@
                           <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
                           <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
-                        <a :href="'https:\/\/cnodejs.org\/topic\/' + item.id" :title="item.title" class="topic_title" target="_blank">
+                        <router-link :to="{ name: 'TopicDetails', params: { topicId: item.id }}" :title="item.title" class="topic_title">
                           {{ item.title }}
-                        </a>
+                        </router-link>
                       </div>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="4" :xs="3">
@@ -53,11 +53,21 @@
           </el-tabs>
         </el-col>
         <el-col :span="4">
-          <div class="grid-content bg-purple">
+          <div class="grid-content">
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>个人信息</span>
                 <el-button style="float: right; padding:3px 0" type="text">操作</el-button>
+              </div>
+              <div class="user-avatar">
+                <img :src="avatar+'?imageView2/1/w/120/h/120'" alt="avatar"><br>
+                <span>预留部分</span>
+              </div>
+            </el-card>
+            <br>
+            <el-card class="box-card" shadow="never">
+              <div class="newTopic">
+                <router-link :to="{name: 'NewTopic'}"><el-button icon="el-icon-edit">发布话题</el-button></router-link>
               </div>
             </el-card>
           </div>
@@ -69,13 +79,18 @@
 
 <script>
 // import { parseTime } from '@/utils/index'
-
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       activeName: 'first',
       topic_list: []
     }
+  },
+  computed: {
+    ...mapGetters([
+      'avatar'
+    ])
   },
   mounted() {
     this.$axios.get('https://cnodejs.org/api/v1/topics')
@@ -158,11 +173,7 @@ export default {
   }
   .topic_title_wrapper {
     width: 100%;
-    // text-align: center;
     display: flex;
-    // .topic_tabs {
-
-    // }
     .topic_title {
       overflow: hidden;
       width: 90%;
@@ -186,5 +197,13 @@ export default {
   }
 }
 // 右侧部分
+.box-card {
+  .user-avatar {
+    text-align: center;
+  }
+  .newTopic {
+    text-align: center;
+  }
+}
 </style>
 

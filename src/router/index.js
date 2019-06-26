@@ -36,13 +36,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -69,14 +67,32 @@ export const asyncRoutes = [
   {
     path: '/forum',
     component: Layout,
+    name: 'Forum',
     children: [
       {
         path: 'index',
-        name: 'Forum',
         component: () => import('@/views/forum/index'),
         meta: {
           title: 'Forum',
           icon: 'forum'
+        }
+      },
+      {
+        path: 'create',
+        name: 'NewTopic',
+        component: () => import('@/views/forum/components/NewTopic'),
+        hidden: true,
+        meta: {
+          title: 'NewTopic'
+        }
+      },
+      {
+        path: ':topicId',
+        name: 'TopicDetails',
+        component: () => import('@/views/forum/components/TopicDetails'),
+        hidden: true,
+        meta: {
+          title: 'TopicDetails'
         }
       }
     ]
@@ -88,7 +104,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         name: 'Torrent',
-        component: () => import('@/views/home/index'),
+        component: () => import('@/views/torrent/index'),
         meta: {
           title: 'Torrent',
           icon: 'torrent'
@@ -111,7 +127,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/market',
     component: Layout,
@@ -157,7 +172,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/about',
     component: Layout,
