@@ -42,18 +42,32 @@
                 </div>
                 <div class="reply_content" v-html="item.content" />
                 <div class="clearfix">
-                  <div v-show="isShow" :id="item.id" class="reply2_area">
-                    <el-form :model="form">
+                  <div v-show="isShow" class="reply2_area">
+                    <el-form :model="replyForm" ref="replyForm">
                       <el-form-item>
-                        <div class="editor-container">
-                          <markdown-editor v-model="form.reply_content" height="200px" />
-                        </div>
+                          <markdown-editor v-model="replyForm.content" height="200px" />
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="onSubmit('replyForm')">回复</el-button>
                       </el-form-item>
                     </el-form>
                   </div>
                 </div>
               </div>
             </div>
+          </el-card><br>
+          <el-card class="box-card" shadow="never">
+            <div slot="header" class="clearfix">
+              <span>添加回复</span>
+            </div>
+            <el-form :model="addReplyForm" ref="addReplyForm">
+              <el-form-item>
+                <markdown-editor v-model="addReplyForm.content" height="200px" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit('addReplyForm')">回复</el-button>
+              </el-form-item>
+            </el-form>
           </el-card>
         </div>
       </el-col>
@@ -97,8 +111,11 @@ export default {
       topic_details: [],
       author_topics: [],
       isShow: false,
-      form: {
-        reply_content: ''
+      replyForm: { // 回复其他回复该话题的操作
+        content: ''
+      },
+      addReplyForm: { // 自己回复这个话题的操作
+        content: ''
       }
     }
   },
@@ -121,6 +138,9 @@ export default {
   methods: {
     display() {
       this.isShow = !this.isShow
+    },
+    onSubmit(formName) {
+      console.log(this.$refs[formName].model.content)
     }
   }
 }
