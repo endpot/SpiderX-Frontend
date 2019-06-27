@@ -20,7 +20,7 @@
             </div>
             <div class="main-content" v-html="topic_details.content" />
           </el-card><br>
-          <el-card class="box-card" shadow="never">
+          <el-card v-if="topic_details.reply_count !== 0" class="box-card" shadow="never">
             <div slot="header" class="clearfix">
               <span>{{ topic_details.reply_count }} 回复</span>
             </div>
@@ -43,9 +43,9 @@
                 <div class="reply_content" v-html="item.content" />
                 <div class="clearfix">
                   <div v-show="isShow" class="reply2_area">
-                    <el-form :model="replyForm" ref="replyForm">
+                    <el-form ref="replyForm" :model="replyForm">
                       <el-form-item>
-                          <markdown-editor v-model="replyForm.content" height="200px" />
+                        <markdown-editor v-model="replyForm.content" height="200px" />
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmit('replyForm')">回复</el-button>
@@ -60,7 +60,7 @@
             <div slot="header" class="clearfix">
               <span>添加回复</span>
             </div>
-            <el-form :model="addReplyForm" ref="addReplyForm">
+            <el-form ref="addReplyForm" :model="addReplyForm">
               <el-form-item>
                 <markdown-editor v-model="addReplyForm.content" height="200px" />
               </el-form-item>
@@ -92,7 +92,9 @@
           <div slot="header" class="clearfix">
             <span>作者其他话题</span>
           </div>
-
+          <div v-for="item in author_topics.recent_topics" :key="item">
+            <a class="topic_title" :href="'https:\/\/cnodejs.org\/topic\/' + item.id">{{ item.title }}</a>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -234,5 +236,16 @@ export default {
       color: #778087;
     }
   }
+}
+.topic_title {
+  overflow: hidden;
+  width: 90%;
+  color: #778087;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  line-height: 20px;
+  text-overflow: ellipsis;
 }
 </style>
