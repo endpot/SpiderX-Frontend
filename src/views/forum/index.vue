@@ -26,7 +26,7 @@
                     </el-col>
                     <el-col :xl="15" :lg="16" :md="16" :sm="17" :xs="17">
                       <div class="topic_title_wrapper">
-                        <span class="topic_tabs">
+                        <span class="topic_tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
                           <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
                           <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
@@ -37,7 +37,7 @@
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="4" :xs="3">
                       <span class="last_time">
-                        <a class="last_active_time" href="#">
+                        <a class="last_active_time" href="#"><!-- 这里要对日期格式化 -->
                           <!-- {{ item.last_reply_at }} -->
                           3 天前
                         </a>
