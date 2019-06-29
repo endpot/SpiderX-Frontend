@@ -95,7 +95,7 @@ export default {
   mounted() {
     this.$axios.get('https://cnodejs.org/api/v1/topics')
       .then((res) => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         // console.log(res.data.data[0].author.loginname)
         this.topic_list = res.data.data
       }).catch((err) => {

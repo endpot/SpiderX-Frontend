@@ -24,7 +24,7 @@
             <div slot="header" class="clearfix">
               <span>{{ topic_details.reply_count }} 回复</span>
             </div>
-            <div v-for="(item, index) in topic_details.replies" :key="index" class="reply_list">
+            <div v-for="(item, index) in topic_details.replies" :key="item.id" class="reply_list">
               <div :id="item.id" class="reply_item">
                 <div class="author_content">
                   <a :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname" class="user_avatar">
@@ -36,19 +36,20 @@
                   </div>
                   <div class="user_action">
                     <span>
-                      <svg-icon icon-class="reply" title="回复" @click="display" />
+                      <svg-icon icon-class="reply" title="回复" @click="display(index)" />
                     </span>
                   </div>
                 </div>
                 <div class="reply_content" v-html="item.content" />
                 <div class="clearfix">
-                  <div v-show="isShow" class="reply2_area">
+                  <div v-show="isShow.includes(index)" class="reply2_area">
                     <el-form ref="replyForm" :model="replyForm">
                       <el-form-item>
                         <markdown-editor v-model="replyForm.content" height="200px" />
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmit('replyForm')">回复</el-button>
+                        <el-button @click="handleCancel(index)">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </div>
@@ -112,7 +113,7 @@ export default {
     return {
       topic_details: [],
       author_topics: [],
-      isShow: false,
+      isShow: [],
       replyForm: { // 回复其他回复该话题的操作
         content: ''
       },
@@ -138,8 +139,16 @@ export default {
     })
   },
   methods: {
-    display() {
-      this.isShow = !this.isShow
+    display(id) {
+      if (this.isShow.indexOf(id) !== -1) {
+        return
+      } else {
+        this.isShow.push(id)
+      }
+    },
+    handleCancel(id) {
+      const index = this.isShow.indexOf(id)
+      this.isShow.splice(index, 1)
     },
     onSubmit(formName) {
       console.log(this.$refs[formName].model.content)
