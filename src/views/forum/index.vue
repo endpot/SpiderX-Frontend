@@ -46,6 +46,15 @@
                   </el-row>
                 </div>
               </div>
+              <el-pagination
+                background
+                layout="total, prev, pager, next, jumper"
+                :current-page.sync="pageIndex"
+                :page-size="pageSize"
+                :total="totalCount"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+              />
             </el-tab-pane>
             <el-tab-pane label="精华" name="second">精华</el-tab-pane>
             <el-tab-pane label="分享" name="third">分享</el-tab-pane>
@@ -84,7 +93,10 @@ export default {
   data() {
     return {
       activeName: 'first',
-      topic_list: []
+      topic_list: [],
+      pageIndex: 1,
+      pageSize: 40,
+      totalCount: 1000
     }
   },
   computed: {
@@ -92,11 +104,13 @@ export default {
       'avatar'
     ])
   },
-  mounted() {
+  created() {
     this.$axios.get('https://cnodejs.org/api/v1/topics')
       .then((res) => {
-        // console.log(res.data.data)
+        console.log(res.data)
         // console.log(res.data.data[0].author.loginname)
+        console.log(res.data.data.length)
+        // this.totalCount = res.data.data.length
         this.topic_list = res.data.data
       }).catch((err) => {
         console.log(err)
@@ -105,6 +119,28 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    // 每页数
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    // 当前页
+    handleCurrentChange(val) {
+      // this.pageIndex = val
+      console.log(`当前页: ${val}`)
+      this.getPageData()
+    },
+    getPageData() {
+      this.$axios({
+        method: 'get',
+        url: 'https://cnodejs.org/api/v1/topics?page=' + this.pageIndex
+      })
+        .then((res) => {
+          console.log(res.data)
+          this.topic_list = res.data.data
+        }).catch((err) => {
+          console.log(err)
+        })
     }
   }
 }
