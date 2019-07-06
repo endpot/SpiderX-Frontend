@@ -4,7 +4,7 @@
       <el-row :gutter="14">
         <el-col :span="15" :offset="3">
           <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-            <el-tab-pane label="全部" name="first">
+            <el-tab-pane v-loading="loading" label="全部" name="first">
               <div v-for="(item, index) in topic_list" :key="index" class="topic-list">
                 <div class="cell">
                   <el-row>
@@ -14,30 +14,30 @@
                       </a>
                     </el-col>
                     <el-col :xl="3" :lg="3" :md="4" :sm="2" :xs="3">
-                      <span class="reply_count">
-                        <span class="count_of_replies" title="回复数">
+                      <span class="reply-count">
+                        <span class="count-of-replies" title="回复数">
                           {{ item.reply_count }}
                         </span>
-                        <span class="count_seperator">/</span>
-                        <span class="count_of_visits" title="点击数">
+                        <span class="count-seperator">/</span>
+                        <span class="count-of-visits" title="点击数">
                           {{ item.visit_count }}
                         </span>
                       </span>
                     </el-col>
                     <el-col :xl="15" :lg="16" :md="16" :sm="17" :xs="17">
-                      <div class="topic_title_wrapper">
-                        <span class="topic_tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
+                      <div class="topic-title-wrapper">
+                        <span class="topic-tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
                           <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
                           <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
-                        <router-link :to="{ name: 'TopicDetails', params: { topicId: item.id }}" :title="item.title" class="topic_title">
+                        <router-link :to="{ name: 'TopicDetails', params: { topicId: item.id }}" :title="item.title" class="topic-title">
                           {{ item.title }}
                         </router-link>
                       </div>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="4" :xs="3">
-                      <span class="last_time">
-                        <a class="last_active_time" href="#"><!-- 这里要对日期格式化 -->
+                      <span class="last-time">
+                        <a class="last-active-time" href="#"><!-- 这里要对日期格式化 -->
                           <!-- {{ item.last_reply_at }} -->
                           3 天前
                         </a>
@@ -75,8 +75,9 @@
             </el-card>
             <br>
             <el-card class="box-card" shadow="never">
-              <div class="newTopic">
-                <router-link :to="{name: 'NewTopic'}"><el-button icon="el-icon-edit">发布话题</el-button></router-link>
+              <div class="new-topic">
+                这里不准备提供创建文章的按钮了  不过并没有想好放什么
+                <!-- <router-link :to="{name: 'CreateTopic'}"><el-button icon="el-icon-edit">发布话题</el-button></router-link> -->
               </div>
             </el-card>
           </div>
@@ -96,7 +97,8 @@ export default {
       topic_list: [],
       pageIndex: 1,
       pageSize: 40,
-      totalCount: 1000
+      totalCount: 1000,
+      loading: false
     }
   },
   computed: {
@@ -126,11 +128,11 @@ export default {
     },
     // 当前页
     handleCurrentChange(val) {
-      // this.pageIndex = val
       console.log(`当前页: ${val}`)
       this.getPageData()
     },
     getPageData() {
+      this.loading = true
       this.$axios({
         method: 'get',
         url: 'https://cnodejs.org/api/v1/topics?page=' + this.pageIndex
@@ -138,6 +140,7 @@ export default {
         .then((res) => {
           console.log(res.data)
           this.topic_list = res.data.data
+          this.loading = false
         }).catch((err) => {
           console.log(err)
         })
@@ -164,10 +167,13 @@ export default {
   line-height: 50px;
 }
 .cell {
+  box-sizing: border-box;
+  border: 1px solid #999;
+  margin-top: -1px;
+  width: 100%;
   // display: flex;
   background-color: #fff;
-  border-radius: 5px;
-  margin:2px 0px;
+  // margin:2px 0px;
   line-height: 50px;
   .user-avatar {
     width: 40px;
@@ -180,37 +186,37 @@ export default {
     }
   }
   @media screen and (min-width: 1000px) {
-    .reply_count {
+    .reply-count {
       // width: 100px;
       margin-left:15px;
-      .count_of_replies {
+      .count-of-replies {
         color: #9e78c0;
         font-size: 16px;
       }
-      .count_of_visits {
+      .count-of-visits {
         font-size: 12px;
         color: #b4b4b4;
       }
     }
   }
   @media screen and(max-width: 999px) {
-    .reply_count {
+    .reply-count {
       font-size: 6px;
       position: absolute;
       padding-left: 40px;
       padding-top: 18px;
-      .count_of_replies {
+      .count-of-replies {
         color: #9e78c0;
       }
-      .count_of_visits {
+      .count-of-visits {
         color: #b4b4b4;
       }
     }
   }
-  .topic_title_wrapper {
+  .topic-title-wrapper {
     width: 100%;
     display: flex;
-    .topic_title {
+    .topic-title {
       overflow: hidden;
       width: 90%;
       white-space: nowrap;
@@ -224,8 +230,8 @@ export default {
       text-decoration: underline !important;
     }
   }
-  .last_time {
-    .last_active_time {
+  .last-time {
+    .last-active-time {
       width: 100%;
       font-size: 12px;
       color: #b4b4b4;
@@ -237,7 +243,7 @@ export default {
   .user-avatar {
     text-align: center;
   }
-  .newTopic {
+  .new-topic {
     text-align: center;
   }
 }
