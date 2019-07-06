@@ -5,44 +5,52 @@
         <div class="panel">
           <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
-              <span class="topic_full_title">
+              <span class="topic-full-title">
                 <el-tag v-if="topic_details.tab === 'share'" size="small">分享</el-tag>
                 <el-tag v-else-if="topic_details.tab === 'ask'" size="small" type="success">问答</el-tag>
                 <span class="title">{{ topic_details.title }}</span>
-                <div class="title_details">
-                  <span>发布于 {{ topic_details.create_at }}</span>
-                  <span>作者<a :href="'https:\/\/cnodejs.org\/user\/' + topic_details.author.loginname">{{ topic_details.author.loginname }}</a></span>
-                  <span>{{ topic_details.visit_count }} 次浏览</span>
-                  <span>来自 {{ topic_details.tab }}</span>
-                  <el-button type="warning" icon="el-icon-star-off" class="bookmark" circle />
+                <div class="title-details">
+                  <span>发布于 {{ topic_details.create_at | formatLocalTime(topic_details.create_at) }}</span>
+                  <span>作者<a :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a></span>
+                  <span>{{ topic_details.pageviews }} 次浏览</span>
+                  <span v-if="topic_details.tab === 'share'">来自 分享</span>
+                  <span v-else-if="topic_details.tab === 'ask'">来自 问答</span>
+                  <div class="handle">
+                    <router-link :to="'/forum/edit/'+topic_details.id"><el-button type="primary" icon="el-icon-edit" class="edit" circle /></router-link>
+                    <el-button type="warning" icon="el-icon-star-off" class="bookmark" circle />
+                  </div>
                 </div>
               </span>
             </div>
-            <div class="main-content" v-html="topic_details.content" />
+            <div class="main-content">
+              {{ topic_details.content }}
+            </div>
           </el-card><br>
           <el-card v-if="topic_details.reply_count !== 0" class="box-card" shadow="never">
             <div slot="header" class="clearfix">
               <span>{{ topic_details.reply_count }} 回复</span>
             </div>
-            <div v-for="(item, index) in topic_details.replies" :key="item.id" class="reply_list">
-              <div :id="item.id" class="reply_item">
-                <div class="author_content">
-                  <a :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname" class="user_avatar">
+            <div v-for="(item, index) in topic_details.replies" :key="item.id" class="reply-list">
+              <div :id="item.id" class="reply-item">
+                <div class="author-content">
+                  <a :href="'#' + item.author.author_name" class="user-avatar">
                     <img :src="item.author.avatar_url">
                   </a>
-                  <div class="user_info">
-                    <a class="dark reply_author" :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname">{{ item.author.loginname }}</a>
-                    <a class="reply_time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.create_at }}</a>
+                  <div class="user-info">
+                    <a class="dark reply-author" :href="'#' + item.author.author_name">{{ item.author.author_name }}</a>
+                    <a class="reply-time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.create_at | formatLocalTime(item.create_at) }}</a>
                   </div>
-                  <div class="user_action">
+                  <div class="user-action">
                     <span>
-                      <svg-icon icon-class="reply" title="回复" @click="display(index)" />
+                      <svg-icon icon-class="reply" title="回复" @click="showReply(index)" />
                     </span>
                   </div>
                 </div>
-                <div class="reply_content" v-html="item.content" />
+                <div class="reply-content">
+                  {{ item.content }}
+                </div>
                 <div class="clearfix">
-                  <div v-show="isShow.includes(index)" class="reply2_area">
+                  <div v-show="isShow.includes(index)" class="reply2-area">
                     <el-form ref="replyForm" :model="replyForm">
                       <el-form-item>
                         <markdown-editor v-model="replyForm.content" height="200px" />
@@ -81,20 +89,20 @@
             <a :href="'https:\/\/cnodejs.org\/user\/' + topic_details.author.loginname" class="user-avatar" target="_blank">
               <img :src="topic_details.author.avatar_url" :title="topic_details.author.loginname">
             </a>
-            <span class="user_name">
-              <a class="dark" :href="'https:\/\/cnodejs.org\/user\/' + topic_details.author.loginname">{{ topic_details.author.loginname }}</a>
+            <span class="user-name">
+              <a class="dark" :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a>
             </span>
-            <div class="user_details">
+            <div class="user-details">
               预留部分  包括上传 下载  分享率 等...
             </div>
           </div>
         </el-card><br>
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <span>作者其他话题</span>
+            <span>该部分待考虑</span>
           </div>
           <div v-for="item in author_topics.recent_topics" :key="item">
-            <a class="topic_title" :href="'https:\/\/cnodejs.org\/topic\/' + item.id">{{ item.title }}</a>
+            <a class="topic-title" :href="'https:\/\/cnodejs.org\/topic\/' + item.id">{{ item.title }}</a>
           </div>
         </el-card>
       </el-col>
@@ -104,10 +112,16 @@
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
-// import { formatTime } from '@/utils'
+import { fetchDetails } from '@/api/forum'
+import { formatTime, timeStamp } from '@/utils'
 export default {
   components: {
     MarkdownEditor
+  },
+  filters: {
+    formatLocalTime(time) {
+      return formatTime(timeStamp(time))
+    }
   },
   data() {
     return {
@@ -122,26 +136,21 @@ export default {
       }
     }
   },
-  mounted() {
-    const paramUrl = this.$route.params.topicId
-    // 考虑到要调用第一次返回的值, 基于promise修改了回调的方式
-    new Promise((resolve, reject) => {
-      this.$axios.get('https://cnodejs.org/api/v1/topic/' + paramUrl)
-        .then((res) => {
-          this.topic_details = res.data.data
-          resolve(this.topic_details.author.loginname)
-        })
-    }).then((userName) => {
-      this.$axios.get('https://cnodejs.org/api/v1/user/' + userName)
-        .then((res) => {
-          this.author_topics = res.data.data
-        })
-    })
+  created() {
+    const id = this.$route.params && this.$route.params.id
+    this.getDetails(id)
   },
   methods: {
-    display(id) {
+    getDetails(id) {
+      // console.log(details_id)
+      fetchDetails(id).then(res => {
+        // console.log(res.data)
+        this.topic_details = res.data
+      })
+    },
+    showReply(id) {
       if (this.isShow.indexOf(id) !== -1) {
-        return
+        return false
       } else {
         this.isShow.push(id)
       }
@@ -160,12 +169,12 @@ export default {
 <style lang="scss" scoped>
 .clearfix {
   display: block;
-  .topic_full_title {
+  .topic-full-title {
     .title {
       font-size: 24px;
     }
   }
-  .title_details {
+  .title-details {
     display: inline-block;
     width: 100%;
     font-size: 12px;
@@ -174,7 +183,7 @@ export default {
     span::before {
       content: "*";
     }
-    .bookmark {
+    .handle {
       float: right;
     }
   }
@@ -182,50 +191,56 @@ export default {
 .main-content {
   display: block;
   margin: 0 10px;
+  text-indent: 2rem;
 }
-.reply_item {
-  .author_content {
+.reply-item {
+  .author-content {
     // display: inline-flex;
     display: block;
-    .user_avatar {
+    .user-avatar {
       display: inline-block;
       img {
         width: 30px;
         height: 30px;
       }
     }
-    .user_info {
+    .user-info {
       display: inline-block;
       margin-left: 10px;
-      .reply_author {
+      .reply-author {
         font-size: 12px;
         font-weight: 700;
         color: #666;
       }
-      .reply_author + a:hover {
+      .reply-author + a:hover {
         text-decoration: underline;
       }
-      .reply_time {
+      .reply-time {
         font-size: 11px;
         color: #08c;
       }
     }
-    .user_action {
+    .user-action {
       color: #666;
       float: right;
     }
   }
-}
-.markdown-text {
-  p {
-    a {
-      color: #08c;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+  .reply-content {
+    display: block;
+    margin: 10px 0;
+    text-indent: 2rem;
   }
 }
+// .markdown-text {
+//   p {
+//     a {
+//       color: #08c;
+//     }
+//     a:hover {
+//       text-decoration: underline;
+//     }
+//   }
+// }
 
 .card-main {
   display: block;
@@ -237,7 +252,7 @@ export default {
       height: 48px;
     }
   }
-  .user_name {
+  .user-name {
     font-size: 16px;
     max-width: 120px;
     white-space: nowrap;
@@ -246,7 +261,7 @@ export default {
     }
   }
 }
-.topic_title {
+.topic-title {
   overflow: hidden;
   width: 90%;
   color: #778087;

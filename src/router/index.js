@@ -67,27 +67,44 @@ export const asyncRoutes = [
   {
     path: '/forum',
     component: Layout,
+    redirect: '/forum/index',
     name: 'Forum',
+    meta: {
+      title: 'Forum',
+      icon: 'forum'
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/forum/index'),
+        name: 'TopicList',
         meta: {
-          title: 'Forum',
-          icon: 'forum'
+          title: 'Topic List',
+          icon: 'list'
         }
       },
       {
         path: 'create',
-        name: 'NewTopic',
-        component: () => import('@/views/forum/components/NewTopic'),
-        hidden: true,
+        component: () => import('@/views/forum/components/CreateTopic'),
+        name: 'CreateTopic',
         meta: {
-          title: 'NewTopic'
+          title: 'Create Topic',
+          icon: 'edit'
         }
       },
       {
-        path: ':topicId',
+        path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
+        name: 'EditTopic',
+        component: () => import('@/views/forum/components/Edit'),
+        hidden: true,
+        meta: {
+          title: 'Edit Topic',
+          noCache: true,
+          activeMenu: '/forum/index'
+        }
+      },
+      {
+        path: 'details/:id',
         name: 'TopicDetails',
         component: () => import('@/views/forum/components/TopicDetails'),
         hidden: true,
@@ -119,7 +136,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         name: 'Subtitle',
-        component: () => import('@/views/home/index'),
+        component: () => import('@/views/table/index'),
         meta: {
           title: 'Subtitle',
           icon: 'subtitle'
