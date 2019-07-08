@@ -4,13 +4,13 @@
       <el-row :gutter="14">
         <el-col :span="15" :offset="3">
           <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-            <el-tab-pane v-loading="loading" label="全部" name="first">
+            <el-tab-pane v-loading="listLoading" label="全部" name="first">
               <div v-for="(item, index) in topic_list" :key="index" class="topic-list">
                 <div class="cell">
                   <el-row>
                     <el-col :xl="1" :lg="1" :md="2" :sm="2" :xs="3">
-                      <a :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname" class="user-avatar" target="_blank">
-                        <img :src="item.author.avatar_url" :title="item.author.loginname">
+                      <a :href="item.author.author_name" class="user-avatar" target="_blank">
+                        <img :src="item.author.avatar_url" :title="item.author.author_name">
                       </a>
                     </el-col>
                     <el-col :xl="3" :lg="3" :md="4" :sm="2" :xs="3">
@@ -20,14 +20,15 @@
                         </span>
                         <span class="count-seperator">/</span>
                         <span class="count-of-visits" title="点击数">
-                          {{ item.visit_count }}
+                          {{ item.pageviews }}
                         </span>
                       </span>
                     </el-col>
-                    <el-col :xl="15" :lg="16" :md="16" :sm="17" :xs="17">
+                    <el-col :xl="15" :lg="15" :md="14" :sm="15" :xs="15">
                       <div class="topic-title-wrapper">
                         <span class="topic-tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
                           <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
+                          <el-tag v-else-if="item.tab === 'good'" size="small">精华</el-tag>
                           <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
                         <router-link :to="{ name: 'TopicDetails', params: { topicId: item.id }}" :title="item.title" class="topic-title">
@@ -35,11 +36,10 @@
                         </router-link>
                       </div>
                     </el-col>
-                    <el-col :xl="2" :lg="2" :md="2" :sm="4" :xs="3">
+                    <el-col :xl="3" :lg="3" :md="4" :sm="5" :xs="4">
                       <span class="last-time">
                         <a class="last-active-time" href="#"><!-- 这里要对日期格式化 -->
-                          <!-- {{ item.last_reply_at }} -->
-                          3 天前
+                          {{ item.last_reply_at | formatLocalTime(item.last_reply_at) }}
                         </a>
                       </span>
                     </el-col>
@@ -49,13 +49,14 @@
               <el-pagination
                 background
                 layout="total, prev, pager, next, jumper"
-                :current-page.sync="pageIndex"
-                :page-size="pageSize"
-                :total="totalCount"
+                :current-page.sync="listQuery.page"
+                :page-size="listQuery.limit"
+                :total="total"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
               />
             </el-tab-pane>
+            <!-- 这里需要keep-alive -->
             <el-tab-pane label="精华" name="second">精华</el-tab-pane>
             <el-tab-pane label="分享" name="third">分享</el-tab-pane>
             <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>
@@ -88,17 +89,29 @@
 </template>
 
 <script>
-// import { parseTime } from '@/utils/index'
+import { formatTime, timeStamp } from '@/utils/index'
+import { fetchList } from '@/api/forum'
 import { mapGetters } from 'vuex'
+// import Pagination from '@/components/Pagination'
 export default {
+  filters: {
+    formatLocalTime(time) {
+      return formatTime(timeStamp(time))
+    }
+  },
+  // components: {
+  //   Pagination
+  // },
   data() {
     return {
       activeName: 'first',
       topic_list: [],
-      pageIndex: 1,
-      pageSize: 40,
-      totalCount: 1000,
-      loading: false
+      total: 1000,
+      listLoading: false,
+      listQuery: {
+        page: 1,
+        limit: 20
+      }
     }
   },
   computed: {
@@ -107,18 +120,18 @@ export default {
     ])
   },
   created() {
-    this.$axios.get('https://cnodejs.org/api/v1/topics')
-      .then((res) => {
-        console.log(res.data)
-        // console.log(res.data.data[0].author.loginname)
-        console.log(res.data.data.length)
-        // this.totalCount = res.data.data.length
-        this.topic_list = res.data.data
-      }).catch((err) => {
-        console.log(err)
-      })
+    this.getList()
   },
   methods: {
+    getList() {
+      this.listLoading = true
+      fetchList().then(res => {
+        console.log(res.data.items)
+        console.log(formatTime(timeStamp(res.data.items[0].last_reply_at)))
+        this.topic_list = res.data.items
+        this.listLoading = false
+      })
+    },
     handleClick(tab, event) {
       console.log(tab, event)
     },
@@ -132,19 +145,22 @@ export default {
       this.getPageData()
     },
     getPageData() {
-      this.loading = true
-      this.$axios({
-        method: 'get',
-        url: 'https://cnodejs.org/api/v1/topics?page=' + this.pageIndex
-      })
-        .then((res) => {
-          console.log(res.data)
-          this.topic_list = res.data.data
-          this.loading = false
-        }).catch((err) => {
-          console.log(err)
-        })
+
     }
+    // getPageData() {
+    //   this.loading = true
+    //   this.$axios({
+    //     method: 'get',
+    //     url: 'https://cnodejs.org/api/v1/topics?page=' + this.pageIndex
+    //   })
+    //     .then((res) => {
+    //       console.log(res.data)
+    //       this.topic_list = res.data.data
+    //       this.loading = false
+    //     }).catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
   }
 }
 </script>
@@ -154,12 +170,12 @@ export default {
   text-align: right;
 }
 @media only screen and (min-width:1200px) { // 单独对部分设备宽度的自适应做处理
-  .el-col-lg-3 {
-    width: 13.8% !important;
-  }
-  .el-col-lg-2 {
-    width: 14.33333% !important;
-  }
+  // .el-col-lg-3 {
+  //   width: 13.8% !important;
+  // }
+  // .el-col-lg-2 {
+  //   width: 14.33333% !important;
+  // }
 }
 // 这里是主体部分
 .topic-list {

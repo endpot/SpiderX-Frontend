@@ -136,7 +136,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         name: 'Subtitle',
-        component: () => import('@/views/home/index'),
+        component: () => import('@/views/table/index'),
         meta: {
           title: 'Subtitle',
           icon: 'subtitle'
