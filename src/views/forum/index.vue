@@ -13,7 +13,7 @@
                         <img :src="item.author.avatar_url" :title="item.author.author_name">
                       </a>
                     </el-col>
-                    <el-col :xl="3" :lg="3" :md="4" :sm="2" :xs="3">
+                    <el-col :xl="2" :lg="4" :md="5" :sm="2" :xs="3">
                       <span class="reply-count">
                         <span class="count-of-replies" title="回复数">
                           {{ item.reply_count }}
@@ -24,7 +24,7 @@
                         </span>
                       </span>
                     </el-col>
-                    <el-col :xl="15" :lg="15" :md="14" :sm="15" :xs="15">
+                    <el-col :xl="18" :lg="16" :md="14" :sm="17" :xs="15">
                       <div class="topic-title-wrapper">
                         <span class="topic-tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
                           <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
@@ -36,7 +36,7 @@
                         </router-link>
                       </div>
                     </el-col>
-                    <el-col :xl="3" :lg="3" :md="4" :sm="5" :xs="4">
+                    <el-col :span="3">
                       <span class="last-time">
                         <a class="last-active-time" href="#"><!-- 这里要对日期格式化 -->
                           {{ item.last_reply_at | formatLocalTime(item.last_reply_at) }}
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { formatTime, timeStamp } from '@/utils/index'
+import { formatTime, timeStamp } from '@/utils/index' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
 import { fetchList } from '@/api/forum'
 import { mapGetters } from 'vuex'
 // import Pagination from '@/components/Pagination'
@@ -126,8 +126,8 @@ export default {
     getList() {
       this.listLoading = true
       fetchList().then(res => {
-        console.log(res.data.items)
-        console.log(formatTime(timeStamp(res.data.items[0].last_reply_at)))
+        console.log(res.data)
+        // console.log(formatTime(timeStamp(res.data.items[0].last_reply_at)))
         this.topic_list = res.data.items
         this.listLoading = false
       })
@@ -143,24 +143,7 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
       this.getPageData()
-    },
-    getPageData() {
-
     }
-    // getPageData() {
-    //   this.loading = true
-    //   this.$axios({
-    //     method: 'get',
-    //     url: 'https://cnodejs.org/api/v1/topics?page=' + this.pageIndex
-    //   })
-    //     .then((res) => {
-    //       console.log(res.data)
-    //       this.topic_list = res.data.data
-    //       this.loading = false
-    //     }).catch((err) => {
-    //       console.log(err)
-    //     })
-    // }
   }
 }
 </script>
@@ -169,14 +152,14 @@ export default {
 .el-col-lg-2 { // 这里单独对日期部分进行右对齐处理
   text-align: right;
 }
-@media only screen and (min-width:1200px) { // 单独对部分设备宽度的自适应做处理
+// @media only screen and (min-width:1200px) { // 单独对部分设备宽度的自适应做处理
   // .el-col-lg-3 {
-  //   width: 13.8% !important;
+  //   width: 15.555% !important;
   // }
   // .el-col-lg-2 {
   //   width: 14.33333% !important;
   // }
-}
+// }
 // 这里是主体部分
 .topic-list {
   // display: block;
@@ -251,6 +234,10 @@ export default {
       width: 100%;
       font-size: 12px;
       color: #b4b4b4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
     }
   }
 }

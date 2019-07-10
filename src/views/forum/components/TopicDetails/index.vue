@@ -107,7 +107,7 @@
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
-// import { formatTime } from '@/utils'
+import { fetchDetails } from '@/api/forum'
 export default {
   components: {
     MarkdownEditor
@@ -125,24 +125,17 @@ export default {
       }
     }
   },
-  mounted() {
-    const paramUrl = this.$route.params.topicId
-    // 考虑到要调用第一次返回的值, 基于promise修改了回调的方式
-    new Promise((resolve, reject) => {
-      this.$axios.get('https://cnodejs.org/api/v1/topic/' + paramUrl)
-        .then((res) => {
-          this.topic_details = res.data.data
-          // console.log(this.topic_details.id)
-          resolve(this.topic_details.author.loginname)
-        })
-    }).then((userName) => {
-      this.$axios.get('https://cnodejs.org/api/v1/user/' + userName)
-        .then((res) => {
-          this.author_topics = res.data.data
-        })
-    })
+  created() {
+    const details_id = this.$route.params && this.$route.params.topicId
+    this.getDetails(details_id)
   },
   methods: {
+    getDetails(details_id) {
+      fetchDetails(details_id).then(res => {
+        console.log(res.data)
+        this.topic_details = res.data.items
+      })
+    },
     showReply(id) {
       if (this.isShow.indexOf(id) !== -1) {
         return
