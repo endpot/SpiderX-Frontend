@@ -51,7 +51,7 @@ export default [
     }
   },
   {
-    url: 'forum/detail/[0-9]*',
+    url: '/forum/details/[0-9]+',
     type: 'get',
     response: config => {
       const { id } = config.query
