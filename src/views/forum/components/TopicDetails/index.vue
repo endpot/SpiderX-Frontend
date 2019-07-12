@@ -131,9 +131,10 @@ export default {
   },
   methods: {
     getDetails(details_id) {
+      console.log(details_id)
       fetchDetails(details_id).then(res => {
         console.log(res.data)
-        this.topic_details = res.data.items
+        // this.topic_details = res.data.items
       })
     },
     showReply(id) {

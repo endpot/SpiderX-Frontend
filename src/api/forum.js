@@ -10,8 +10,7 @@ export function fetchList(params) {
 
 export function fetchDetails(id) {
   return request({
-    url: 'forum/details',
-    method: 'get',
-    params: { id }
+    url: 'forum/details/' + id,
+    method: 'get'
   })
 }

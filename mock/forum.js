@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 const List = []
-const count = 100
+const count = 10
 
 const image_url = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
 
@@ -40,9 +40,6 @@ export default [
     url: '/forum/list',
     type: 'get',
     response: config => {
-      for (let i = 0; i < List.length; i++) {
-        delete (List[i].replies)
-      }
       const items = List
       return {
         code: 20000,
@@ -54,7 +51,7 @@ export default [
     }
   },
   {
-    url: 'forum/details\/[0-9]*',
+    url: 'forum/detail/[0-9]*',
     type: 'get',
     response: config => {
       const { id } = config.query
