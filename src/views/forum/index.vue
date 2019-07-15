@@ -31,7 +31,7 @@
                           <el-tag v-else-if="item.tab === 'good'" size="small">精华</el-tag>
                           <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
-                        <router-link :to="{ name: 'TopicDetails', params: { topicId: item.id }}" :title="item.title" class="topic-title">
+                        <router-link :to="{ name: 'TopicDetails', params: { id: item.id }}" :title="item.title" class="topic-title">
                           {{ item.title }}
                         </router-link>
                       </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { formatTime, timeStamp } from '@/utils/index' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
+import { formatTime, timeStamp } from '@/utils' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
 import { fetchList } from '@/api/forum'
 import { mapGetters } from 'vuex'
 // import Pagination from '@/components/Pagination'

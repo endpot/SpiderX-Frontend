@@ -7,9 +7,8 @@ const image_url = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4aca
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    id: '@id', // 该topic id
+    id: '@increment', // 该topic id
     author: {
-      // avatar_url: ('100x100', '@color', '@color', 'jpg', '@name'),
       avatar_url: image_url,
       author_name: '@name' // 作者用户名
     },
@@ -51,15 +50,15 @@ export default [
     }
   },
   {
-    url: '/forum/details/[0-9]+',
+    url: '/forum/details',
     type: 'get',
     response: config => {
       const { id } = config.query
-      for (const topics of List) {
-        if (topics.id === +id) {
+      for (const topic of List) {
+        if (topic.id === +id) {
           return {
             code: 20000,
-            data: topics
+            data: topic
           }
         }
       }

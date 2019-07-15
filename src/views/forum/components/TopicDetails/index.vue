@@ -10,10 +10,11 @@
                 <el-tag v-else-if="topic_details.tab === 'ask'" size="small" type="success">问答</el-tag>
                 <span class="title">{{ topic_details.title }}</span>
                 <div class="title-details">
-                  <span>发布于 {{ topic_details.create_at }}</span>
-                  <span>作者<a :href="'https:\/\/cnodejs.org\/user\/' + topic_details.author.loginname">{{ topic_details.author.loginname }}</a></span>
-                  <span>{{ topic_details.visit_count }} 次浏览</span>
-                  <span>来自 {{ topic_details.tab }}</span>
+                  <span>发布于 {{ topic_details.create_at | formatLocalTime(topic_details.create_at) }}</span>
+                  <span>作者<a :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a></span>
+                  <span>{{ topic_details.pageviews }} 次浏览</span>
+                  <span v-if="topic_details.tab === 'share'">来自 分享</span>
+                  <span v-else-if="topic_details.tab === 'ask'">来自 问答</span>
                   <div class="handle">
                     <router-link :to="'/forum/edit/'+topic_details.id"><el-button type="primary" icon="el-icon-edit" class="edit" circle /></router-link>
                     <el-button type="warning" icon="el-icon-star-off" class="bookmark" circle />
@@ -21,7 +22,9 @@
                 </div>
               </span>
             </div>
-            <div class="main-content" v-html="topic_details.content" />
+            <div class="main-content">
+              {{ topic_details.content }}
+            </div>
           </el-card><br>
           <el-card v-if="topic_details.reply_count !== 0" class="box-card" shadow="never">
             <div slot="header" class="clearfix">
@@ -30,12 +33,12 @@
             <div v-for="(item, index) in topic_details.replies" :key="item.id" class="reply-list">
               <div :id="item.id" class="reply-item">
                 <div class="author-content">
-                  <a :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname" class="user-avatar">
+                  <a :href="'#' + item.author.author_name" class="user-avatar">
                     <img :src="item.author.avatar_url">
                   </a>
                   <div class="user-info">
-                    <a class="dark reply-author" :href="'https:\/\/cnodejs.org\/user\/' + item.author.loginname">{{ item.author.loginname }}</a>
-                    <a class="reply-time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.create_at }}</a>
+                    <a class="dark reply-author" :href="'#' + item.author.author_name">{{ item.author.author_name }}</a>
+                    <a class="reply-time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.create_at | formatLocalTime(item.create_at) }}</a>
                   </div>
                   <div class="user-action">
                     <span>
@@ -43,7 +46,9 @@
                     </span>
                   </div>
                 </div>
-                <div class="reply-content" v-html="item.content" />
+                <div class="reply-content">
+                  {{ item.content }}
+                </div>
                 <div class="clearfix">
                   <div v-show="isShow.includes(index)" class="reply2-area">
                     <el-form ref="replyForm" :model="replyForm">
@@ -85,7 +90,7 @@
               <img :src="topic_details.author.avatar_url" :title="topic_details.author.loginname">
             </a>
             <span class="user-name">
-              <a class="dark" :href="'https:\/\/cnodejs.org\/user\/' + topic_details.author.loginname">{{ topic_details.author.loginname }}</a>
+              <a class="dark" :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a>
             </span>
             <div class="user-details">
               预留部分  包括上传 下载  分享率 等...
@@ -94,7 +99,7 @@
         </el-card><br>
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <span>作者其他话题</span>
+            <span>该部分待考虑</span>
           </div>
           <div v-for="item in author_topics.recent_topics" :key="item">
             <a class="topic-title" :href="'https:\/\/cnodejs.org\/topic\/' + item.id">{{ item.title }}</a>
@@ -108,9 +113,15 @@
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
 import { fetchDetails } from '@/api/forum'
+import { formatTime, timeStamp } from '@/utils'
 export default {
   components: {
     MarkdownEditor
+  },
+  filters: {
+    formatLocalTime(time) {
+      return formatTime(timeStamp(time))
+    }
   },
   data() {
     return {
@@ -126,20 +137,20 @@ export default {
     }
   },
   created() {
-    const details_id = this.$route.params && this.$route.params.topicId
-    this.getDetails(details_id)
+    const id = this.$route.params && this.$route.params.id
+    this.getDetails(id)
   },
   methods: {
-    getDetails(details_id) {
-      console.log(details_id)
-      fetchDetails(details_id).then(res => {
-        console.log(res.data)
-        // this.topic_details = res.data.items
+    getDetails(id) {
+      // console.log(details_id)
+      fetchDetails(id).then(res => {
+        // console.log(res.data)
+        this.topic_details = res.data
       })
     },
     showReply(id) {
       if (this.isShow.indexOf(id) !== -1) {
-        return
+        return false
       } else {
         this.isShow.push(id)
       }
@@ -180,6 +191,7 @@ export default {
 .main-content {
   display: block;
   margin: 0 10px;
+  text-indent: 2rem;
 }
 .reply-item {
   .author-content {
@@ -212,6 +224,11 @@ export default {
       color: #666;
       float: right;
     }
+  }
+  .reply-content {
+    display: block;
+    margin: 10px 0;
+    text-indent: 2rem;
   }
 }
 // .markdown-text {

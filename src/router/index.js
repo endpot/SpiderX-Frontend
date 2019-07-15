@@ -104,7 +104,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'details/:topicId',
+        path: 'details/:id',
         name: 'TopicDetails',
         component: () => import('@/views/forum/components/TopicDetails'),
         hidden: true,

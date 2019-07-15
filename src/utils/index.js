@@ -91,7 +91,7 @@ export function formatTime(time, option) {
 
 /**
  * @param {string} time
- * @returns {number}
+ * @returns {string}
  */
 export function timeStamp(time) {
   return new Date(Date.parse(time.replace(/-/g, '/'))).getTime() / 1000
