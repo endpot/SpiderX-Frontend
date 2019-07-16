@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 const List = []
-const count = 10
+const count = 30
 
 const image_url = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
 
@@ -44,7 +44,7 @@ export default [
         code: 20000,
         data: {
           total: items.length,
-          items: items
+          items
         }
       }
     }

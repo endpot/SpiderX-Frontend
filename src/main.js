@@ -28,9 +28,6 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
-import Axios from 'axios'
-Vue.prototype.$axios = Axios // 暂时使用
-
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 

@@ -117,6 +117,7 @@ export const asyncRoutes = [
   {
     path: '/torrent',
     component: Layout,
+    redirect: 'torrent/index',
     children: [
       {
         path: 'index',

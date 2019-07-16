@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     getDetails(id) {
-      // console.log(details_id)
+      // console.log(id)
       fetchDetails(id).then(res => {
         // console.log(res.data)
         this.topic_details = res.data
