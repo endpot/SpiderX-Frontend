@@ -1,5 +1,5 @@
 {
-  "name": "SpiderX-Frontend",
+  "name": "spiderx-frontend",
   "version": "4.2.1",
   "description": "A Private-Tracker frontend template by vue-admin-template",
   "author": "ajycc20 <ajycc20@qq.com>",
@@ -21,7 +21,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
-    "tui-editor": "^1.4.4-alpha.0",
+    "tui-editor": "^1.4.4",
     "vue": "2.6.10",
     "vue-router": "3.0.6",
     "vuex": "3.1.0"

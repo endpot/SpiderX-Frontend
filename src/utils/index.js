@@ -50,6 +50,7 @@ export function parseTime(time, cFormat) {
  * @param {number} time
  * @param {string} option
  * @returns {string}
+ * @description 年份级别的格式化有问题  待考虑修改
  */
 export function formatTime(time, option) {
   if (('' + time).length === 10) {
@@ -91,7 +92,7 @@ export function formatTime(time, option) {
 
 /**
  * @param {string} time
- * @returns {string}
+ * @returns {number}
  */
 export function timeStamp(time) {
   return new Date(Date.parse(time.replace(/-/g, '/'))).getTime() / 1000
@@ -115,4 +116,26 @@ export function param2Obj(url) {
         .replace(/\+/g, ' ') +
       '"}'
   )
+}
+/**
+ * @description 用以计算文件的大小
+ * @author ajycc20 <ajycc20@qq.com>
+ * @param {number} size
+ */
+export function calcFileSize(size) {
+  const fileSizeByte = size
+
+  if (fileSizeByte < 1048576) {
+    return (fileSizeByte / 1024).toFixed(2) + ' KB'
+  } else if (fileSizeByte === 1048576) {
+    return '1.00 MB'
+  } else if (fileSizeByte > 1048576 && fileSizeByte < 1073741824) {
+    return (fileSizeByte / (1024 * 1024)).toFixed(2) + ' MB'
+  } else if (fileSizeByte > 1048576 && fileSizeByte === 1073741824) {
+    return '1.00 GB'
+  } else if (fileSizeByte > 1073741824 && fileSizeByte < 1099511627776) {
+    return (fileSizeByte / (1024 * 1024 * 1024)).toFixed(2) + ' GB'
+  } else {
+    return '文件超过1.00 TB'
+  }
 }

@@ -1,43 +1,51 @@
 import Mock from 'mockjs'
 
 const torrentList = []
-const count = 100
+const count = 50
 
 for (let i = 0; i < count; i++) {
   torrentList.push(Mock.mock({
-    id: '@id', // ID
-    title: '@ctitle', // 资源标题
+    id: '@increment', // ID
+    title: '@title(6, 8)', // 资源标题
     caption: '@csentence', // 资源副标题
     descr: '@cparagraph', // 资源简介
     'category|1': ['电影', '剧集', '纪录', '综艺', '学习'], // 资源分类
-    size: '@integer(1024, 1073741824)', // 种子大小
+    size: '@integer(1048576, 10737418240)', // 种子大小
     created_by: '@name', // 上传者
-    created_at: 'datetime', // 上传时间
+    created_at: '@datetime', // 上传时间
     attachments: [], // 附件
-    leechers: '@integer', // 下载数
-    seeders: '@integer' // 做种数
+    leechers: '@integer(60, 100)', // 下载数
+    seeders: '@integer(60, 100)', // 做种数
+    rate: '@integer(0, 100)' // 完成百分比
   }))
 }
 
 export default [
   {
-    url: '/torrents',
+    url: '/torrent/list',
     type: 'get',
     response: config => {
-      const items = torrentList
+      const { page = 1, limit = 20 } = config.query
+      const pageList = torrentList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
       return {
-        data: items
+        code: 20000,
+        data: {
+          total: torrentList.length,
+          items: pageList
+        }
       }
     }
   },
   {
-    url: '/torrents/[0-9]+',
+    url: '/torrent/details',
     type: 'get',
     response: config => {
       const { id } = config.query
       for (const torrent of torrentList) {
         if (torrent.id === +id) {
           return {
+            code: 20000,
             data: torrent
           }
         }

@@ -27,9 +27,9 @@
                     <el-col :xl="18" :lg="16" :md="14" :sm="17" :xs="15">
                       <div class="topic-title-wrapper">
                         <span class="topic-tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
-                          <el-tag v-if="item.tab === 'share'" size="small">分享</el-tag>
-                          <el-tag v-else-if="item.tab === 'good'" size="small">精华</el-tag>
-                          <el-tag v-else-if="item.tab === 'ask'" size="small" type="success">问答</el-tag>
+                          <el-tag v-if="item.topicType === 'share'" size="small">分享</el-tag>
+                          <el-tag v-else-if="item.topicType === 'good'" size="small">精华</el-tag>
+                          <el-tag v-else-if="item.topicType === 'ask'" size="small" type="success">问答</el-tag>
                         </span>
                         <router-link :to="{ name: 'TopicDetails', params: { id: item.id }}" :title="item.title" class="topic-title">
                           {{ item.title }}
@@ -46,7 +46,9 @@
                   </el-row>
                 </div>
               </div>
-              <el-pagination
+
+              <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+              <!-- <el-pagination
                 background
                 layout="total, prev, pager, next, jumper"
                 :current-page.sync="listQuery.page"
@@ -54,10 +56,15 @@
                 :total="total"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-              />
+              /> -->
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
-            <el-tab-pane label="精华" name="second">精华</el-tab-pane>
+            <el-tab-pane label="精华" name="second">
+              权限测试查看
+              <el-tag v-permission="['admin']">This is admin</el-tag>
+              <el-tag v-permission="['editor']">This is editor</el-tag>
+              <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
+            </el-tab-pane>
             <el-tab-pane label="分享" name="third">分享</el-tab-pane>
             <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>
           </el-tabs>
@@ -92,22 +99,26 @@
 import { formatTime, timeStamp } from '@/utils' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
 import { fetchList } from '@/api/forum'
 import { mapGetters } from 'vuex'
-// import Pagination from '@/components/Pagination'
+import permission from '@/directive/permission'
+import Pagination from '@/components/Pagination'
 export default {
   filters: {
     formatLocalTime(time) {
       return formatTime(timeStamp(time))
     }
   },
-  // components: {
-  //   Pagination
-  // },
+  directives: {
+    permission
+  },
+  components: {
+    Pagination
+  },
   data() {
     return {
       activeName: 'first',
       topic_list: [],
-      total: 1000,
-      listLoading: false,
+      total: 0,
+      listLoading: true,
       listQuery: {
         page: 1,
         limit: 20
@@ -125,10 +136,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList().then(res => {
-        console.log(res.data)
-        // console.log(formatTime(timeStamp(res.data.items[0].last_reply_at)))
+      fetchList(this.listQuery).then(res => {
         this.topic_list = res.data.items
+        this.total = res.data.total
         this.listLoading = false
       })
     },
@@ -152,14 +162,6 @@ export default {
 .el-col-lg-2 { // 这里单独对日期部分进行右对齐处理
   text-align: right;
 }
-// @media only screen and (min-width:1200px) { // 单独对部分设备宽度的自适应做处理
-  // .el-col-lg-3 {
-  //   width: 15.555% !important;
-  // }
-  // .el-col-lg-2 {
-  //   width: 14.33333% !important;
-  // }
-// }
 // 这里是主体部分
 .topic-list {
   // display: block;
