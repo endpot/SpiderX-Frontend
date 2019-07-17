@@ -95,7 +95,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
         name: 'EditTopic',
-        component: () => import('@/views/forum/components/Edit'),
+        component: () => import('@/views/forum/components/EditTopic'),
         hidden: true,
         meta: {
           title: 'Edit Topic',
@@ -117,15 +117,49 @@ export const asyncRoutes = [
   {
     path: '/torrent',
     component: Layout,
-    redirect: 'torrent/index',
+    redirect: '/torrent/index',
+    name: 'Torrent',
+    meta: {
+      title: 'Torrent',
+      icon: 'torrent'
+    },
     children: [
       {
         path: 'index',
-        name: 'Torrent',
         component: () => import('@/views/torrent/index'),
+        name: 'TorrentList',
         meta: {
-          title: 'Torrent',
-          icon: 'torrent'
+          title: 'Torrent List',
+          icon: 'list'
+        }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/views/torrent/components/UploadTorrent'),
+        name: 'UploadTorrent',
+        meta: {
+          title: 'Upload Torrent',
+          icon: 'upload'
+        }
+      },
+      {
+        path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
+        name: 'EditTorrent',
+        component: () => import('@/views/torrent/components/EditTorrent'),
+        hidden: true,
+        meta: {
+          title: 'Edit Torrent',
+          noCache: true,
+          activeMenu: '/torrent/index'
+        }
+      },
+      {
+        path: 'details/:id',
+        name: 'TorrentDetails',
+        component: () => import('@/views/torrent/components/TorrentDetails'),
+        hidden: true,
+        meta: {
+          title: 'Torrent Details'
         }
       }
     ]

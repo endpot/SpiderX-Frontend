@@ -58,9 +58,10 @@
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
             <el-tab-pane label="精华" name="second">
-                <el-tag v-permission="['admin']">admin</el-tag>
-                <el-tag v-permission="['editor']">editor</el-tag>
-                <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
+              权限测试查看
+              <el-tag v-permission="['admin']">This is admin</el-tag>
+              <el-tag v-permission="['editor']">This is editor</el-tag>
+              <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
             </el-tab-pane>
             <el-tab-pane label="分享" name="third">分享</el-tab-pane>
             <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>

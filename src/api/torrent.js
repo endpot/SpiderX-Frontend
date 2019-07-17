@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchList(params) {
+export function fetchList(query) {
   return request({
     url: '/torrent/list',
     method: 'get',
-    params
+    params: query
   })
 }
 

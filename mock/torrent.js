@@ -25,12 +25,14 @@ export default [
     url: '/torrent/list',
     type: 'get',
     response: config => {
-      const items = torrentList
+      const { page = 1, limit = 20 } = config.query
+      const pageList = torrentList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
       return {
         code: 20000,
         data: {
-          total: items.length,
-          items
+          total: torrentList.length,
+          items: pageList
         }
       }
     }
