@@ -57,7 +57,11 @@
               />
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
-            <el-tab-pane label="精华" name="second">精华</el-tab-pane>
+            <el-tab-pane label="精华" name="second">
+                <el-tag v-permission="['admin']">admin</el-tag>
+                <el-tag v-permission="['editor']">editor</el-tag>
+                <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
+            </el-tab-pane>
             <el-tab-pane label="分享" name="third">分享</el-tab-pane>
             <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>
           </el-tabs>
@@ -92,12 +96,16 @@
 import { formatTime, timeStamp } from '@/utils' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
 import { fetchList } from '@/api/forum'
 import { mapGetters } from 'vuex'
+import permission from '@/directive/permission'
 // import Pagination from '@/components/Pagination'
 export default {
   filters: {
     formatLocalTime(time) {
       return formatTime(timeStamp(time))
     }
+  },
+  directives: {
+    permission
   },
   // components: {
   //   Pagination
