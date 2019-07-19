@@ -6,15 +6,15 @@
           <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
               <span class="topic-full-title">
-                <el-tag v-if="topic_details.tab === 'share'" size="small">分享</el-tag>
-                <el-tag v-else-if="topic_details.tab === 'ask'" size="small" type="success">问答</el-tag>
+                <el-tag v-if="topic_details.topicType === 'share'" size="small">分享</el-tag>
+                <el-tag v-else-if="topic_details.topicType === 'ask'" size="small" type="success">问答</el-tag>
                 <span class="title">{{ topic_details.title }}</span>
                 <div class="title-details">
                   <span>发布于 {{ topic_details.create_at | formatLocalTime(topic_details.create_at) }}</span>
                   <span>作者<a :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a></span>
                   <span>{{ topic_details.pageviews }} 次浏览</span>
-                  <span v-if="topic_details.tab === 'share'">来自 分享</span>
-                  <span v-else-if="topic_details.tab === 'ask'">来自 问答</span>
+                  <span v-if="topic_details.topicType === 'share'">来自 分享</span>
+                  <span v-else-if="topic_details.topicType === 'ask'">来自 问答</span>
                   <div class="handle">
                     <router-link :to="'/forum/edit/'+topic_details.id"><el-button type="primary" icon="el-icon-edit" class="edit" circle /></router-link>
                     <el-button type="warning" icon="el-icon-star-off" class="bookmark" circle />
@@ -142,9 +142,7 @@ export default {
   },
   methods: {
     getDetails(id) {
-      // console.log(id)
       fetchDetails(id).then(res => {
-        // console.log(res.data)
         this.topic_details = res.data
       })
     },

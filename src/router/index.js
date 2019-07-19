@@ -85,7 +85,7 @@ export const asyncRoutes = [
       },
       {
         path: 'create',
-        component: () => import('@/views/forum/components/CreateTopic'),
+        component: () => import('@/views/forum/create'),
         name: 'CreateTopic',
         meta: {
           title: 'Create Topic',
@@ -95,7 +95,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
         name: 'EditTopic',
-        component: () => import('@/views/forum/components/EditTopic'),
+        component: () => import('@/views/forum/edit'),
         hidden: true,
         meta: {
           title: 'Edit Topic',
@@ -135,7 +135,7 @@ export const asyncRoutes = [
       },
       {
         path: 'upload',
-        component: () => import('@/views/torrent/components/UploadTorrent'),
+        component: () => import('@/views/torrent/upload'),
         name: 'UploadTorrent',
         meta: {
           title: 'Upload Torrent',
@@ -145,7 +145,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
         name: 'EditTorrent',
-        component: () => import('@/views/torrent/components/EditTorrent'),
+        component: () => import('@/views/torrent/edit'),
         hidden: true,
         meta: {
           title: 'Edit Torrent',

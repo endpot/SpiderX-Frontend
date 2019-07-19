@@ -1,12 +1,12 @@
 import Mock from 'mockjs'
 
-const List = []
-const count = 30
+const forumList = []
+const count = 50
 
 const image_url = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
 
 for (let i = 0; i < count; i++) {
-  List.push(Mock.mock({
+  forumList.push(Mock.mock({
     id: '@increment', // 该topic id
     author: {
       avatar_url: image_url,
@@ -16,7 +16,7 @@ for (let i = 0; i < count; i++) {
     content: '@cparagraph', // 内容
     create_at: '@datetime', // 创建时间
     title: '@ctitle',
-    'tab|1': ['good', 'share', 'ask'], // 该topic分类
+    'topicType|1': ['good', 'share', 'ask'], // 该topic分类
     last_reply_at: '@now', // 最后回复时间
     'replies|50': [{
       author: {
@@ -39,12 +39,14 @@ export default [
     url: '/forum/list',
     type: 'get',
     response: config => {
-      const items = List
+      const { page = 1, limit = 20 } = config.query
+      const pageList = forumList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
       return {
         code: 20000,
         data: {
-          total: items.length,
-          items
+          total: forumList.length,
+          items: pageList
         }
       }
     }
@@ -54,7 +56,7 @@ export default [
     type: 'get',
     response: config => {
       const { id } = config.query
-      for (const topic of List) {
+      for (const topic of forumList) {
         if (topic.id === +id) {
           return {
             code: 20000,

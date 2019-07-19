@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchList(params) {
+export function fetchList(query) {
   return request({
     url: '/forum/list',
     method: 'get',
-    params
+    params: query
   })
 }
 

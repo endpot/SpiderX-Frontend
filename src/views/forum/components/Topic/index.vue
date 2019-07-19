@@ -4,8 +4,8 @@
       <el-col class="main" :span="15" :offset="3">
         <div class="new-title">创建新话题</div>
         <el-form ref="form" :model="form" :rules="rules">
-          <el-form-item label="选择版块:" prop="forumArea" label-width="90px">
-            <el-select v-model="form.forumArea" placeholder="请选择版块">
+          <el-form-item label="选择版块:" prop="topicType" label-width="90px">
+            <el-select v-model="form.topicType" placeholder="请选择版块">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -14,11 +14,11 @@
           </el-form-item>
           <el-form-item label-width="10px">
             <div class="editor-container">
-              <markdown-editor v-model="content" height="400px" />
+              <markdown-editor v-model="form.content" class="md-editor" height="400px" />
             </div>
           </el-form-item>
           <el-form-item label-width="10px">
-            <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+            <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -28,7 +28,7 @@
           <div slot="header" class="clearfix">
             <span>Markdown 语法参考</span>
           </div>
-          <div v-for="item in grammerList" :key="item" class="markdown-grammers">
+          <div v-for="(item, index) in grammerList" :key="index" class="markdown-grammers">
             {{ item.value }}
           </div>
           <span class="markdown-link"><a href="https://segmentfault.com/markdown" target="_blank">Markdown 文档</a></span>
@@ -46,35 +46,47 @@
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
+import { fetchDetails } from '@/api/forum'
 
-const content = `
-**This is test**
-
-* vue
-* element
-* webpack
-
-`
+const defaultForm = {
+  id: undefined,
+  topicType: '', // 话题类别
+  title: '', // 话题标题
+  content: '' // 话题正文
+}
 
 export default {
   components: {
     MarkdownEditor
   },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + '为必填项',
+          type: 'error'
+        })
+        callback(new Error(rule.field + '为必填项'))
+      } else {
+        callback()
+      }
+    }
+
     return {
-      form: {
-        forumArea: '',
-        title: ''
-      },
+      loading: false,
+      form: Object.assign({}, defaultForm),
       rules: {
-        forumArea: [
-          { required: true, message: '请选择版块', trigger: 'change' }
-        ],
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 - 20 个字符', trigger: 'blur' }
-        ]
+        topicType: [{ validator: validateRequire }],
+        title: [{ validator: validateRequire }],
+        content: [{ validator: validateRequire }]
       },
+      tempRoute: {},
       options: [
         {
           label: '精华',
@@ -89,7 +101,6 @@ export default {
           value: 'ask'
         }
       ],
-      content: content, // mdEditor文本内容
       grammerList: [
         {
           value: '### 单行的标题'
@@ -112,13 +123,44 @@ export default {
       ]
     }
   },
+  created() {
+    if (this.isEdit) {
+      const id = this.$route.params && this.$route.params.id
+      this.getDetails(id)
+    } else {
+      this.form = Object.assign({}, defaultForm)
+    }
+    this.tempRoute = Object.assign({}, this.$route)
+  },
   methods: {
-    onSubmit(formName) {
-      this.$refs[formName].validate((valid) => {
+    getDetails(id) {
+      fetchDetails(id).then(res => {
+        this.form = res.data
+
+        // set page title
+        this.setPageTitle()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    setPageTitle() {
+      const title = 'Edit Topic'
+      document.title = `${title} - ${this.form.id}`
+    },
+    submitForm() {
+      console.log(this.form)
+      this.$refs.form.validate((valid) => {
         if (valid) {
-          alert('submit')
+          this.loading = true
+          this.$notify({
+            title: '成功',
+            message: '发布话题成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.loading = false
         } else {
-          console.log('err')
+          console.log('err submit')
           return false
         }
       })
@@ -136,6 +178,9 @@ export default {
 }
 .main {
   background-color: #fff;;
+}
+.md-editor{
+  line-height: 0;
 }
 .box-card {
   .markdown-grammers {

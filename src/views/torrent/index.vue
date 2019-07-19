@@ -1,13 +1,17 @@
 <template>
   <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="torrentList"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
+    <el-card class="box-card">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item style="width:280px" prop="search">
+          <el-input v-model="form.search" placeholder="请输入种子信息" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="onSearch" />
+          </el-input>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-table v-loading="listLoading" :data="torrentList" border fit highlight-current-row style="width: 100%">
+
       <el-table-column align="center" label="类型" width="80">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.category }}</el-tag>
@@ -93,12 +97,19 @@ export default {
     return {
       torrentList: null,
       total: 0,
-      width: 38,
+      width: 38, // rate circle width
       bookmark: [],
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20
+      },
+      form: {
+        search: '' // 搜索框
+      },
+      rules: {
+        search: [{ required: true, message: '请输入要查询的种子信息', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
       }
     }
   },
@@ -114,6 +125,9 @@ export default {
         this.total = res.data.total
         this.listLoading = false
       })
+    },
+    onSearch() {
+      console.log(this.form.search)
     },
     bookMark(id) {
       if (this.bookmark.indexOf(id) !== -1) {
