@@ -1,9 +1,32 @@
 <template>
   <div class="app-container">
+    <h1>这里是种子Title</h1>
     <el-card class="box-card">
-      <div v-for="o in 24" :key="o" class="text item">
-        {{ '列表内容 ' + o }}
+      <div slot="header" class="clearfix">
+        <span>IMDB / DouBan / TMDB Information</span>
       </div>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Torrent Info</span>
+      </div>
+      Just By UHDBits Torrent Details Torrents card
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Media Info</span>
+      </div>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Screenshots Info</span>
+      </div>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Comments</span>
+      </div>
+      list the comments just like forum details list
     </el-card>
   </div>
 </template>
@@ -17,7 +40,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+h1 {
+  text-align: center;
+}
 .box-card {
   opacity: 0.8;
+  margin: 15px 0;
 }
 </style>
