@@ -41,7 +41,22 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
+      },
+      '/omdb': {
+        target: 'http://www.omdbapi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/omdb': '/'
+        }
+      },
+      '/douban': {
+        target: 'http://api.douban.com/v2/movie',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/douban': '/'
+        }
       }
+
     },
     after: require('./mock/mock-server.js')
   },
