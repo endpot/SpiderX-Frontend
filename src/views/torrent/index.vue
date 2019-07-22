@@ -61,6 +61,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="Completer">
+        <template slot-scope="scope">
+          <span>{{ scope.row.completer }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="Rate">
         <template slot-scope="scope">
           <el-progress type="circle" :percentage="scope.row.rate" :width="width" />

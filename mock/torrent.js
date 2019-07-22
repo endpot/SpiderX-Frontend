@@ -16,6 +16,7 @@ for (let i = 0; i < count; i++) {
     attachments: [], // 附件
     leechers: '@integer(60, 100)', // 下载数
     seeders: '@integer(60, 100)', // 做种数
+    completer: '@integer(20, 120)', // 完成数
     rate: '@integer(0, 100)' // 完成百分比
   }))
 }
