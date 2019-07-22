@@ -48,15 +48,6 @@
               </div>
 
               <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-              <!-- <el-pagination
-                background
-                layout="total, prev, pager, next, jumper"
-                :current-page.sync="listQuery.page"
-                :page-size="listQuery.limit"
-                :total="total"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-              /> -->
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
             <el-tab-pane label="精华" name="second">
