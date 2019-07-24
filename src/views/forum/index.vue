@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="panel">
-      <el-row :gutter="14">
-        <el-col :span="15" :offset="3">
-          <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+      <el-row :gutter="20">
+        <el-col :span="16" :offset="1">
+          <el-tabs v-model="activeName" class="main-container" type="border-card" @tab-click="handleClick">
             <el-tab-pane v-loading="listLoading" label="全部" name="first">
               <div v-for="(item, index) in topic_list" :key="index" class="topic-list">
                 <div class="cell">
@@ -60,23 +60,30 @@
             <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>
           </el-tabs>
         </el-col>
-        <el-col :span="4">
-          <div class="grid-content">
-            <el-card class="box-card" shadow="never">
+        <el-col :span="6">
+          <div class="card-item">
+            <el-card :class="{front:front2Back}" class="box-card-front">
               <div slot="header" class="clearfix">
                 <span>个人信息</span>
-                <el-button style="float: right; padding:3px 0" type="text">操作</el-button>
+                <span style="float: right; padding: 3px 0">
+                  <svg-icon icon-class="change" @click="changeClick" />
+                </span>
               </div>
               <div class="user-avatar">
                 <img :src="avatar+'?imageView2/1/w/120/h/120'" alt="avatar"><br>
                 <span>预留部分</span>
               </div>
             </el-card>
-            <br>
-            <el-card class="box-card" shadow="never">
-              <div class="new-topic">
-                这里不准备提供创建文章的按钮了  不过并没有想好放什么
-                <!-- <router-link :to="{name: 'CreateTopic'}"><el-button icon="el-icon-edit">发布话题</el-button></router-link> -->
+
+            <el-card :class="{back:front2Back}" class="box-card-back">
+              <div slot="header" class="clearfix">
+                <span>UserInfo</span>
+                <span style="float: right; padding: 3px 0">
+                  <svg-icon icon-class="change" @click="changeClick" />
+                </span>
+              </div>
+              <div class="user-info">
+                user info
               </div>
             </el-card>
           </div>
@@ -113,7 +120,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 20
-      }
+      },
+      front2Back: false
     }
   },
   computed: {
@@ -144,7 +152,11 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
       this.getPageData()
+    },
+    changeClick() {
+      this.front2Back = !this.front2Back
     }
+
   }
 }
 </script>
@@ -152,6 +164,11 @@ export default {
 <style lang="scss" scoped>
 .el-col-lg-2 { // 这里单独对日期部分进行右对齐处理
   text-align: right;
+}
+.main-container {
+  opacity: 0.8;
+  border-radius: 0 0 4px 4px;
+  margin: 15px 0;
 }
 // 这里是主体部分
 .topic-list {
@@ -234,13 +251,36 @@ export default {
     }
   }
 }
-// 右侧部分
-.box-card {
-  .user-avatar {
-    text-align: center;
+/* 可翻转的用户信息栏 */
+.card-item {
+    width: 25%;
+    height: 300px;
+    position: absolute;
+    margin: 15px 0;
+    opacity: 0.8;
+  .box-card-front,
+  .box-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    transition: .5s ease-in-out;
   }
-  .new-topic {
-    text-align: center;
+  .box-card-front {
+    z-index: 1;
+  }
+  .box-card-back {
+    transform: rotateY(180deg);
+  }
+  .box-card-back.back {
+    transform: rotateY(0deg);
+  }
+  .box-card-front.front {
+    z-index: 0;
+    transform: rotateY(-180deg);
   }
 }
 </style>
