@@ -3,61 +3,87 @@
     <div class="panel">
       <el-row :gutter="20">
         <el-col :span="16" :offset="1">
-          <el-tabs v-model="activeName" class="main-container" type="border-card" @tab-click="handleClick">
-            <el-tab-pane v-loading="listLoading" label="全部" name="first">
-              <div v-for="(item, index) in topic_list" :key="index" class="topic-list">
-                <div class="cell">
-                  <el-row>
-                    <el-col :xl="1" :lg="1" :md="2" :sm="2" :xs="3">
-                      <a :href="item.author.author_name" class="user-avatar" target="_blank">
-                        <img :src="item.author.avatar_url" :title="item.author.author_name">
-                      </a>
-                    </el-col>
-                    <el-col :xl="2" :lg="4" :md="5" :sm="2" :xs="3">
-                      <span class="reply-count">
-                        <span class="count-of-replies" title="回复数">
-                          {{ item.reply_count }}
-                        </span>
-                        <span class="count-seperator">/</span>
-                        <span class="count-of-visits" title="点击数">
-                          {{ item.pageviews }}
-                        </span>
-                      </span>
-                    </el-col>
-                    <el-col :xl="18" :lg="16" :md="14" :sm="17" :xs="15">
-                      <div class="topic-title-wrapper">
-                        <span class="topic-tabs"><!-- 这里考虑论坛的所有分类同标签页个数 -->
-                          <el-tag v-if="item.topicType === 'share'" size="small">分享</el-tag>
-                          <el-tag v-else-if="item.topicType === 'good'" size="small">精华</el-tag>
-                          <el-tag v-else-if="item.topicType === 'ask'" size="small" type="success">问答</el-tag>
-                        </span>
-                        <router-link :to="{ name: 'TopicDetails', params: { id: item.id }}" :title="item.title" class="topic-title">
-                          {{ item.title }}
-                        </router-link>
-                      </div>
-                    </el-col>
-                    <el-col :span="3">
-                      <span class="last-time">
-                        <a class="last-active-time" href="#"><!-- 这里要对日期格式化 -->
-                          {{ item.last_reply_at | formatLocalTime(item.last_reply_at) }}
-                        </a>
-                      </span>
-                    </el-col>
-                  </el-row>
-                </div>
-              </div>
+          <el-tabs v-model="activeName" class="tab-container" type="border-card" @tab-click="handleClick">
+            <el-tab-pane v-loading="listLoading" label="全部" name="all">
+
+              <el-table :data="forumData" :show-header="showHeader" fit highlight-current-row style="width: 100%">
+
+                <el-table-column align="center" label="Icon" width="60">
+                  <template slot-scope="scope">
+                    <router-link :to="'#'">
+                      <el-popover placement="right" trigger="hover">
+                        <el-card class="user-info-hover" shadow="never">
+                          <div slot="header" class="clearfix">
+                            <el-image :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px;" />
+                            <div class="user-name"> {{ scope.row.author.author_name }} </div>
+                            <div v-for="role in roles" :key="role" style="float: right; padding: 3px 0">{{ role }}</div>
+                          </div>
+                          <div class="user-options">
+                            <el-row>
+                              <el-button size="small" round>加为好友</el-button>
+                              <el-button size="small" round>发送信息</el-button>
+                              <el-button size="small" round>打个招呼</el-button>
+                            </el-row>
+                          </div>
+                        </el-card>
+                        <el-image slot="reference" :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px; border-radius: 50%;" />
+                      </el-popover>
+                    </router-link>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="left" label="Title" width="auto">
+                  <template slot-scope="scope">
+                    <div class="titlelist">
+                      <el-button v-if="scope.row.topicType === 'notice'" type="text" @click="changeTab(scope)">[站务公告]</el-button>
+                      <el-button v-if="scope.row.topicType === 'guide'" type="text" @click="changeTab(scope)">[新手指引]</el-button>
+                      <el-button v-if="scope.row.topicType === 'discuss'" type="text" @click="changeTab(scope)">[综合交流]</el-button>
+                      <el-button v-if="scope.row.topicType === 'hobby'" type="text" @click="changeTab(scope)">[兴趣爱好]</el-button>
+                      <el-button v-if="scope.row.topicType === 'working'" type="text" @click="changeTab(scope)">[站务工作]</el-button>
+                      <router-link :to="'/forum/details/'+scope.row.id" :title="scope.row.title" class="link-type">
+                        <div>{{ scope.row.title }}</div>
+                      </router-link>
+                    </div>
+                    <div class="titleinfo">
+                      <span>作者:</span>
+                      <router-link :to="'/user/info/'+scope.row.author_id" :title="scope.row.author" class="link-type">
+                        <span> {{ scope.row.author.author_name }} </span>
+                      </router-link>
+                      <span> {{ scope.row.create_at }} </span>
+                      <span> | </span>
+                      <span> 最后发表: </span>
+                      <span>{{ scope.row.author.author_name }}</span>
+                      <span>{{ scope.row.last_reply_at | formatLocalTime(scope.row.last_reply_at) }}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="right" label="ReplyOrRead" width="120">
+                  <template slot-scope="scope">
+                    <div class="reply-read">
+                      <span>回帖:</span>
+                      <span> {{ scope.row.reply_count }} </span>
+                      <span> / </span>
+                      <span> {{ scope.row.pageviews }} </span>
+                    </div>
+                  </template>
+                </el-table-column>
+
+              </el-table>
 
               <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
-            <el-tab-pane label="精华" name="second">
+            <el-tab-pane label="站务公告" name="notice">
               权限测试查看
               <el-tag v-permission="['admin']">This is admin</el-tag>
               <el-tag v-permission="['editor']">This is editor</el-tag>
               <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
             </el-tab-pane>
-            <el-tab-pane label="分享" name="third">分享</el-tab-pane>
-            <el-tab-pane label="问答" name="fourth">问答</el-tab-pane>
+            <el-tab-pane label="新手指引" name="guide">分享</el-tab-pane>
+            <el-tab-pane label="综合交流" name="discuss">问答</el-tab-pane>
+            <el-tab-pane label="兴趣爱好" name="hobby">问答</el-tab-pane>
+            <el-tab-pane v-permission="['admin']" label="站务工作" name="working">问答</el-tab-pane>
           </el-tabs>
         </el-col>
         <el-col :span="6">
@@ -113,20 +139,22 @@ export default {
   },
   data() {
     return {
-      activeName: 'first',
-      topic_list: [],
+      activeName: 'all',
+      forumData: {},
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20
       },
-      front2Back: false
+      front2Back: false,
+      showHeader: false
     }
   },
   computed: {
     ...mapGetters([
-      'avatar'
+      'avatar',
+      'roles'
     ])
   },
   created() {
@@ -136,7 +164,8 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(res => {
-        this.topic_list = res.data.items
+        // console.log(res.data)
+        this.forumData = res.data.items
         this.total = res.data.total
         this.listLoading = false
       })
@@ -155,6 +184,10 @@ export default {
     },
     changeClick() {
       this.front2Back = !this.front2Back
+    },
+    changeTab(id) {
+      const idTab = id.row.topicType
+      this.activeName = idTab
     }
 
   }
@@ -162,92 +195,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-col-lg-2 { // 这里单独对日期部分进行右对齐处理
-  text-align: right;
-}
-.main-container {
+// 对原有样式修正
+
+.tab-container {
   opacity: 0.8;
-  border-radius: 0 0 4px 4px;
   margin: 15px 0;
+  border-radius: 0 0 5px 5px;
 }
-// 这里是主体部分
-.topic-list {
-  // display: block;
-  line-height: 50px;
+// 标题部分的type='text' 按钮的大小
+.el-button {
+  font-size: 12px;
+  padding: 0 2px 0 0;
 }
-.cell {
-  box-sizing: border-box;
-  border: 1px solid #999;
-  margin-top: -1px;
-  width: 100%;
-  // display: flex;
-  background-color: #fff;
-  // margin:2px 0px;
-  line-height: 50px;
-  .user-avatar {
-    width: 40px;
-    img {
-      margin-left:5px;
-      width: 30px;
-      height: 30px;
-      border-radius: 3px;
-      vertical-align: middle;
-    }
+.titlelist {
+  display: flex;
+}
+.titleinfo {
+  font-size: 12px;
+}
+.reply-read {
+    font-size: 12px;
+    margin-top: 30px;
+    text-align: right;
+}
+.user-info-hover {
+  width: 280px;
+}
+.clearfix {
+  .user-name {
+    display: inline-block;
+    position: absolute;
+    padding: 3px;
   }
-  @media screen and (min-width: 1000px) {
-    .reply-count {
-      // width: 100px;
-      margin-left:15px;
-      .count-of-replies {
-        color: #9e78c0;
-        font-size: 16px;
-      }
-      .count-of-visits {
-        font-size: 12px;
-        color: #b4b4b4;
-      }
-    }
-  }
-  @media screen and(max-width: 999px) {
-    .reply-count {
-      font-size: 6px;
-      position: absolute;
-      padding-left: 40px;
-      padding-top: 18px;
-      .count-of-replies {
-        color: #9e78c0;
-      }
-      .count-of-visits {
-        color: #b4b4b4;
-      }
-    }
-  }
-  .topic-title-wrapper {
-    width: 100%;
-    display: flex;
-    .topic-title {
-      overflow: hidden;
-      width: 90%;
-      white-space: nowrap;
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 16px;
-      line-height: 50px;
-      text-overflow: ellipsis;
-    }
-    a:hover {
-      text-decoration: underline !important;
-    }
-  }
-  .last-time {
-    .last-active-time {
-      width: 100%;
-      font-size: 12px;
-      color: #b4b4b4;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
+}
+.user-options {
+  .el-row {
+    .el-button {
+      color: #aaa;
+      text-shadow: 5px 0 15px #fff;
     }
   }
 }
