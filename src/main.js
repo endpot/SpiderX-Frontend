@@ -27,6 +27,17 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+/**
+ * Echart
+ * VeLine 折线图
+ * VeTree 树图 考虑admin查看邀请树用 备用
+ */
+import VeLine from 'v-charts/lib/line.common'
+import VeTree from 'v-charts/lib/tree.common'
+
+Vue.component(VeLine.name, VeLine)
+Vue.component(VeTree.name, VeTree)
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 
