@@ -5,12 +5,14 @@ import user from './user'
 import table from './table'
 import forum from './forum'
 import torrent from './torrent'
+import home from './home'
 
 const mocks = [
   ...user,
   ...table,
   ...forum,
-  ...torrent
+  ...torrent,
+  ...home
 ]
 
 // for front mock
