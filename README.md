@@ -1,4 +1,6 @@
 # SpiderX-Frontend
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fajycc20%2FSpiderX-Frontend.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fajycc20%2FSpiderX-Frontend?ref=badge_shield)
+
 
 > SpiderX-Frontend 是一个基于vue-admin-template 的Private-Tracker前台模板
 
@@ -49,3 +51,7 @@ npm run lint
 # 代码格式检查并自动修复
 npm run lint -- --fix
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fajycc20%2FSpiderX-Frontend.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fajycc20%2FSpiderX-Frontend?ref=badge_large)
