@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 const forumList = []
-const count = 50
+const count = 500
 
 const image_url = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
 
@@ -39,13 +39,22 @@ export default [
     url: '/forum/list',
     type: 'get',
     response: config => {
-      const { page = 1, limit = 20 } = config.query
-      const pageList = forumList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-
+      const { page = 1, limit = 20, tab = 'all' } = config.query
+      let itemList = []
+      if (tab !== 'all') {
+        for (const item of forumList) {
+          if (item.topicType === tab) {
+            itemList.push(item)
+          }
+        }
+      } else {
+        itemList = forumList
+      }
+      const pageList = itemList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
       return {
         code: 20000,
         data: {
-          total: forumList.length,
+          total: itemList.length,
           items: pageList
         }
       }

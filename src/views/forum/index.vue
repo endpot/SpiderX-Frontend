@@ -4,9 +4,9 @@
       <el-row :gutter="20">
         <el-col :span="16" :offset="1">
           <el-tabs v-model="activeName" class="tab-container" type="border-card" @tab-click="handleClick">
-            <el-tab-pane v-loading="listLoading" label="全部" name="all">
+            <el-tab-pane label="全部" name="all">
 
-              <el-table :data="forumData" :show-header="showHeader" fit highlight-current-row style="width: 100%">
+              <el-table v-loading="listLoading" :data="forumData" :show-header="showHeader" fit highlight-current-row style="width: 100%">
 
                 <el-table-column align="center" label="Icon" width="60">
                   <template slot-scope="scope">
@@ -33,13 +33,81 @@
                 </el-table-column>
 
                 <el-table-column align="left" label="Title" width="auto">
+                  <template slot-scope="{row}">
+                    <div class="titlelist">
+                      <el-button v-if="row.topicType === 'notice'" type="text" @click="changeTab(row)">[站务公告]</el-button>
+                      <el-button v-if="row.topicType === 'guide'" type="text" @click="changeTab(row)">[新手指引]</el-button>
+                      <el-button v-if="row.topicType === 'discuss'" type="text" @click="changeTab(row)">[综合交流]</el-button>
+                      <el-button v-if="row.topicType === 'hobby'" type="text" @click="changeTab(row)">[兴趣爱好]</el-button>
+                      <el-button v-if="row.topicType === 'working'" type="text" @click="changeTab(row)">[站务工作]</el-button>
+                      <router-link :to="'/forum/details/'+row.id" :title="row.title" class="link-type">
+                        <div>{{ row.title }}</div>
+                      </router-link>
+                    </div>
+                    <div class="titleinfo">
+                      <span>作者:</span>
+                      <router-link :to="'/user/info/'+row.author_id" :title="row.author" class="link-type">
+                        <span> {{ row.author.author_name }} </span>
+                      </router-link>
+                      <span> {{ row.create_at }} </span>
+                      <span> | </span>
+                      <span> 最后发表: </span>
+                      <span>{{ row.author.author_name }}</span>
+                      <span>{{ row.last_reply_at | formatLocalTime(row.last_reply_at) }}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="right" label="ReplyOrRead" width="120">
+                  <template slot-scope="scope">
+                    <div class="reply-read">
+                      <span>回帖:</span>
+                      <span> {{ scope.row.reply_count }} </span>
+                      <span> / </span>
+                      <span> {{ scope.row.pageviews }} </span>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+              <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+            </el-tab-pane>
+            <!-- 这里需要keep-alive -->
+            <el-tab-pane label="站务公告" name="notice">
+              权限测试查看
+              <el-tag v-permission="['admin']">This is admin</el-tag>
+              <el-tag v-permission="['editor']">This is editor</el-tag>
+              <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
+
+              <el-table v-loading="listLoading" :data="noticeList" :show-header="showHeader" fit highlight-current-row style="width: 100%">
+
+                <el-table-column align="center" label="Icon" width="60">
+                  <template slot-scope="scope">
+                    <router-link :to="'#'">
+                      <el-popover placement="right" trigger="hover">
+                        <el-card class="user-info-hover" shadow="never">
+                          <div slot="header" class="clearfix">
+                            <el-image :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px;" />
+                            <div class="user-name"> {{ scope.row.author.author_name }} </div>
+                            <div v-for="role in roles" :key="role" style="float: right; padding: 3px 0">{{ role }}</div>
+                          </div>
+                          <div class="user-options">
+                            <el-row>
+                              <el-button size="small" round>加为好友</el-button>
+                              <el-button size="small" round>发送信息</el-button>
+                              <el-button size="small" round>打个招呼</el-button>
+                            </el-row>
+                          </div>
+                        </el-card>
+                        <el-image slot="reference" :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px; border-radius: 50%;" />
+                      </el-popover>
+                    </router-link>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="left" label="Title" min-width="300px">
                   <template slot-scope="scope">
                     <div class="titlelist">
-                      <el-button v-if="scope.row.topicType === 'notice'" type="text" @click="changeTab(scope)">[站务公告]</el-button>
-                      <el-button v-if="scope.row.topicType === 'guide'" type="text" @click="changeTab(scope)">[新手指引]</el-button>
-                      <el-button v-if="scope.row.topicType === 'discuss'" type="text" @click="changeTab(scope)">[综合交流]</el-button>
-                      <el-button v-if="scope.row.topicType === 'hobby'" type="text" @click="changeTab(scope)">[兴趣爱好]</el-button>
-                      <el-button v-if="scope.row.topicType === 'working'" type="text" @click="changeTab(scope)">[站务工作]</el-button>
                       <router-link :to="'/forum/details/'+scope.row.id" :title="scope.row.title" class="link-type">
                         <div>{{ scope.row.title }}</div>
                       </router-link>
@@ -58,7 +126,7 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column align="right" label="ReplyOrRead" width="120">
+                <el-table-column align="right" label="ReplyOrRead">
                   <template slot-scope="scope">
                     <div class="reply-read">
                       <span>回帖:</span>
@@ -68,17 +136,10 @@
                     </div>
                   </template>
                 </el-table-column>
-
               </el-table>
 
               <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-            </el-tab-pane>
-            <!-- 这里需要keep-alive -->
-            <el-tab-pane label="站务公告" name="notice">
-              权限测试查看
-              <el-tag v-permission="['admin']">This is admin</el-tag>
-              <el-tag v-permission="['editor']">This is editor</el-tag>
-              <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
+
             </el-tab-pane>
             <el-tab-pane label="新手指引" name="guide">分享</el-tab-pane>
             <el-tab-pane label="综合交流" name="discuss">问答</el-tab-pane>
@@ -139,14 +200,18 @@ export default {
   },
   data() {
     return {
-      activeName: 'all',
-      forumData: {},
+      activeName: 'notice',
+      // tab all page
+      forumData: null,
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20
+        limit: 20,
+        tab: 'all'
       },
+      // tab notice page
+      noticeList: null,
       front2Back: false,
       showHeader: false
     }
@@ -172,6 +237,8 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event)
+      this.listQuery.tab = tab.name
+      this.getList()
     },
     // 每页数
     handleSizeChange(val) {
