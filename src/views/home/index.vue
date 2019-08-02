@@ -28,6 +28,12 @@
 
       <el-card class="box-card">
         <div slot="header" class="clearfix">
+          <span>推荐</span>
+        </div>
+      </el-card>
+
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
           <span>聊天区</span>
           <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">操作</el-button>
         </div>
@@ -36,6 +42,14 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>投票</span>
+          <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">操作</el-button>
+        </div>
+
+      </el-card>
+
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>竞价置顶</span>
           <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">操作</el-button>
         </div>
 
