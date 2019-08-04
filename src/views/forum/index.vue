@@ -6,7 +6,7 @@
           <el-tabs v-model="activeName" class="tab-container" type="border-card" @tab-click="handleClick">
             <el-tab-pane label="全部" name="all">
               <!-- tab page 1 -->
-              <tab-page :tab-name="all" />
+              <tab-page ref="tab-page" />
 
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
@@ -16,13 +16,21 @@
               <el-tag v-permission="['editor']">This is editor</el-tag>
               <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
               <!-- tab page 2 -->
-              <tab-page :tab-name="notice" />
+              <tab-page ref="tab-page" />
 
             </el-tab-pane>
-            <el-tab-pane label="新手指引" name="guide">分享</el-tab-pane>
-            <el-tab-pane label="综合交流" name="discuss">问答</el-tab-pane>
-            <el-tab-pane label="兴趣爱好" name="hobby">问答</el-tab-pane>
-            <el-tab-pane v-permission="['admin']" label="站务工作" name="working">问答</el-tab-pane>
+            <el-tab-pane label="新手指引" name="guide">
+              <tab-page ref="tab-page" />
+            </el-tab-pane>
+            <el-tab-pane label="综合交流" name="discuss">
+              <tab-page ref="tab-page" />
+            </el-tab-pane>
+            <el-tab-pane label="兴趣爱好" name="hobby">
+              <tab-page ref="tab-page" />
+            </el-tab-pane>
+            <el-tab-pane v-permission="['admin']" label="站务工作" name="working">
+              <tab-page ref="tab-page" />
+            </el-tab-pane>
           </el-tabs>
         </el-col>
         <el-col :span="6">
@@ -78,30 +86,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'avatar',
-      'roles'
+      'avatar'
     ])
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
-      this.listQuery.tab = tab.name
-    },
-    // 每页数
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
-    },
-    // 当前页
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
-      this.getPageData()
+    handleClick(tab, event) { // 问题：请求值正常  页面渲染不正常 以及初始化请求了6次
+      this.$refs['tab-page'].getList(tab.name)
     },
     changeClick() {
       this.front2Back = !this.front2Back
-    },
-    changeTab(id) {
-      const idTab = id.row.topicType
-      this.activeName = idTab
     }
   }
 }

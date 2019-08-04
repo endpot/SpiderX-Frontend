@@ -10,7 +10,7 @@
                 <div slot="header" class="clearfix">
                   <el-image :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px;" />
                   <div class="user-name"> {{ scope.row.author.author_name }} </div>
-                  <div v-for="role in roles" :key="role" style="float: right; padding: 3px 0">{{ role }}</div>
+                  <div v-for="(role, index) in roles" :key="index" class="user-role" style="float: right; padding: 3px 0">{{ role }}</div>
                 </div>
                 <div class="user-options">
                   <el-row>
@@ -68,7 +68,8 @@
   </div>
 </template>
 
-<script> // 考虑将该处所有tab封装为一个组件 通过props传值
+<script>
+import { mapGetters } from 'vuex'
 import { formatTime, timeStamp } from '@/utils' // 这里考虑到mockjs生成的日期是yyyy-MM-dd HH:mm:ss  所以封装了timeStamp将时间转为unix格式
 import { fetchList } from '@/api/forum'
 import Pagination from '@/components/Pagination'
@@ -81,12 +82,12 @@ export default {
   components: {
     Pagination
   },
-  props: {
-    tabName: {
-      type: String,
-      default: 'all'
-    }
-  },
+  // props: { // 康了康好像没什么用
+  //   tabName: {
+  //     type: String,
+  //     default: 'all'
+  //   }
+  // },
   data() {
     return {
       tableData: null, // 全局表格data
@@ -96,23 +97,33 @@ export default {
       listQuery: { // fetchList 参数
         page: 1,
         limit: 20,
-        tab: this.tabName //default tab page  这里接收传递的tabName
-      },
+        tab: 'all' // default tab page  这里接收传递的tabName
+      }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'avatar',
+      'roles'
+    ])
   },
   mounted() {
     this.getList()
   },
   methods: {
-    getList() {
+    getList(tab) { // 这里接受父组件 this.$refs['tab-page'].getList(tab.name)
+      this.listQuery.tab = tab
       this.listLoading = true
       fetchList(this.listQuery).then(res => {
-        // console.log(res.data)
         this.tableData = res.data.items
         this.total = res.data.total
         this.listLoading = false
       })
     },
+    changeTab(id) {
+      const idTab = id.row.topicType
+      this.activeName = idTab
+    }
   }
 }
 </script>

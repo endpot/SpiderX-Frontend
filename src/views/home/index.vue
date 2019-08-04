@@ -63,8 +63,8 @@
         <ve-line :data="chartData" :settings="chartSettings" />
       </el-card>
     </div>
-    <!-- <div class="home-text">name:{{ name }}</div>
-    <div class="home-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div> -->
+    <div class="home-text">name:{{ name }}</div>
+    <div class="home-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
   </div>
 </template>
 
