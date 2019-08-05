@@ -33,7 +33,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" class="hidden-xs-only">
           <div class="card-item">
             <el-card :class="{front:front2Back}" class="box-card-front">
               <div slot="header" class="clearfix">
@@ -95,33 +95,33 @@ export default {
   methods: {
     // 页面初始化 请求page all
     getTabAll() {
-      this.$refs['tab-page-all'].getList('all')
+      this.$refs['tab-page-all'].getList()
     },
     handleClick(tab, event) {
       switch (this.activeName) {
         case 'all':
-          this.$refs['tab-page-all'].getList('all')
+          this.$refs['tab-page-all'].getTabName('all')
           break
         case 'notice':
-          this.$refs['tab-page-notice'].getList('notice')
+          this.$refs['tab-page-notice'].getTabName('notice')
           break
         case 'guide':
-          this.$refs['tab-page-guide'].getList('guide')
+          this.$refs['tab-page-guide'].getTabName('guide')
           break
         case 'discuss':
-          this.$refs['tab-page-discuss'].getList('discuss')
+          this.$refs['tab-page-discuss'].getTabName('discuss')
           break
         case 'hobby':
-          this.$refs['tab-page-hobby'].getList('hobby')
+          this.$refs['tab-page-hobby'].getTabName('hobby')
           break
         case 'working':
-          this.$refs['tab-page-working'].getList('working')
+          this.$refs['tab-page-working'].getTabName('working')
           break
         default:
-          this.$refs['tab-page-all'].getList('all')
+          this.$refs['tab-page-all'].getTabName('all')
       }
     },
-    changeTabs(tabName) {
+    changeTabs(tabName) { // 接收从子组件传递过来的tabName 然后将获取到的tabName赋值给 activeName 然后执行请求数据
       this.activeName = tabName
       this.handleClick()
     },

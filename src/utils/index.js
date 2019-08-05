@@ -120,18 +120,34 @@ export function param2Obj(url) {
  */
 export function calcFileSize(size) {
   const fileSizeByte = size
+  const Kilobyte = 1024 // 1024 * B
+  const Megabyte = 1048576 // 1024 * KB
+  const Gigabyte = 1073741824 // 1024 * MB
+  const Terabyte = 1099511627776 // 1024 * GB
+  const Petabyte = 1125899906842624 // 1024 * TB
+  const Exabyte = 1152921504606846976 // 1024 * PB
+  // const Zettabyte = 1180591620717411303424 // 1024 * EB
+  // const Yottabyte = 1208925819614629174706176 // 1024 * ZB
 
-  if (fileSizeByte < 1048576) {
-    return (fileSizeByte / 1024).toFixed(2) + ' KB'
-  } else if (fileSizeByte === 1048576) {
+  if (fileSizeByte < Megabyte) {
+    return (fileSizeByte / Kilobyte).toFixed(2) + ' KB'
+  } else if (fileSizeByte === Megabyte) {
     return '1.00 MB'
-  } else if (fileSizeByte > 1048576 && fileSizeByte < 1073741824) {
-    return (fileSizeByte / (1024 * 1024)).toFixed(2) + ' MB'
-  } else if (fileSizeByte > 1048576 && fileSizeByte === 1073741824) {
+  } else if (fileSizeByte > Megabyte && fileSizeByte < Gigabyte) {
+    return (fileSizeByte / Megabyte).toFixed(2) + ' MB'
+  } else if (fileSizeByte === Gigabyte) {
     return '1.00 GB'
-  } else if (fileSizeByte > 1073741824 && fileSizeByte < 1099511627776) {
-    return (fileSizeByte / (1024 * 1024 * 1024)).toFixed(2) + ' GB'
+  } else if (fileSizeByte > Gigabyte && fileSizeByte < Terabyte) {
+    return (fileSizeByte / Gigabyte).toFixed(2) + ' GB'
+  } else if (fileSizeByte === Terabyte) {
+    return '1.00 TB'
+  } else if (fileSizeByte > Terabyte && fileSizeByte < Petabyte) {
+    return (fileSizeByte / Terabyte).toFixed(2) + ' TB'
+  } else if (fileSizeByte === Petabyte) {
+    return '1.00 PB'
+  } else if (fileSizeByte > Petabyte && fileSizeByte < Exabyte) {
+    return (fileSizeByte / Petabyte).toFixed(2) + ' PB'
   } else {
-    return '文件超过1.00 TB'
+    return '文件超过1.00 EB'
   }
 }

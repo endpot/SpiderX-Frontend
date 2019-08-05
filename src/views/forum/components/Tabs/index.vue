@@ -26,7 +26,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="left" label="Title" width="auto">
+      <el-table-column align="left" label="Title" width="auto" min-width="280">
         <template slot-scope="{row}">
           <div class="titlelist">
             <el-button v-if="row.topicType === 'notice'" type="text" @click="changeTab(row)">[站务公告]</el-button>
@@ -91,7 +91,7 @@ export default {
       listQuery: { // fetchList 参数
         page: 1,
         limit: 20,
-        tab: 'all' // default tab page  这里接收传递的tabName
+        tab: 'all'
       }
     }
   },
@@ -102,8 +102,11 @@ export default {
     ])
   },
   methods: {
-    getList(tab) { // 这里接受父组件 this.$refs['tab-page'].getList(tab.name)
+    getTabName(tab) { // 从父组件获取tabName
       this.listQuery.tab = tab
+      this.getList()
+    },
+    getList() {
       this.listLoading = true
       this.tableData = null
       fetchList(this.listQuery).then(res => {
@@ -112,7 +115,7 @@ export default {
         this.listLoading = false
       })
     },
-    changeTab(id) {
+    changeTab(id) { // 将当前所点击的tab类别传递至父组件
       const idTab = id.topicType
       this.$emit('listenTabEvent', idTab)
     }
