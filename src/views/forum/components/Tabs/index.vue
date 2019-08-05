@@ -82,12 +82,6 @@ export default {
   components: {
     Pagination
   },
-  // props: { // 康了康好像没什么用
-  //   tabName: {
-  //     type: String,
-  //     default: 'all'
-  //   }
-  // },
   data() {
     return {
       tableData: null, // 全局表格data
@@ -107,13 +101,11 @@ export default {
       'roles'
     ])
   },
-  mounted() {
-    this.getList()
-  },
   methods: {
     getList(tab) { // 这里接受父组件 this.$refs['tab-page'].getList(tab.name)
       this.listQuery.tab = tab
       this.listLoading = true
+      this.tableData = null
       fetchList(this.listQuery).then(res => {
         this.tableData = res.data.items
         this.total = res.data.total
@@ -121,8 +113,8 @@ export default {
       })
     },
     changeTab(id) {
-      const idTab = id.row.topicType
-      this.activeName = idTab
+      const idTab = id.topicType
+      this.$emit('listenTabEvent', idTab)
     }
   }
 }
