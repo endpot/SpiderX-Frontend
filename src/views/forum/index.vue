@@ -6,7 +6,7 @@
           <el-tabs v-model="activeName" class="tab-container" type="border-card" @tab-click="handleClick">
             <el-tab-pane label="全部" name="all">
               <!-- tab page 1 -->
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-all" @listenTabEvent="changeTabs" />
 
             </el-tab-pane>
             <!-- 这里需要keep-alive -->
@@ -16,20 +16,20 @@
               <el-tag v-permission="['editor']">This is editor</el-tag>
               <el-tag v-permission="['admin','editor']">Both admin or editor can see this</el-tag>
               <!-- tab page 2 -->
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-notice" @listenTabEvent="changeTabs" />
 
             </el-tab-pane>
             <el-tab-pane label="新手指引" name="guide">
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-guide" @listenTabEvent="changeTabs" />
             </el-tab-pane>
             <el-tab-pane label="综合交流" name="discuss">
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-discuss" @listenTabEvent="changeTabs" />
             </el-tab-pane>
             <el-tab-pane label="兴趣爱好" name="hobby">
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-hobby" @listenTabEvent="changeTabs" />
             </el-tab-pane>
             <el-tab-pane v-permission="['admin']" label="站务工作" name="working">
-              <tab-page ref="tab-page" />
+              <tab-page ref="tab-page-working" @listenTabEvent="changeTabs" />
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -89,9 +89,41 @@ export default {
       'avatar'
     ])
   },
+  mounted() {
+    this.getTabAll()
+  },
   methods: {
-    handleClick(tab, event) { // 问题：请求值正常  页面渲染不正常 以及初始化请求了6次
-      this.$refs['tab-page'].getList(tab.name)
+    // 页面初始化 请求page all
+    getTabAll() {
+      this.$refs['tab-page-all'].getList('all')
+    },
+    handleClick(tab, event) {
+      switch (this.activeName) {
+        case 'all':
+          this.$refs['tab-page-all'].getList('all')
+          break
+        case 'notice':
+          this.$refs['tab-page-notice'].getList('notice')
+          break
+        case 'guide':
+          this.$refs['tab-page-guide'].getList('guide')
+          break
+        case 'discuss':
+          this.$refs['tab-page-discuss'].getList('discuss')
+          break
+        case 'hobby':
+          this.$refs['tab-page-hobby'].getList('hobby')
+          break
+        case 'working':
+          this.$refs['tab-page-working'].getList('working')
+          break
+        default:
+          this.$refs['tab-page-all'].getList('all')
+      }
+    },
+    changeTabs(tabName) {
+      this.activeName = tabName
+      this.handleClick()
     },
     changeClick() {
       this.front2Back = !this.front2Back
