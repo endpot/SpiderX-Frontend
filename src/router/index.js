@@ -65,6 +65,37 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
+    path: '/announce',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'create',
+        name: 'Create Announce',
+        component: () => import('@/views/home/create'),
+        meta: {
+          title: 'Create Announce'
+        }
+      },
+      {
+        path: 'list',
+        name: 'List Announce',
+        component: () => import('@/views/home/components/AnnounceList'),
+        meta: {
+          title: 'List Announce'
+        }
+      },
+      {
+        path: 'edit/:id',
+        name: 'Edit Announce',
+        component: () => import('@/views/home/edit'),
+        meta: {
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: '/forum',
     component: Layout,
     redirect: '/forum/index',

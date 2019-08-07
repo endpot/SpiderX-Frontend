@@ -4,20 +4,41 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>最近消息</span>
-          <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">发布</el-button>
+          <span style="float: right; padding: 3px 0;">
+            <router-link :to="'/announce/create'" class="link-type">
+              [New]
+            </router-link>
+            <router-link :to="'/announce/list'" class="link-type">
+              [List]
+            </router-link>
+          </span>
         </div>
 
-        <el-collapse v-model="activeName" accordion>
+        <el-collapse v-model="activeName">
           <div v-for="(item, index) in announceList" :key="index" class="items">
-            <el-collapse-item :title="item.announce_title" :name="item.announce_id">
+            <el-collapse-item :name="item.announce_id">
+              <template slot="title">
+                {{ item.announce_title }}
+                <div class="item-title-right">
+                  <div class="item-title-options">
+                    <span>
+                      <router-link :to="'/announce/edit/'+item.announce_id" class="link-type">
+                        Edit
+                      </router-link>
+                      <span class="link-type" @click="deleteAnnounceItem(item)">Delete</span>
+                    </span>
+                    <span class="item-title-time hidden-xs-only"> {{ item.announce_time }} </span>
+                  </div>
+                </div>
+              </template>
               <div class="items-text">{{ item.announce_text }}</div>
               <div class="items-footer">
-                <div class="items-footer-note"> —— {{ item.announce_footer_note }}</div>
-                <div class="items-footer-time">{{ item.announce_time }}</div>
+                <div class="items-footer-note">{{ item.announce_footer_note }}</div>
               </div>
             </el-collapse-item>
           </div>
         </el-collapse>
+
       </el-card>
 
       <el-card class="box-card">
@@ -86,6 +107,7 @@ export default {
     return {
       activeName: '',
       announceList: [],
+      // activeItem: [],
       chartData: { // 待考虑怎么整2333
         columns: ['日期', '访问用户', '下单用户', '下单率'],
         rows: [
@@ -115,7 +137,26 @@ export default {
         // 逆序保证最新数据为0号， 切片显示部分 考虑计算属性 为了方便activeName 直接在这里
         this.announceList = res.data.items.reverse().slice(0, 4)
         this.activeName = this.announceList[0].announce_id
+        // this.activeItem.push(this.announceList[0].announce_id)
       })
+    },
+    // showItems(id) {
+    //   console.log(id)
+    //   if (this.activeItem.indexOf(id) !== -1) {
+    //     const index = this.activeItem.indexOf(id)
+    //     this.activeItem.splice(index, 1)
+    //   } else {
+    //     this.activeItem.push(id)
+    //   }
+    // },
+    deleteAnnounceItem(item) {
+      alert('Sure to delete this item?')
+      for (let i = 0; i < this.announceList.length; i++) {
+        if (this.announceList[i].announce_id === item.announce_id) {
+          this.announceList.splice(i, 1)
+        }
+      }
+      // 预留一个post 方法
     }
   }
 }
@@ -129,11 +170,18 @@ export default {
 .box-card {
   margin: 15px 0;
 }
-
-.items-footer {
-  padding: 20px 0 0 0;
-  // &-note, &-time {
-  //   float: right;
-  // }
+.item-title {
+  &-right {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 120px);
+    position: absolute;
+  }
+  &-options {
+    align-self: flex-end;
+  }
+  &-time {
+    color: #838383;
+  }
 }
 </style>

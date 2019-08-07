@@ -10,7 +10,7 @@ for (let i = 0; i < count; i++) {
     announce_title: '@ctitle',
     announce_text: '@cparagraph',
     announce_footer_note: '@title', // 类似于  ———— 某官方
-    announce_time: '@now("yyyy-MM-dd")'
+    announce_time: '@now'
   }))
 }
 
