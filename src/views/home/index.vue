@@ -6,7 +6,7 @@
           <span>最近消息</span>
           <span style="float: right; padding: 3px 0;">
             <router-link :to="'/announce/create'" class="link-type">
-              [New]
+              [New+]
             </router-link>
             <router-link :to="'/announce/list'" class="link-type">
               [List]
@@ -91,7 +91,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchAnnounce } from '@/api/home'
+import { fetchAnnounceList } from '@/api/home'
 import permission from '@/directive/permission' // 页面内使用permission指令控制权限
 export default {
   name: 'Home',
@@ -107,7 +107,6 @@ export default {
     return {
       activeName: '',
       announceList: [],
-      // activeItem: [],
       chartData: { // 待考虑怎么整2333
         columns: ['日期', '访问用户', '下单用户', '下单率'],
         rows: [
@@ -132,23 +131,13 @@ export default {
   },
   methods: {
     getAnnounce() {
-      fetchAnnounce().then(res => {
+      fetchAnnounceList().then(res => {
         // console.log(res.data.items)
         // 逆序保证最新数据为0号， 切片显示部分 考虑计算属性 为了方便activeName 直接在这里
         this.announceList = res.data.items.reverse().slice(0, 4)
         this.activeName = this.announceList[0].announce_id
-        // this.activeItem.push(this.announceList[0].announce_id)
       })
     },
-    // showItems(id) {
-    //   console.log(id)
-    //   if (this.activeItem.indexOf(id) !== -1) {
-    //     const index = this.activeItem.indexOf(id)
-    //     this.activeItem.splice(index, 1)
-    //   } else {
-    //     this.activeItem.push(id)
-    //   }
-    // },
     deleteAnnounceItem(item) {
       alert('Sure to delete this item?')
       for (let i = 0; i < this.announceList.length; i++) {

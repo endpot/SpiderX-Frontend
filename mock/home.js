@@ -16,14 +16,50 @@ for (let i = 0; i < count; i++) {
 
 export default [
   {
-    url: '/home/announce',
+    url: '/home/announce/list',
     type: 'get',
     response: config => {
+      const { page = 1, limit = 20, value, type } = config.query
+
+      const mockList = homeList.filter(item => {
+        if (type && type === 'title') {
+          if (value && item.announce_title.indexOf(value) < 0) {
+            return false
+          }
+        } else if (type && type === 'body') {
+          if (value && item.announce_text.indexOf(value) < 0) {
+            return false
+          }
+        } else if (type && type === 'both') {
+          if ((value && item.announce_title.indexOf(value) < 0) && (value && item.announce_text.indexOf(value) < 0)) {
+            return false
+          }
+        }
+        return true
+      })
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
       return {
         code: 20000,
         data: {
-          total: homeList.length,
-          items: homeList
+          total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/home/announce/details',
+    type: 'get',
+    response: config => {
+      const { id } = config.query
+      for (const item of homeList) {
+        if (item.announce_id === +id) {
+          return {
+            code: 20000,
+            data: item
+          }
         }
       }
     }

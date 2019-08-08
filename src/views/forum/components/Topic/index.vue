@@ -12,14 +12,14 @@
           <el-form-item label="标题:" prop="title" label-width="90px">
             <el-input v-model="form.title" placeholder="请输入标题" />
           </el-form-item>
-          <el-form-item label-width="10px">
+          <el-form-item label-width="10px" prop="content">
             <div class="editor-container">
               <markdown-editor v-model="form.content" class="md-editor" height="400px" />
             </div>
           </el-form-item>
           <el-form-item label-width="10px">
             <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="cancelForm">取消</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -136,8 +136,6 @@ export default {
     getDetails(id) {
       fetchDetails(id).then(res => {
         this.form = res.data
-
-        // set page title
         this.setPageTitle()
       }).catch(err => {
         console.log(err)
@@ -164,6 +162,9 @@ export default {
           return false
         }
       })
+    },
+    cancelForm() {
+      this.$router.go(-1)
     }
   }
 }
@@ -172,6 +173,7 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   display: block;
+  opacity: 0.8;
 }
 .new-title {
   margin: 25px;

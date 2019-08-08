@@ -65,11 +65,11 @@ export default [
     type: 'get',
     response: config => {
       const { id } = config.query
-      for (const topic of forumList) {
-        if (topic.id === +id) {
+      for (const item of forumList) {
+        if (item.id === +id) {
           return {
             code: 20000,
-            data: topic
+            data: item
           }
         }
       }

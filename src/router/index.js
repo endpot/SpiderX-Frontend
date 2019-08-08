@@ -72,7 +72,7 @@ export const asyncRoutes = [
       {
         path: 'create',
         name: 'Create Announce',
-        component: () => import('@/views/home/create'),
+        component: () => import('@/views/home/components/Announce/create'),
         meta: {
           title: 'Create Announce'
         }
@@ -80,7 +80,7 @@ export const asyncRoutes = [
       {
         path: 'list',
         name: 'List Announce',
-        component: () => import('@/views/home/components/AnnounceList'),
+        component: () => import('@/views/home/components/Announce/list'),
         meta: {
           title: 'List Announce'
         }
@@ -88,9 +88,17 @@ export const asyncRoutes = [
       {
         path: 'edit/:id',
         name: 'Edit Announce',
-        component: () => import('@/views/home/edit'),
+        component: () => import('@/views/home/components/Announce/edit'),
         meta: {
           noCache: true
+        }
+      },
+      {
+        path: 'details/:id',
+        name: 'AnnounceDetails',
+        component: () => import('@/views/home/components/Announce/details'),
+        meta: {
+          title: 'Announce Details'
         }
       }
     ]
@@ -140,7 +148,7 @@ export const asyncRoutes = [
         component: () => import('@/views/forum/components/TopicDetails'),
         hidden: true,
         meta: {
-          title: 'TopicDetails'
+          title: 'Topic Details'
         }
       }
     ]
