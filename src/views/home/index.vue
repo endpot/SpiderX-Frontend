@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container">
+  <div class="app-container">
     <div class="home-announce">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -78,11 +78,14 @@
 
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>站点数据</span>
+          <span>Links</span>
           <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">操作</el-button>
         </div>
-        <ve-line :data="chartData" :settings="chartSettings" />
+        <div class="links-text link-type">
+          <span><a href="https://ajycc20.xyz" target="_blank">ajycc20's Blog</a></span>
+        </div>
       </el-card>
+
     </div>
     <div class="home-text">name:{{ name }}</div>
     <div class="home-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
@@ -99,25 +102,9 @@ export default {
     permission
   },
   data() {
-    this.chartSettings = {
-      axisSite: { right: ['下单率'] },
-      yAxisType: ['KMB', 'percent'],
-      yAxisName: ['数值', '比率']
-    }
     return {
       activeName: '',
-      announceList: [],
-      chartData: { // 待考虑怎么整2333
-        columns: ['日期', '访问用户', '下单用户', '下单率'],
-        rows: [
-          { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32 },
-          { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
-          { '日期': '1/3', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
-          { '日期': '1/4', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
-          { '日期': '1/5', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
-          { '日期': '1/6', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
-        ]
-      }
+      announceList: []
     }
   },
   computed: {
@@ -152,10 +139,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home-container {
-  margin: 20px;
-  opacity: 0.8;
-}
 .box-card {
   margin: 15px 0;
 }

@@ -110,9 +110,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container {
-  opacity: 0.8;
-}
 .el-select {
   .el-input {
     width: 100px;

@@ -29,11 +29,11 @@
       <el-table-column align="left" label="Title" width="auto" min-width="280">
         <template slot-scope="{row}">
           <div class="titlelist">
-            <el-button v-if="row.topicType === 'notice'" type="text" @click="changeTab(row)">[站务公告]</el-button>
-            <el-button v-if="row.topicType === 'guide'" type="text" @click="changeTab(row)">[新手指引]</el-button>
-            <el-button v-if="row.topicType === 'discuss'" type="text" @click="changeTab(row)">[综合交流]</el-button>
-            <el-button v-if="row.topicType === 'hobby'" type="text" @click="changeTab(row)">[兴趣爱好]</el-button>
-            <el-button v-if="row.topicType === 'working'" type="text" @click="changeTab(row)">[站务工作]</el-button>
+            <el-button v-if="row.topic_type === 'notice'" type="text" @click="changeTab(row)">[站务公告]</el-button>
+            <el-button v-if="row.topic_type === 'guide'" type="text" @click="changeTab(row)">[新手指引]</el-button>
+            <el-button v-if="row.topic_type === 'discuss'" type="text" @click="changeTab(row)">[综合交流]</el-button>
+            <el-button v-if="row.topic_type === 'hobby'" type="text" @click="changeTab(row)">[兴趣爱好]</el-button>
+            <el-button v-if="row.topic_type === 'working'" type="text" @click="changeTab(row)">[站务工作]</el-button>
             <router-link :to="'/forum/details/'+row.id" :title="row.title" class="link-type">
               <div>{{ row.title }}</div>
             </router-link>
@@ -116,7 +116,7 @@ export default {
       })
     },
     changeTab(id) { // 将当前所点击的tab类别传递至父组件
-      const idTab = id.topicType
+      const idTab = id.topic_type
       this.$emit('listenTabEvent', idTab)
     }
   }

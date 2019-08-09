@@ -156,9 +156,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container {
-  opacity: 0.8;
-}
 .caption {
   font-size: 0.8rem;
   width: 100%;

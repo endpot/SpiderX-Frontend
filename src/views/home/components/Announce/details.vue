@@ -5,11 +5,11 @@
         <span>New+</span>
       </div>
       <div class="main-text">
-        <el-form ref="form" label-width="60" :model="form" :rules="rules">
-          <el-form-item label="Title" prop="announce_title">
+        <el-form ref="form" :model="form" :rules="rules">
+          <el-form-item label="Title" prop="announce_title" label-width="100px">
             <el-input v-model="form.announce_title" />
           </el-form-item>
-          <el-form-item label="Created By" prop="announce_footer_note">
+          <el-form-item label="Created By" prop="announce_footer_note" label-width="100px">
             <el-input v-model="form.announce_footer_note" />
           </el-form-item>
           <el-form-item prop="announce_text">
@@ -119,8 +119,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container {
-  opacity: 0.8;
-}
-
 </style>

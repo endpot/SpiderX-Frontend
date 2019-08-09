@@ -16,7 +16,7 @@ for (let i = 0; i < count; i++) {
     content: '@cparagraph', // 内容
     create_at: '@datetime', // 创建时间
     title: '@ctitle',
-    'topicType|1': ['notice', 'guide', 'discuss', 'hobby', 'working'], // notice: 公告 guide: 新手指引  discuss: 综合交流  hobby: 爱好 working:站务工作
+    'topic_type|1': ['notice', 'guide', 'discuss', 'hobby', 'working'], // notice: 公告 guide: 新手指引  discuss: 综合交流  hobby: 爱好 working:站务工作
     last_reply_at: '@now', // 最后回复时间
     'replies|50': [{
       author: {

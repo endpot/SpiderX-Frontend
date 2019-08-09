@@ -1,29 +1,38 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="14">
-      <el-col class="main" :span="15" :offset="3">
-        <div class="new-title">创建新话题</div>
-        <el-form ref="form" :model="form" :rules="rules">
-          <el-form-item label="选择版块:" prop="topicType" label-width="90px">
-            <el-select v-model="form.topicType" placeholder="请选择版块">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="标题:" prop="title" label-width="90px">
-            <el-input v-model="form.title" placeholder="请输入标题" />
-          </el-form-item>
-          <el-form-item label-width="10px" prop="content">
-            <div class="editor-container">
-              <markdown-editor v-model="form.content" class="md-editor" height="400px" />
-            </div>
-          </el-form-item>
-          <el-form-item label-width="10px">
-            <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
-            <el-button @click="cancelForm">取消</el-button>
-          </el-form-item>
-        </el-form>
+    <el-row :gutter="20">
+      <el-col class="main" :span="20">
+
+        <el-card class="box-card" shadow="never">
+          <div slot="header" class="clearfix">
+            <span>New Topic</span>
+          </div>
+          <div class="main-form">
+            <el-form ref="form" :model="form" :rules="rules">
+              <el-form-item label="Type" prop="topic_type" label-width="50px">
+                <el-select v-model="form.topic_type" clearable placeholder="Type">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="Title" prop="title" label-width="50px">
+                <el-input v-model="form.title" placeholder="Title" />
+              </el-form-item>
+              <el-form-item prop="content">
+                <div class="editor-container">
+                  <markdown-editor v-model="form.content" class="md-editor" height="400px" />
+                </div>
+              </el-form-item>
+              <el-form-item label-width="10px">
+                <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
+                <el-button @click="cancelForm">取消</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+
       </el-col>
       <el-col :span="4">
+
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
             <span>Markdown 语法参考</span>
@@ -39,6 +48,7 @@
             <span>话题发布指南</span>
           </div>
         </el-card>
+
       </el-col>
     </el-row>
   </div>
@@ -50,7 +60,7 @@ import { fetchDetails } from '@/api/forum'
 
 const defaultForm = {
   id: undefined,
-  topicType: '', // 话题类别
+  topic_type: '', // 话题类别
   title: '', // 话题标题
   content: '' // 话题正文
 }
@@ -82,24 +92,17 @@ export default {
       loading: false,
       form: Object.assign({}, defaultForm),
       rules: {
-        topicType: [{ validator: validateRequire }],
+        topic_type: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }]
       },
       tempRoute: {},
-      options: [
-        {
-          label: '精华',
-          value: 'good'
-        },
-        {
-          label: '分享',
-          value: 'share'
-        },
-        {
-          label: '问答',
-          value: 'ask'
-        }
+      options: [ // notice: 公告 guide: 新手指引  discuss: 综合交流  hobby: 爱好 working:站务工作
+        { label: 'Notice', value: 'notice' },
+        { label: 'Guide', value: 'guide' },
+        { label: 'Discuss', value: 'discuss' },
+        { label: 'Hobby', value: 'hobby' },
+        { label: 'Working', value: 'working' }
       ],
       grammerList: [
         {
@@ -173,13 +176,9 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   display: block;
-  opacity: 0.8;
-}
-.new-title {
-  margin: 25px;
 }
 .main {
-  background-color: #fff;;
+  border-radius: 6px;
 }
 .md-editor{
   line-height: 0;

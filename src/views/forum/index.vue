@@ -34,6 +34,7 @@
           </el-tabs>
         </el-col>
         <el-col :span="6" class="hidden-xs-only">
+          <!-- front2back user info card -->
           <div class="card-item">
             <el-card :class="{front:front2Back}" class="box-card-front">
               <div slot="header" class="clearfix">
@@ -60,6 +61,17 @@
               </div>
             </el-card>
           </div>
+          <!-- create topic card -->
+          <el-card class="box-card create-options">
+            <div slot="header" class="clearfix">
+              <span>Create Topic</span>
+            </div>
+            <div class="main-options">
+              <router-link :to="{ name: 'CreateTopic' }">
+                <el-button type="primary">Create</el-button>
+              </router-link>
+            </div>
+          </el-card>
         </el-col>
       </el-row>
     </div>
@@ -134,19 +146,17 @@ export default {
 
 <style lang="scss" scoped>
 // 对原有样式修正
-
 .tab-container {
-  opacity: 0.8;
   margin: 15px 0;
   border-radius: 0 0 5px 5px;
 }
-// 标题部分的type='text' 按钮的大小
-.el-button {
-  font-size: 12px;
-  padding: 0 2px 0 0;
-}
 .titlelist {
   display: flex;
+  // 标题部分的type='text' 按钮的大小
+  .el-button {
+    font-size: 12px;
+    padding: 0 2px 0 0;
+  }
 }
 .titleinfo {
   font-size: 12px;
@@ -180,7 +190,6 @@ export default {
     height: 300px;
     position: absolute;
     margin: 15px 0;
-    opacity: 0.8;
   .box-card-front,
   .box-card-back {
     position: absolute;
@@ -204,6 +213,14 @@ export default {
   .box-card-front.front {
     z-index: 0;
     transform: rotateY(-180deg);
+  }
+}
+.create-options {
+  position: absolute;
+  margin-top: 360px;
+  width: 25%;
+  .main-options {
+    text-align: center;
   }
 }
 </style>
