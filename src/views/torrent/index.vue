@@ -1,88 +1,133 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-form ref="form" :model="form" :rules="rules">
-        <el-form-item style="width:280px" prop="search">
-          <el-input v-model="form.search" placeholder="请输入种子信息" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search" @click="onSearch" />
-          </el-input>
-        </el-form-item>
-      </el-form>
-    </el-card>
+      <div slot="header" class="clearfix">
+        <span>
+          <el-button type="primary">Categories</el-button>
+          <el-button type="success">Cards</el-button>
+          <el-button type="info">Groupings</el-button>
+          <el-button type="warning">Default(List)</el-button>
+        </span>
+        <span style="float: right">
+          <el-button type="success" @click="handleFullSearch">Filter</el-button>
+        </span>
+      </div>
+      <div v-if="fullSearch" class="search-full-options">
+        <el-form ref="formFullSearch" :model="form">
+          <el-form-item label="Torrent Type">
+            种子类型 movie tv music .etc
+          </el-form-item>
+          <el-form-item label="Type">
+            媒介 just like CD DVD Encode WEB-DL HDTV Remux Blu-ray .etc
+          </el-form-item>
+          <el-form-item label="Code">
+            编码 x265 x264 HEVC H264 .etc
+          </el-form-item>
+          <el-form-item label="IMDB / Douban">
+            imdb or douban links
+          </el-form-item>
+          <el-form-item label="Year Range">
+            年代  front - end
+          </el-form-item>
+          <el-form-item label="Resolution">
+            分辨率
+          </el-form-item>
+          <el-form-item label="Genre">
+            电影类型
+          </el-form-item>
+          <el-form-item label="Discounts">
+            种子buff
+          </el-form-item>
+          <el-form-item label="Activity">
+            活动 seeding or leeching or completed .etc
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="search-options">
+        <el-input v-model="listQuery.value" placeholder="Title" style="width: 600px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-select v-model="listQuery.type" placeholder="Type" clearable style="width: 90px" class="filter-item">
+          <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          Search
+        </el-button>
+      </div>
 
-    <el-table v-loading="listLoading" :data="torrentList" border fit highlight-current-row style="width: 100%">
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
 
-      <el-table-column align="center" label="类型" width="80">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.category }}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table v-loading="listLoading" :data="torrentList" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column align="center" label="Title" min-width="300px">
-        <template slot-scope="{row}">
-          <router-link :to="'/torrent/details/'+row.id" :title="row.title" class="link-type">
-            <span>{{ row.title }}</span>
-          </router-link>
-          <div class="caption">
-            <span>{{ row.caption }}</span>
-            <div class="icon-options">
-              <svg-icon icon-class="download" />
-              <span @click="bookMark(row.id)">
-                <svg-icon v-if="bookmark.includes(row.id)" icon-class="star-pick" />
-                <svg-icon v-else icon-class="star" />
-              </span>
+        <el-table-column align="center" label="类型" width="80">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.category }}</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" label="Title" min-width="300px">
+          <template slot-scope="{row}">
+            <router-link :to="'/torrent/details/'+row.id" :title="row.title" class="link-type">
+              <span>{{ row.title }}</span>
+            </router-link>
+            <div class="caption">
+              <span>{{ row.caption }}</span>
+              <div class="icon-options">
+                <svg-icon icon-class="download" />
+                <span @click="bookMark(row.id)">
+                  <svg-icon v-if="bookmark.includes(row.id)" icon-class="star-pick" />
+                  <svg-icon v-else icon-class="star" />
+                </span>
+              </div>
             </div>
-          </div>
-        </template>
-      </el-table-column>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Date">
-        <template slot-scope="scope">
-          <!-- <span>{{ scope.row.created_at | formatLocalTime(scope.row.create_at) }}</span> 这个格式化有点问题我们先去掉它 -->
-          <span>{{ scope.row.created_at }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Date">
+          <template slot-scope="scope">
+            <span>{{ scope.row.created_at }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Size">
-        <template slot-scope="scope">
-          <span>{{ scope.row.size | fileSize(scope.row.size) }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Size">
+          <template slot-scope="scope">
+            <span>{{ scope.row.size | fileSize(scope.row.size) }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Seeder">
-        <template slot-scope="scope">
-          <span>{{ scope.row.seeders }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Seeder">
+          <template slot-scope="scope">
+            <span>{{ scope.row.seeders }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Leecher">
-        <template slot-scope="scope">
-          <span>{{ scope.row.leechers }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Leecher">
+          <template slot-scope="scope">
+            <span>{{ scope.row.leechers }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Completer">
-        <template slot-scope="scope">
-          <span>{{ scope.row.completer }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Completer">
+          <template slot-scope="scope">
+            <span>{{ scope.row.completer }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Rate">
-        <template slot-scope="scope">
-          <el-progress type="circle" :percentage="scope.row.rate" :width="width" />
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="Rate">
+          <template slot-scope="scope">
+            <el-progress type="circle" :percentage="scope.row.rate" :width="width" />
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" label="Uploader">
-        <template slot-scope="{row}">
-          <router-link :to="'/user/details'" class="link-type">
-            <span>{{ row.created_by }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column align="center" label="Uploader">
+          <template slot-scope="{row}">
+            <router-link :to="'/user/details'" class="link-type">
+              <span>{{ row.created_by }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
+    </el-card>
   </div>
 </template>
 
@@ -102,17 +147,23 @@ export default {
   data() {
     return {
       torrentList: null,
+      fullSearch: false,
       total: 0,
       width: 38, // rate circle width
       bookmark: [],
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20
+        limit: 20,
+        value: undefined,
+        type: 'title'
       },
-      form: {
-        search: '' // 搜索框
-      },
+      typeOptions: [
+        { label: 'Title', value: 'title' },
+        { label: 'Caption', value: 'caption' },
+        { label: 'Description', value: 'descr' },
+        { label: 'Uploader', value: 'created_by' }
+      ],
       rules: {
         search: [{ required: true, message: '请输入要查询的种子信息', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
@@ -143,19 +194,30 @@ export default {
         this.bookmark.push(id)
       }
     },
-    handleSizeChange(val) {
-      this.pageSize = val
-      console.log(this.pageSize)
+    handleFullSearch() {
+      this.fullSearch = !this.fullSearch
     },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      console.log(this.currentPage)
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.search-full-options {
+  margin: 15px 8%;
+  border: 1px solid #dddddd;
+  padding: 10px 20px;
+  border-radius: 5px;
+  &:hover {
+    box-shadow: 2px 5px 5px 5px #bbb;
+  }
+}
+.search-options {
+  text-align: center;
+}
 .caption {
   font-size: 0.8rem;
   width: 100%;

@@ -26,13 +26,35 @@ export default [
     url: '/torrent/list',
     type: 'get',
     response: config => {
-      const { page = 1, limit = 20 } = config.query
-      const pageList = torrentList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+      const { page = 1, limit = 20, value, type } = config.query
+
+      const mockList = torrentList.filter(item => {
+        if (type && type === 'title') {
+          if (value && item.title.indexOf(value) < 0) {
+            return false
+          }
+        } else if (type && type === 'caption') {
+          if (value && item.caption.indexOf(value) < 0) {
+            return false
+          }
+        } else if (type && type === 'descr') {
+          if (value && item.title.indexOf(value) < 0) {
+            return false
+          }
+        } else if (type && type === 'created_by') {
+          if (value && item.title.indexOf(value) < 0) {
+            return false
+          }
+        }
+        return true
+      })
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
 
       return {
         code: 20000,
         data: {
-          total: torrentList.length,
+          total: mockList.length,
           items: pageList
         }
       }
