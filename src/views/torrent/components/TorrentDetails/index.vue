@@ -305,11 +305,15 @@ export default {
       fetchDetails(id).then(res => {
         console.log(res.data)
         this.torrentDetail.push(res.data)
+      }).catch(err => {
+        console.log(err)
       })
     },
     getOMDB() {
       fetchOMDB(this.imdbId).then(res => {
         this.imdbPoster = res.data.Poster
+      }).catch(err => {
+        console.log(err)
       })
     },
     getDouban() {
@@ -318,6 +322,8 @@ export default {
         this.doubanInfo = res.data
         this.doubanPoster = res.data.image
         this.doubanRating = +res.data.rating.average
+      }).catch(err => {
+        console.log(err)
       })
     },
     searchSubTitles() {

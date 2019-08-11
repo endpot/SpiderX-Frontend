@@ -57,76 +57,48 @@
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
 
-      <el-table v-loading="listLoading" :data="torrentList" border fit highlight-current-row style="width: 100%">
-
-        <el-table-column align="center" label="类型" width="80">
-          <template slot-scope="scope">
-            <el-tag>{{ scope.row.category }}</el-tag>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Title" min-width="300px">
-          <template slot-scope="{row}">
-            <router-link :to="'/torrent/details/'+row.id" :title="row.title" class="link-type">
-              <span>{{ row.title }}</span>
-            </router-link>
-            <div class="caption">
-              <span>{{ row.caption }}</span>
-              <div class="icon-options">
-                <svg-icon icon-class="download" />
-                <span @click="bookMark(row.id)">
-                  <svg-icon v-if="bookmark.includes(row.id)" icon-class="star-pick" />
-                  <svg-icon v-else icon-class="star" />
+      <el-row v-loading="listLoading" :gutter="10">
+        <el-col v-for="(item, index) in torrentList" :key="index" class="card-list">
+          <el-card class="box-card-info">
+            <div slot="header" class="clearfix">
+              <span class="card-title">
+                <el-tag>Movies</el-tag>
+                <el-tag>MKV</el-tag>
+                <el-tag>{{ item.size | fileSize(item.size) }}</el-tag>
+                <el-tag>
+                  <svg-icon icon-class="card-up" />{{ item.seeders }} /
+                  <svg-icon icon-class="card-up" class="icon-download" />{{ item.leechers }} /
+                  <svg-icon icon-class="card-complete" />{{ item.completer }}
+                </el-tag>
+              </span>
+            </div>
+            <div class="card-info clearfix">
+              <div class="card-poster">
+                <img :src="doubanImg" :title="doubanInfo.title" alt="poster" class="card-poster-img">
+              </div>
+              <div class="card-main-info">
+                <router-link :to="'/torrent/details/'+item.id" :title="item.title" class="link-type">
+                  <h3> {{ doubanInfo.title }} </h3>
+                </router-link>
+                <span class="card-main-genre">
+                  <span v-for="(typeName, typeNum) in doubanMovieType" :key="typeNum">
+                    <el-button size="small">{{ typeName }}</el-button>
+                  </span>
                 </span>
+                <p class="card-main-summary">
+                  {{ doubanInfo.summary }}
+                </p>
               </div>
             </div>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Date">
-          <template slot-scope="scope">
-            <span>{{ scope.row.created_at }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Size">
-          <template slot-scope="scope">
-            <span>{{ scope.row.size | fileSize(scope.row.size) }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Seeder">
-          <template slot-scope="scope">
-            <span>{{ scope.row.seeders }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Leecher">
-          <template slot-scope="scope">
-            <span>{{ scope.row.leechers }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Completer">
-          <template slot-scope="scope">
-            <span>{{ scope.row.completer }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Rate">
-          <template slot-scope="scope">
-            <el-progress type="circle" :percentage="scope.row.rate" :width="width" />
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="Uploader">
-          <template slot-scope="{row}">
-            <router-link :to="'/user/details'" class="link-type">
-              <span>{{ row.created_by }}</span>
-            </router-link>
-          </template>
-        </el-table-column>
-      </el-table>
+            <div class="card-footer clearfix">
+              <span><el-tag><svg-icon icon-class="user" />{{ name }}</el-tag></span>
+              <span style="float: right; padding: 3px 0;">
+                <el-tag>{{ doubanInfo.rating.average }} / 10 ({{ doubanInfo.rating.numRaters }} votes)</el-tag>
+              </span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
     </el-card>
@@ -135,6 +107,8 @@
 
 <script>
 import { fetchList } from '@/api/torrent'
+import { fetchDouban } from '@/api/main'
+import { mapGetters } from 'vuex'
 import { calcFileSize } from '@/utils'
 import Pagination from '@/components/Pagination'
 export default {
@@ -148,10 +122,12 @@ export default {
   },
   data() {
     return {
-      torrentList: null,
+      torrentList: [],
       fullSearch: false,
       total: 0,
-      width: 38, // rate circle width
+      doubanId: 26931786,
+      doubanInfo: {},
+      doubanPoster: '',
       bookmark: [],
       listLoading: true,
       listQuery: {
@@ -172,14 +148,35 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'name'
+    ]),
+    doubanImg() {
+      return this.doubanPoster.replace(/img3/g, 'img1').replace(/s_ratio_poster/g, 'l_ratio_poster')
+    },
+    doubanMovieType() {
+      return this.doubanInfo.attrs.movie_type
+    }
+  },
   created() {
     this.getList()
+    this.getDouban()
   },
   methods: {
+    getDouban() {
+      fetchDouban(this.doubanId).then(res => {
+        // console.log(res.data)
+        this.doubanInfo = res.data
+        this.doubanPoster = res.data.image
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.torrentList = res.data.items
         this.total = res.data.total
         this.listLoading = false
@@ -219,15 +216,77 @@ export default {
     box-shadow: 2px 5px 5px 5px #bbb;
   }
 }
+
 .search-options {
   text-align: center;
 }
-.caption {
-  font-size: 0.8rem;
-  width: 100%;
-  .icon-options {
-    float: right;
+
+.card-list {
+  @media screen and (min-width: 1600px) {
+    width: 33.33333%;
+  }
+  @media screen and (max-width: 1599px) and (min-width: 900px) {
+    width: 50%;
+  }
+  @media screen and (max-width: 899px) {
+    width: 100%;
   }
 }
 
+.box-card-info {
+  margin: 15px 0;
+}
+
+.card-title{
+  float: right;
+  padding: 0 3px;
+}
+
+.icon-download {
+  transform: rotate(180deg);
+}
+
+.card-info {
+  display: flex;
+  height: 260px;
+  .card-poster {
+    img {
+      height: 260px;
+    }
+  }
+}
+
+.card-main {
+  &-info {
+    padding: 10px 15px;
+    margin-top: -20px;
+    height: 260px;
+    overflow: hidden;
+    &:hover {
+      overflow: auto;
+    }
+  }
+  &-genre {
+    span {
+      margin: 0 6px;
+      .el-button {
+        border: none;
+        box-shadow: 0 0 5px 5px #eee;
+        cursor: default;
+      }
+    }
+  }
+  &-summary {
+    display: flex;
+    font-size: 12px;
+  }
+}
+
+.card-footer {
+  span {
+    .el-tag {
+      margin: 10px 0 0 0;
+    }
+  }
+}
 </style>

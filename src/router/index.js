@@ -161,35 +161,31 @@ export const asyncRoutes = [
     path: '/torrent',
     component: Layout,
     redirect: '/torrent/index',
-    name: 'Torrent',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/torrent/index'),
+        name: 'Torrent',
+        meta: {
+          title: 'Torrent',
+          icon: 'torrent'
+        }
+      }
+    ]
+  },
+  {
+    path: '/torrent',
+    component: Layout,
+    hidden: true,
     meta: {
       title: 'Torrent',
       icon: 'torrent'
     },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/torrent/index'),
-        name: 'TorrentList',
-        meta: {
-          title: 'Torrent List',
-          icon: 'list'
-        }
-      },
-      {
-        path: 'upload',
-        component: () => import('@/views/torrent/upload'),
-        name: 'UploadTorrent',
-        meta: {
-          title: 'Upload Torrent',
-          icon: 'upload'
-        }
-      },
-      {
-        path: 'edit/:id', // 这里需要进行修改 考虑动态绑定值进行文章编辑
+        path: 'edit/:id',
         name: 'EditTorrent',
         component: () => import('@/views/torrent/edit'),
-        hidden: true,
         meta: {
           title: 'Edit Torrent',
           noCache: true,
@@ -200,9 +196,31 @@ export const asyncRoutes = [
         path: 'details/:id',
         name: 'TorrentDetails',
         component: () => import('@/views/torrent/components/TorrentDetails'),
-        hidden: true,
         meta: {
           title: 'Torrent Details'
+        }
+      },
+      {
+        path: 'cards',
+        name: 'TorrentCards',
+        component: () => import('@/views/torrent/components/Cards'),
+        meta: {
+          title: 'Torrent Card'
+        }
+      }
+    ]
+  },
+  {
+    path: '/upload',
+    component: Layout,
+    children: [
+      {
+        path: 'upload',
+        component: () => import('@/views/torrent/upload'),
+        name: 'Upload',
+        meta: {
+          title: 'Upload',
+          icon: 'upload'
         }
       }
     ]

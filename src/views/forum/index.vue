@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="panel">
       <el-row :gutter="20">
-        <el-col :span="16" :offset="1">
+        <el-col :span="16" :xs="22" :offset="1">
           <el-tabs v-model="activeName" class="tab-container" type="border-card" @tab-click="handleClick">
             <el-tab-pane label="全部" name="all">
               <!-- tab page 1 -->

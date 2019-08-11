@@ -90,6 +90,8 @@ export default {
         this.activeName = this.announceList[0].announce_id
         this.newTag[0] = this.announceList[0].announce_id
         this.listLoading = false
+      }).catch(err => {
+        console.log(err)
       })
     },
     deleteAnnounceItem(item) {

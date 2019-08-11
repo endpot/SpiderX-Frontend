@@ -123,6 +123,8 @@ export default {
         // 逆序保证最新数据为0号， 切片显示部分 考虑计算属性 为了方便activeName 直接在这里
         this.announceList = res.data.items.reverse().slice(0, 4)
         this.activeName = this.announceList[0].announce_id
+      }).catch(err => {
+        console.log(err)
       })
     },
     deleteAnnounceItem(item) {

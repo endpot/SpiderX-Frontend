@@ -144,6 +144,8 @@ export default {
     getDetails(id) {
       fetchDetails(id).then(res => {
         this.topic_details = res.data
+      }).catch(err => {
+        console.log(err)
       })
     },
     showReply(id) {

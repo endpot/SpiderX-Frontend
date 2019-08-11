@@ -113,6 +113,8 @@ export default {
         this.tableData = res.data.items
         this.total = res.data.total
         this.listLoading = false
+      }).catch(err => {
+        console.log(err)
       })
     },
     changeTab(id) { // 将当前所点击的tab类别传递至父组件
