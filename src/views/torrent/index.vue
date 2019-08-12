@@ -6,6 +6,9 @@
           <router-link :to="{ name: 'TorrentCards' }">
             <el-button type="success">Cards</el-button>
           </router-link>
+          <router-link :to="{ name: 'TorrentWaterfall' }">
+            <el-button type="success">Waterfall</el-button>
+          </router-link>
           <router-link :to="{ name: 'Torrent' }">
             <el-button type="success">Default(List)</el-button>
           </router-link>

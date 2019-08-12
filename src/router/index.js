@@ -207,6 +207,14 @@ export const asyncRoutes = [
         meta: {
           title: 'Torrent Card'
         }
+      },
+      {
+        path: 'waterfall',
+        name: 'TorrentWaterfall',
+        component: () => import('@/views/torrent/components/Waterfall'),
+        meta: {
+          title: 'Torrent Waterfall'
+        }
       }
     ]
   },

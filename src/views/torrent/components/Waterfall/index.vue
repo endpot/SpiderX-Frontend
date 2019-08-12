@@ -57,54 +57,27 @@
           Search
         </el-button>
       </div>
-
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
-
-      <el-row v-loading="listLoading" :gutter="10">
-        <el-col v-for="(item, index) in torrentList" :key="index" class="card-list">
-          <el-card class="box-card-info">
-            <div slot="header" class="clearfix">
-              <span class="card-title">
-                <el-tag>Movies</el-tag>
-                <el-tag>MKV</el-tag>
-                <el-tag>{{ item.size | fileSize(item.size) }}</el-tag>
-                <el-tag>
-                  <svg-icon icon-class="card-up" />{{ item.seeders }} /
-                  <svg-icon icon-class="card-up" class="icon-download" />{{ item.leechers }} /
-                  <svg-icon icon-class="card-complete" />{{ item.completer }}
-                </el-tag>
-              </span>
-            </div>
-            <div class="card-info clearfix">
-              <div class="card-poster">
-                <img :src="doubanImg" :title="doubanInfo.title" alt="poster" class="card-poster-img">
-              </div>
-              <div class="card-main-info">
-                <router-link :to="'/torrent/details/'+item.id" :title="item.title" class="link-type">
-                  <h3> {{ doubanInfo.title }} </h3>
-                </router-link>
-                <span class="card-main-genre">
-                  <span v-for="(typeName, typeNum) in doubanMovieType" :key="typeNum">
-                    <el-button size="small">{{ typeName }}</el-button>
-                  </span>
-                </span>
-                <p class="card-main-summary">
-                  {{ doubanInfo.summary }}
-                </p>
-              </div>
-            </div>
-            <div class="card-footer clearfix">
-              <span><el-tag><svg-icon icon-class="user" />{{ name }}</el-tag></span>
-              <span style="float: right; padding: 3px 0;">
-                <el-tag>{{ doubanInfo.rating.average }} / 10 ({{ doubanInfo.rating.numRaters }} votes)</el-tag>
-              </span>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
     </el-card>
+    <!-- waterfall  -->
+    <div class="waterfall">
+      <div v-for="(item, index) in torrentList" :key="index" class="waterfall-item">
+        <el-card class="waterfall-card">
+          <router-link :to="'/torrent/details/'+item.id">
+            <div class="waterfall-poster">
+              <img :src="doubanImg" :title="item.title" alt="poster">
+            </div>
+            <div class="waterfall-caption">
+              <p>{{ item.caption }}</p>
+            </div>
+          </router-link>
+          <div class="waterfall-user-active">
+            <span>
+              {{ item.seeders }} 做种 {{ item.leechers }} 下载 {{ item.completer }} 完成
+            </span>
+          </div>
+        </el-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -113,21 +86,17 @@ import { fetchList } from '@/api/torrent'
 import { fetchDouban } from '@/api/main'
 import { mapGetters } from 'vuex'
 import { calcFileSize } from '@/utils'
-import Pagination from '@/components/Pagination'
 export default {
   filters: {
     fileSize(size) {
       return calcFileSize(size)
     }
   },
-  components: {
-    Pagination
-  },
   data() {
     return {
       torrentList: [],
+      torrentListMore: [],
       fullSearch: false,
-      total: 0,
       doubanId: 26931786,
       doubanInfo: {},
       doubanPoster: '',
@@ -156,14 +125,24 @@ export default {
     ]),
     doubanImg() {
       return this.doubanPoster.replace(/img3/g, 'img1').replace(/s_ratio_poster/g, 'l_ratio_poster')
-    },
-    doubanMovieType() {
-      return this.doubanInfo.attrs.movie_type
     }
   },
   created() {
     this.getList()
     this.getDouban()
+    const that = this
+    window.onscroll = function() {
+      // scrollTop 滚动条滚动时，距离顶部的距离
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      // windowHeight 可视区的高度
+      const windowHeight = document.documentElement.clientHeight || document.body.clientHeight
+      // scrollHeight 滚动条的总高度
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+      // 滚动条到底部的条件
+      if (scrollTop + windowHeight >= scrollHeight) {
+        that.loadMore()
+      }
+    }
   },
   methods: {
     getDouban() {
@@ -180,8 +159,16 @@ export default {
       fetchList(this.listQuery).then(res => {
         // console.log(res.data)
         this.torrentList = res.data.items
-        this.total = res.data.total
         this.listLoading = false
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    loadMore() {
+      this.listQuery.page += 1
+      fetchList(this.listQuery).then(res => {
+        this.torrentListMore = res.data.items
+        this.torrentList = this.torrentList.concat(this.torrentListMore)
       }).catch(err => {
         console.log(err)
       })
@@ -215,72 +202,59 @@ export default {
   text-align: center;
 }
 
-.card-list {
-  @media screen and (min-width: 1600px) {
-    width: 33.33333%;
-  }
-  @media screen and (max-width: 1599px) and (min-width: 900px) {
-    width: 50%;
-  }
-  @media screen and (max-width: 899px) {
-    width: 100%;
-  }
-}
-
-.box-card-info {
-  margin: 15px 0;
-}
-
-.card-title{
-  float: right;
-  padding: 0 3px;
-}
-
-.icon-download {
-  transform: rotate(180deg);
-}
-
-.card-info {
-  display: flex;
-  height: 260px;
-  .card-poster {
+.waterfall {
+  column-count: 5;
+  column-gap: 0;
+  .waterfall-item {
+    box-sizing: border-box;
+    break-inside: avoid;
+    transition: .3s;
+    padding: 8px;
     img {
-      height: 260px;
+      width: 100%;
+    }
+    .waterfall-caption {
+      font-size: 12px;
+    }
+    .waterfall-user-active {
+      font-size: 12px;
+      color: #838383;
     }
   }
 }
-
-.card-main {
-  &-info {
-    padding: 10px 15px;
-    margin-top: -20px;
-    height: 260px;
-    overflow: hidden;
-    &:hover {
-      overflow: auto;
-    }
-  }
-  &-genre {
-    span {
-      margin: 0 6px;
-      .el-button {
-        border: none;
-        box-shadow: 0 0 5px 5px #eee;
-        cursor: default;
-      }
-    }
-  }
-  &-summary {
-    display: flex;
-    font-size: 12px;
+@media screen and(min-width: 1800px) {
+  .waterfall {
+    column-count: 7;
   }
 }
-
-.card-footer {
-  span {
-    .el-tag {
-      margin: 10px 0 0 0;
-    }
+@media screen and(max-width: 1799px) and(min-width: 1600px) {
+  .waterfall {
+    column-count: 6;
+  }
+}
+@media screen and(max-width: 1599px) and(min-width: 1200px) {
+  .waterfall {
+    column-count: 5;
+  }
+}
+@media screen and(max-width: 1199px) and(min-width: 900px) {
+  .waterfall {
+    column-count: 4;
+  }
+}
+@media screen and(max-width: 899px) and(min-width: 700px) {
+  .waterfall {
+    column-count: 3;
+  }
+}
+@media screen and(max-width: 699px) and(min-width: 500px) {
+  .waterfall {
+    column-count: 2;
+  }
+}
+@media screen and(max-width: 499px) {
+  .waterfall {
+    column-count: 1;
   }
 }
 </style>
