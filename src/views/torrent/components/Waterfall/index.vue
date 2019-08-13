@@ -138,8 +138,8 @@ export default {
       const windowHeight = document.documentElement.clientHeight || document.body.clientHeight
       // scrollHeight 滚动条的总高度
       const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-      // 滚动条到底部的条件
-      if (scrollTop + windowHeight >= scrollHeight) {
+      // 滚动条到底部的条件 多次测试发现会有小于1的偏差以至于无法生效 所以这里对scrollTop 向上取整
+      if (Math.ceil(scrollTop) + windowHeight >= scrollHeight) {
         that.loadMore()
       }
     }
@@ -209,7 +209,7 @@ export default {
     box-sizing: border-box;
     break-inside: avoid;
     transition: .3s;
-    padding: 8px;
+    padding: 4px;
     img {
       width: 100%;
     }

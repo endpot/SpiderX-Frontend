@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 const torrentList = []
-const count = 50
+const count = 150
 
 for (let i = 0; i < count; i++) {
   torrentList.push(Mock.mock({
