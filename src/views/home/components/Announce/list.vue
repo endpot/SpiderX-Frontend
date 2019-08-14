@@ -69,7 +69,7 @@ export default {
         page: 1,
         limit: 20,
         value: undefined,
-        type: undefined
+        type: 'title'
       },
       typeOptions: [
         { label: 'Title', value: 'title' },

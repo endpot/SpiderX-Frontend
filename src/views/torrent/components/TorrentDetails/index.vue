@@ -102,84 +102,23 @@
             </div>
           </div>
         </el-card>
-        <!-- Torrent Info -->
+        <!-- General -->
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>Torrent Info</span>
+            <span>General</span>
           </div>
-          <el-form ref="form" :model="form">
-            <el-form-item>
-              <el-table :data="torrentDetail" :show-header="showHeader" border fit highlight-current-row style="width: 100%">
-
-                <el-table-column align="center" label="Title">
-                  <template slot-scope="scope">
-                    <router-link :to="'#'" :title="scope.row.title" class="link-type">
-                      <div>{{ scope.row.title }}</div>
-                    </router-link>
-
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" label="Size" width="90">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.size | fileSize(scope.row.size) }}</span>
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" label="Seeder" width="80">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.seeders }}</span>
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" label="Leecher" width="80">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.leechers }}</span>
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" label="Completer" width="80">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.completer }}</span>
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" label="Rate" width="80">
-                  <template slot-scope="scope">
-                    <el-progress type="circle" :percentage="scope.row.rate" :width="width" />
-                  </template>
-                </el-table-column>
-
-              </el-table>
-            </el-form-item>
-            <el-form-item style="width:360px" label="subTitles" label-width="80px">
-              <el-input v-model="torrentDetail[0].title"><!-- 考虑正则将种子名中的文件名拎出来 -->
-                <el-button slot="append" icon="el-icon-search" @click="searchSubTitles" />
-              </el-input>
-            </el-form-item>
-          </el-form>
-        </el-card>
-        <!-- Media Info -->
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>Media Info</span>
-          </div>
-          <div>
-            <pre>
-              RELEASE.NAME...: Guardians.Of.The.Tomb.2018.1080p.WEB-DL.H265.2Audios.AAC-NYHD
-              RELEASE.DATE...: 26/03/2018
-              RELEASE.SIZE...: 2.05 GiB
-              RELEASE.FORMAT.: Matroska
-              DURATION.......: 01:30:43.400(HH:MM:SS.MMM)
-              OVERALL.BITRATE: 3 241 Kbps
-              RESOLUTION.....: 1920x816
-              VIDEO.CODEC....: V_MPEGH/ISO/HEVC
-              FRAME.RATE.....: 25.000 FPS
-              AUDIO1.........: English AAC LC 2 channels 128 Kbps
-              AUDIO2.........: Chinese AAC LC 2 channels 128 Kbps
-              SUBTITLE.......: Chs
-              UPLOADER.......: @NYHD
-            </pre>
+          <div class="main-torrent-info">
+            <table>
+              <tbody>
+                <tr><td>Name</td><td>Just a name</td></tr>
+                <tr><td>Moderation</td><td>star or not</td></tr>
+                <tr><td>Staff Tools</td><td>free or half</td></tr>
+                <tr><td>Uploader</td><td>username</td></tr>
+                <tr><td>Size</td><td>1 KiB</td></tr>
+                <tr><td>Category</td><td>Movie</td></tr>
+                <tr><td>Peers</td><td>30 / 20</td></tr>
+              </tbody>
+            </table>
           </div>
         </el-card>
         <!-- Screenshots Info -->
@@ -344,7 +283,6 @@ export default {
   }
 }
 .box-card {
-  opacity: 0.8;
   margin: 15px 0;
 }
 
@@ -397,6 +335,24 @@ export default {
         padding-left: 75px;
       }
     }
+  }
+}
+/* General */
+.main-torrent-info {
+  margin: -20px;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  tr td {
+    border: 1px solid #f9f9f9;
+    padding: 5px;
+  }
+  tr td:nth-child(1) {
+    width: 120px;
+  }
+  tr:nth-of-type(odd) {
+    background: #e9e9e9;
   }
 }
 
