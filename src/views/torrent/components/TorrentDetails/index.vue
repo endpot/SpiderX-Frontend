@@ -7,9 +7,12 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>IMDB / DouBan / TMDB Information</span>
-            <router-link :to="'/torrent/edit/'+torrentDetail[0].id">
-              <el-button style="float: right; padding: 3px 0" type="text">Edit</el-button>
-            </router-link>
+            <span style="float: right; padding: 3px 0">
+              <router-link :to="'/torrent/edit/'+torrentDetail[0].id">
+                <el-button type="text">Edit</el-button>
+              </router-link>
+              <el-button type="text" @click="handleDelete">Delete</el-button>
+            </span>
           </div>
           <div class="info-container">
             <el-image :src="doubanImg" fit="contain" />
@@ -110,13 +113,92 @@
           <div class="main-torrent-info">
             <table>
               <tbody>
-                <tr><td>Name</td><td>Just a name</td></tr>
-                <tr><td>Moderation</td><td>star or not</td></tr>
-                <tr><td>Staff Tools</td><td>free or half</td></tr>
-                <tr><td>Uploader</td><td>username</td></tr>
-                <tr><td>Size</td><td>1 KiB</td></tr>
-                <tr><td>Category</td><td>Movie</td></tr>
-                <tr><td>Peers</td><td>30 / 20</td></tr>
+                <tr>
+                  <!-- first line is title column -->
+                  <td><strong>Title</strong></td>
+                  <td>{{ torrentDetail[0].title }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Staff Tools</strong></td>
+                  <td>
+                    <el-button type="primary" size="mini">
+                      <svg-icon icon-class="star-pick" title="free" />Free
+                    </el-button>
+                    <el-button type="primary" size="mini">2x Free</el-button>
+                    <el-button type="primary" size="mini">Half</el-button>
+                    <el-button type="primary" size="mini">2x Half</el-button>
+                    <el-button type="primary" size="mini">30%</el-button>
+                    <el-button type="primary" size="mini">
+                      <svg-icon icon-class="sticky" title="free" />Sticky
+                    </el-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Uploader</strong></td>
+                  <td>
+                    <router-link :to="'#'">
+                      <el-button type="primary" size="mini">
+                        <svg-icon icon-class="user" title="user" />{{ torrentDetail[0].created_by }}
+                      </el-button>
+                      <el-button type="primary" size="mini">
+                        <svg-icon icon-class="heart" title="heart" style="color: red;" />Thanks
+                      </el-button>
+                    </router-link>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Uploaded</strong></td>
+                  <td>{{ torrentDetail[0].created_at }}({{ torrentDetail[0].created_at | formatLocalTime(torrentDetail[0].created_at) }})</td>
+                </tr>
+                <tr>
+                  <td><strong>Size</strong></td>
+                  <td>{{ torrentDetail[0].size | fileSize(torrentDetail[0].size) }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Category</strong></td>
+                  <td>Movie</td>
+                </tr>
+                <tr>
+                  <td><strong>Peers</strong></td>
+                  <td>
+                    <el-button type="primary" size="mini" round>
+                      <svg-icon icon-class="card-up" />{{ torrentDetail[0].seeder_count }}
+                    </el-button>
+                    <el-button type="primary" size="mini" round>
+                      <svg-icon icon-class="card-up" class="icon-download" />{{ torrentDetail[0].leecher_count }}
+                    </el-button>
+                    <el-button type="primary" size="mini" round>
+                      <svg-icon icon-class="card-snatch" />{{ torrentDetail[0].snatcher_count }}
+                    </el-button>
+                    <el-button type="primary" size="mini" round>
+                      View Peers
+                    </el-button>
+                    <el-button type="primary" size="mini" round>
+                      View Snatchers
+                    </el-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Tip Amount</strong></td>
+                  <td>
+                    <el-popover placement="top-start" trigger="click">
+                      <el-row style="display:flex;">
+                        <el-button type="success">10</el-button>
+                        <el-button type="success">50</el-button>
+                        <el-button type="success">100</el-button>
+                        <el-button type="success">500</el-button>
+                        <el-button type="success">1000</el-button>
+                        <el-button type="success">2000</el-button>
+                        <el-input v-model="tipCount" style="margin-left:5px;" placeholder="Enter a num for tip amount">
+                          <template slot="append">
+                            <el-button type="success">Leave tip</el-button>
+                          </template>
+                        </el-input>
+                      </el-row>
+                      <el-button slot="reference" type="primary" size="mini">Send</el-button>
+                    </el-popover>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -168,11 +250,14 @@
 <script>
 import { fetchDouban, fetchOMDB } from '@/api/main'
 import { fetchDetails } from '@/api/torrent'
-import { calcFileSize } from '@/utils'
+import { calcFileSize, formatTime, timeStamp } from '@/utils'
 export default {
   filters: {
     fileSize(size) {
       return calcFileSize(size)
+    },
+    formatLocalTime(time) {
+      return formatTime(timeStamp(time))
     }
   },
   data() {
@@ -187,7 +272,8 @@ export default {
       imdbId: 6320628,
       width: 38,
       showHeader: false,
-      front2Back: false
+      front2Back: false,
+      tipCount: 0
     }
   },
   computed: {
@@ -264,6 +350,9 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    handleDelete() {
+      alert('Sure to delete')
     },
     searchSubTitles() {
       alert('This is subtitles search')
@@ -344,6 +433,9 @@ export default {
     border-collapse: collapse;
     width: 100%;
   }
+  tr {
+    line-height: 24px;
+  }
   tr td {
     border: 1px solid #f9f9f9;
     padding: 5px;
@@ -351,18 +443,22 @@ export default {
   tr td:nth-child(1) {
     width: 120px;
   }
+  tr td:nth-child(2) {
+    font-size: 14px;
+  }
   tr:nth-of-type(odd) {
     background: #e9e9e9;
   }
 }
-
+.icon-download {
+  transform: rotate(180deg);
+}
 /* 可翻转的用户信息栏 */
 .card-item {
     width: 25%;
     height: 300px;
     position: absolute;
     margin: 15px 0;
-    opacity: 0.8;
   .box-card-front,
   .box-card-back {
     position: absolute;

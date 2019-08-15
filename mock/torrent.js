@@ -14,9 +14,9 @@ for (let i = 0; i < count; i++) {
     created_by: '@name', // 上传者
     created_at: '@datetime', // 上传时间
     attachments: [], // 附件
-    leechers: '@integer(60, 100)', // 下载数
-    seeders: '@integer(60, 100)', // 做种数
-    completer: '@integer(20, 120)', // 完成数
+    leecher_count: '@integer(60, 100)', // 下载数
+    seeder_count: '@integer(60, 100)', // 做种数
+    snatcher_count: '@integer(20, 120)', // 完成数
     rate: '@integer(0, 100)' // 完成百分比
   }))
 }

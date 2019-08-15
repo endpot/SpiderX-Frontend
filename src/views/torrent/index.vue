@@ -100,19 +100,19 @@
 
         <el-table-column align="center" label="Seeder">
           <template slot-scope="scope">
-            <span>{{ scope.row.seeders }}</span>
+            <span>{{ scope.row.seeder_count }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Leecher">
           <template slot-scope="scope">
-            <span>{{ scope.row.leechers }}</span>
+            <span>{{ scope.row.leecher_count }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Completer">
           <template slot-scope="scope">
-            <span>{{ scope.row.completer }}</span>
+            <span>{{ scope.row.snatcher_count }}</span>
           </template>
         </el-table-column>
 

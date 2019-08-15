@@ -72,7 +72,7 @@
           </router-link>
           <div class="waterfall-user-active">
             <span>
-              {{ item.seeders }} 做种 {{ item.leechers }} 下载 {{ item.completer }} 完成
+              {{ item.seeder_count }} 做种 {{ item.leecher_count }} 下载 {{ item.snatcher_count }} 完成
             </span>
           </div>
         </el-card>

@@ -69,9 +69,9 @@
                 <el-tag>MKV</el-tag>
                 <el-tag>{{ item.size | fileSize(item.size) }}</el-tag>
                 <el-tag>
-                  <svg-icon icon-class="card-up" />{{ item.seeders }} /
-                  <svg-icon icon-class="card-up" class="icon-download" />{{ item.leechers }} /
-                  <svg-icon icon-class="card-complete" />{{ item.completer }}
+                  <svg-icon icon-class="card-up" />{{ item.seeder_count }} /
+                  <svg-icon icon-class="card-up" class="icon-download" />{{ item.leecher_count }} /
+                  <svg-icon icon-class="card-snatch" />{{ item.snatcher_count }}
                 </el-tag>
               </span>
             </div>
