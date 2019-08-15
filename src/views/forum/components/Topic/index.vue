@@ -180,7 +180,7 @@ export default {
 .main {
   border-radius: 6px;
 }
-.md-editor{
+.md-editor {
   line-height: 0;
 }
 .box-card {
