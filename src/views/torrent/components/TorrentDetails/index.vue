@@ -328,8 +328,9 @@ export default {
   methods: {
     getDetails(id) {
       fetchDetails(id).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.torrentDetail.push(res.data)
+        this.setPageTitle()
       }).catch(err => {
         console.log(err)
       })
@@ -350,6 +351,10 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    setPageTitle() {
+      const title = 'Torrent Details'
+      document.title = `${title} - ${this.torrentDetail[0].title}`
     },
     handleDelete() {
       alert('Sure to delete')

@@ -146,7 +146,7 @@ export default {
     },
     setPageTitle() {
       const title = 'Edit Topic'
-      document.title = `${title} - ${this.form.id}`
+      document.title = `${title} - ${this.form.title}`
     },
     submitForm() {
       console.log(this.form)

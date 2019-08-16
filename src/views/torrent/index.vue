@@ -129,6 +129,15 @@
             </router-link>
           </template>
         </el-table-column>
+
+        <el-table-column align="center" label="Options" fixed="right">
+          <template slot-scope="scope">
+            <router-link :to="'/torrent/edit/'+scope.row.id" class="link-type">
+              <el-button type="text">Edit</el-button>
+            </router-link>
+            <el-button type="text" @click="handleDelete(scope.$index, torrentList)">Delete</el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
@@ -207,6 +216,15 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleDelete(index, row) {
+      row.splice(index, 1)
+      this.$notify({
+        title: '提示',
+        message: '删除成功',
+        type: 'success',
+        duration: 2000
+      })
     }
   }
 }

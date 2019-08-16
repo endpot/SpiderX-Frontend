@@ -221,9 +221,10 @@ export const asyncRoutes = [
   {
     path: '/upload',
     component: Layout,
+    redirect: '/upload/index',
     children: [
       {
-        path: 'upload',
+        path: 'index',
         component: () => import('@/views/torrent/upload'),
         name: 'Upload',
         meta: {

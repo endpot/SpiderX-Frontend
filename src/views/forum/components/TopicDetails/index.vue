@@ -144,9 +144,14 @@ export default {
     getDetails(id) {
       fetchDetails(id).then(res => {
         this.topic_details = res.data
+        this.setPageTitle()
       }).catch(err => {
         console.log(err)
       })
+    },
+    setPageTitle() {
+      const title = 'Topic Details'
+      document.title = `${title} - ${this.topic_details.title}`
     },
     showReply(id) {
       if (this.isShow.indexOf(id) !== -1) {

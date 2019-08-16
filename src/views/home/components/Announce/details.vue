@@ -92,7 +92,7 @@ export default {
     },
     setPageTitle() {
       const title = 'Edit Topic'
-      document.title = `${title} - ${this.form.id}`
+      document.title = `${title} - ${this.form.announce_title}`
     },
     handleSubmit() {
       this.$refs.form.validate((valid) => {
