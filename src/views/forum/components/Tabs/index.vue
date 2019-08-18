@@ -96,20 +96,24 @@ export default {
     }
   },
   computed: {
+    // 从store获取avatar和roles
     ...mapGetters([
       'avatar',
       'roles'
     ])
   },
   methods: {
-    getTabName(tab) { // 从父组件获取tabName
+    // 从父组件获取tabName 然后调用getList方法
+    getTabName(tab) {
       this.listQuery.tab = tab
       this.getList()
     },
+    // 将tableData设置为null 防止数据污染 之后使用api/forum/fetchList() 请求数据
     getList() {
       this.listLoading = true
       this.tableData = null
       fetchList(this.listQuery).then(res => {
+        console.log(res.data)
         this.tableData = res.data.items
         this.total = res.data.total
         this.listLoading = false
@@ -117,7 +121,8 @@ export default {
         console.log(err)
       })
     },
-    changeTab(id) { // 将当前所点击的tab类别传递至父组件
+    // 将当前所点击的tab类别传递至父组件
+    changeTab(id) {
       const idTab = id.topic_type
       this.$emit('listenTabEvent', idTab)
     }
@@ -126,25 +131,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// 标题部分的type='text' 按钮的大小
-.el-button {
-  font-size: 12px;
-  padding: 0 2px 0 0;
-}
 .titlelist {
   display: flex;
+  .el-button {
+    font-size: 12px;
+    padding: 0 2px 0 0;
+  }
 }
+
 .titleinfo {
   font-size: 12px;
 }
+
 .reply-read {
     font-size: 12px;
     margin-top: 30px;
     text-align: right;
 }
+
 .user-info-hover {
   width: 280px;
 }
+
 .clearfix {
   .user-name {
     display: inline-block;
@@ -152,6 +160,7 @@ export default {
     padding: 3px;
   }
 }
+
 .user-options {
   .el-row {
     .el-button {

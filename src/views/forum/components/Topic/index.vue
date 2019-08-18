@@ -90,7 +90,7 @@ export default {
 
     return {
       loading: false,
-      form: Object.assign({}, defaultForm),
+      form: Object.assign({}, defaultForm), // 拷贝defaultForm-> form
       rules: {
         topic_type: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
@@ -127,6 +127,7 @@ export default {
     }
   },
   created() {
+    // 这里判断接收的参数isEdit true/false
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.getDetails(id)
@@ -136,6 +137,7 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
+    // 请求数据
     getDetails(id) {
       fetchDetails(id).then(res => {
         this.form = res.data
@@ -144,10 +146,12 @@ export default {
         console.log(err)
       })
     },
+    // 设置当前网页title
     setPageTitle() {
       const title = 'Edit Topic'
       document.title = `${title} - ${this.form.title}`
     },
+    // submit form
     submitForm() {
       console.log(this.form)
       this.$refs.form.validate((valid) => {
@@ -166,6 +170,7 @@ export default {
         }
       })
     },
+    // router go back
     cancelForm() {
       this.$router.go(-1)
     }

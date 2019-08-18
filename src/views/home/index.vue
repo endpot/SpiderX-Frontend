@@ -103,17 +103,19 @@ export default {
   },
   data() {
     return {
-      activeName: '',
-      announceList: []
+      activeName: '', // 当前激活的collspan
+      announceList: [] // 存放announce list
     }
   },
   computed: {
+    // 从store获取 name roles
     ...mapGetters([
       'name',
       'roles'
     ])
   },
   mounted() {
+    // 调用getAnnounce
     this.getAnnounce()
   },
   methods: {
@@ -134,7 +136,6 @@ export default {
           this.announceList.splice(i, 1)
         }
       }
-      // 预留一个post 方法
     }
   }
 }
@@ -144,6 +145,7 @@ export default {
 .box-card {
   margin: 15px 0;
 }
+
 .item-title {
   &-right {
     display: flex;

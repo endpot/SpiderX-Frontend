@@ -260,7 +260,7 @@ export default {
       return formatTime(timeStamp(time))
     }
   },
-  data() {
+  data() { // 该页面并没有写完
     return {
       torrentDetail: [],
       doubanInfo: {},

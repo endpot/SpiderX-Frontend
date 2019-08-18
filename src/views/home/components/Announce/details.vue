@@ -61,7 +61,7 @@ export default {
     }
 
     return {
-      form: Object.assign({}, defaultForm),
+      form: Object.assign({}, defaultForm), // 拷贝 defaultForm -> form
       rules: {
         announce_title: [{ validator: validateRequire }],
         announce_text: [{ validator: validateRequire }],
@@ -73,6 +73,7 @@ export default {
     }
   },
   created() {
+    // 判断是否未edit页面
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.getDetails(id)
@@ -111,6 +112,7 @@ export default {
         }
       })
     },
+    // cancel -> router go back
     handleCancel() {
       this.$router.go(-1)
     }

@@ -91,17 +91,18 @@ export default {
   },
   data() {
     return {
-      activeName: 'all',
-      front2Back: false,
-      showHeader: false
+      activeName: 'all', // 当前激活tab
+      front2Back: false // user card 翻转判断
     }
   },
   computed: {
+    // 从store获取用户avatar
     ...mapGetters([
       'avatar'
     ])
   },
   mounted() {
+    // 初始化调用首页
     this.getTabAll()
   },
   methods: {
@@ -109,6 +110,7 @@ export default {
     getTabAll() {
       this.$refs['tab-page-all'].getList()
     },
+    // 点击tab触发 将当前tab name传递给子组件 触发子组件getTabName方法
     handleClick(tab, event) {
       switch (this.activeName) {
         case 'all':
@@ -133,10 +135,12 @@ export default {
           this.$refs['tab-page-all'].getTabName('all')
       }
     },
-    changeTabs(tabName) { // 接收从子组件传递过来的tabName 然后将获取到的tabName赋值给 activeName 然后执行请求数据
+    // 接收从子组件传递过来的tabName 然后将获取到的tabName赋值给 activeName 然后执行请求数据
+    changeTabs(tabName) {
       this.activeName = tabName
       this.handleClick()
     },
+    // user card 翻转
     changeClick() {
       this.front2Back = !this.front2Back
     }
@@ -145,11 +149,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// 对原有样式修正
 .tab-container {
   margin: 15px 0;
   border-radius: 0 0 5px 5px;
 }
+
 .titlelist {
   display: flex;
   // 标题部分的type='text' 按钮的大小
@@ -158,17 +162,21 @@ export default {
     padding: 0 2px 0 0;
   }
 }
+
 .titleinfo {
   font-size: 12px;
 }
+
 .reply-read {
     font-size: 12px;
     margin-top: 30px;
     text-align: right;
 }
+
 .user-info-hover {
   width: 280px;
 }
+
 .clearfix {
   .user-name {
     display: inline-block;
@@ -176,6 +184,7 @@ export default {
     padding: 3px;
   }
 }
+
 .user-options {
   .el-row {
     .el-button {
@@ -184,6 +193,7 @@ export default {
     }
   }
 }
+
 /* 可翻转的用户信息栏 */
 .card-item {
     width: 25%;
@@ -215,6 +225,7 @@ export default {
     transform: rotateY(-180deg);
   }
 }
+
 .create-options {
   position: absolute;
   margin-top: 360px;
@@ -224,4 +235,3 @@ export default {
   }
 }
 </style>
-

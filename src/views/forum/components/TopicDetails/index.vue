@@ -4,7 +4,7 @@
       <el-col class="main" :span="15" :offset="3">
         <div class="panel">
           <el-card class="box-card" shadow="never">
-            <div slot="header" class="clearfix">
+            <div slot="header" class="clearfix main-title">
               <span class="topic-full-title">
                 <el-tag v-if="topic_details.topic_type === 'share'" size="small">分享</el-tag>
                 <el-tag v-else-if="topic_details.topic_type === 'ask'" size="small" type="success">问答</el-tag>
@@ -119,15 +119,16 @@ export default {
     MarkdownEditor
   },
   filters: {
+    // 格式化时间 后期会基于api修改
     formatLocalTime(time) {
       return formatTime(timeStamp(time))
     }
   },
   data() {
     return {
-      topic_details: [],
-      author_topics: [],
-      isShow: [],
+      topic_details: [], // 该topic details 数据存放
+      author_topics: [], // 目前其实没用
+      isShow: [], // 这里使用一个数组存放 回复list 从而使得多个共用组件分开处理
       replyForm: { // 回复其他回复该话题的操作
         content: ''
       },
@@ -153,6 +154,7 @@ export default {
       const title = 'Topic Details'
       document.title = `${title} - ${this.topic_details.title}`
     },
+    // 不存在 则push 然后上面 v-show -> includes 判断
     showReply(id) {
       if (this.isShow.indexOf(id) !== -1) {
         return false
@@ -160,10 +162,12 @@ export default {
         this.isShow.push(id)
       }
     },
+    // 取消回复 删除isShow 隐藏
     handleCancel(id) {
       const index = this.isShow.indexOf(id)
       this.isShow.splice(index, 1)
     },
+    // 待修复
     onSubmit(formName) {
       console.log(this.$refs[formName].model.content)
     }
@@ -172,7 +176,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.clearfix {
+.main-title {
   display: block;
   .topic-full-title {
     .title {
@@ -193,11 +197,13 @@ export default {
     }
   }
 }
+
 .main-content {
   display: block;
   margin: 0 10px;
   text-indent: 2rem;
 }
+
 .reply-item {
   .author-content {
     // display: inline-flex;
@@ -236,16 +242,6 @@ export default {
     text-indent: 2rem;
   }
 }
-// .markdown-text {
-//   p {
-//     a {
-//       color: #08c;
-//     }
-//     a:hover {
-//       text-decoration: underline;
-//     }
-//   }
-// }
 
 .card-main {
   display: block;
@@ -266,6 +262,7 @@ export default {
     }
   }
 }
+
 .topic-title {
   overflow: hidden;
   width: 90%;

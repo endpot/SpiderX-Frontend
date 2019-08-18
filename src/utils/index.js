@@ -115,7 +115,6 @@ export function param2Obj(url) {
 }
 /**
  * @description 用以计算文件的大小
- * @author ajycc20 <ajycc20@qq.com>
  * @param {number} size
  */
 export function calcFileSize(size) {

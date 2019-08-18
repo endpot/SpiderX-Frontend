@@ -1,10 +1,9 @@
 import request from '@/utils/request'
+
 /**
  * @description get home page announce
- * @author ajycc20 <ajycc20@qq.com>
- * @export
  * @param {*} params
- * @returns
+ * @returns utils/request -> announce list json
  */
 export function fetchAnnounceList(params) {
   return request({
@@ -14,10 +13,9 @@ export function fetchAnnounceList(params) {
   })
 }
 /**
- * @description
- * @export
+ * @description fetch announce details with announce id
  * @param {number} id
- * @returns
+ * @returns utils/request -> announce info json
  */
 export function fetchAnnounceDetails(id) {
   return request({

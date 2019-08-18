@@ -60,12 +60,12 @@ export default {
   },
   data() {
     return {
-      activeName: '',
-      announceList: [],
-      newTag: [],
-      total: 0,
+      activeName: '', // 当前激活的collspan
+      announceList: [], // announce list
+      newTag: [], // 是否是最新的announce  待修改
+      total: 0, // 分页 total
       listLoading: true,
-      listQuery: {
+      listQuery: { // 默认search 基于 title
         page: 1,
         limit: 20,
         value: undefined,
@@ -117,6 +117,7 @@ export default {
     width: 100px;
   }
 }
+
 .item-title {
   &-right {
     display: flex;

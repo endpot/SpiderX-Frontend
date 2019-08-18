@@ -164,7 +164,7 @@ export default {
       fullSearch: false,
       total: 0,
       width: 38, // rate circle width
-      bookmark: [],
+      bookmark: [], // 同样基于 数组然后使用includes 返回的true/false 进行判断
       listLoading: true,
       listQuery: {
         page: 1,
@@ -202,6 +202,7 @@ export default {
     onSearch() {
       console.log(this.form.search)
     },
+    // 收藏
     bookMark(id) {
       if (this.bookmark.indexOf(id) !== -1) {
         const index = this.bookmark.indexOf(id)
@@ -210,13 +211,17 @@ export default {
         this.bookmark.push(id)
       }
     },
+    // 基于多个筛选的查询 待修改
     handleFullSearch() {
       this.fullSearch = !this.fullSearch
     },
+    // search
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
+    // 应该是先post 再 重新请求list
+    // 或者可以考虑 post 基于返回的code -> this.$notify -> row.splice
     handleDelete(index, row) {
       row.splice(index, 1)
       this.$notify({
@@ -240,9 +245,11 @@ export default {
     box-shadow: 2px 5px 5px 5px #bbb;
   }
 }
+
 .search-options {
   text-align: center;
 }
+
 .caption {
   font-size: 0.8rem;
   width: 100%;
@@ -250,5 +257,4 @@ export default {
     float: right;
   }
 }
-
 </style>

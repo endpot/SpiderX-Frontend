@@ -94,8 +94,8 @@ export default {
   },
   data() {
     return {
-      torrentList: [],
-      torrentListMore: [],
+      torrentList: [], // default list
+      torrentListMore: [], // 瀑布流第一次之后的加载
       fullSearch: false,
       doubanId: 26931786,
       doubanInfo: {},
