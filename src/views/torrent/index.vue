@@ -253,6 +253,7 @@ export default {
 .caption {
   font-size: 0.8rem;
   width: 100%;
+
   .icon-options {
     float: right;
   }

@@ -206,36 +206,43 @@ export default {
 
 .reply-item {
   .author-content {
-    // display: inline-flex;
     display: block;
+
     .user-avatar {
       display: inline-block;
+
       img {
         width: 30px;
         height: 30px;
       }
     }
+
     .user-info {
       display: inline-block;
       margin-left: 10px;
+
       .reply-author {
         font-size: 12px;
         font-weight: 700;
         color: #666;
       }
+
       .reply-author + a:hover {
         text-decoration: underline;
       }
+
       .reply-time {
         font-size: 11px;
         color: #08c;
       }
     }
+
     .user-action {
       color: #666;
       float: right;
     }
   }
+
   .reply-content {
     display: block;
     margin: 10px 0;
@@ -253,6 +260,7 @@ export default {
       height: 48px;
     }
   }
+
   .user-name {
     font-size: 16px;
     max-width: 120px;

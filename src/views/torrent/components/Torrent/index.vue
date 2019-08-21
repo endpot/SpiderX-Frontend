@@ -119,6 +119,7 @@ export default {
     margin-right: 20px !important;
   }
 }
+
 .md-editor {
   line-height: 0;
 }

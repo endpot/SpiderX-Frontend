@@ -200,26 +200,29 @@ export default {
     height: 300px;
     position: absolute;
     margin: 15px 0;
+
   .box-card-front,
   .box-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
-
     transition: .5s ease-in-out;
   }
+
   .box-card-front {
     z-index: 1;
   }
+
   .box-card-back {
     transform: rotateY(180deg);
   }
+
   .box-card-back.back {
     transform: rotateY(0deg);
   }
+
   .box-card-front.front {
     z-index: 0;
     transform: rotateY(-180deg);

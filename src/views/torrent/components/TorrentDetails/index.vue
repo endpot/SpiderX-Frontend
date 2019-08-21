@@ -388,6 +388,7 @@ export default {
     float: left;
     margin: 0 0 15px 0;
   }
+
   .info {
     display: block;
     float: left;
@@ -395,6 +396,7 @@ export default {
     padding-top: 5px;
     max-width: 68%;
     width: 100%;
+
     .douban-title {
       font-size: 22px;
       text-align: center;
@@ -405,21 +407,25 @@ export default {
       font-weight: bold;
       text-align: center;
     }
+
     .rating {
       display: flex;
     }
+
     dl {
       font-size: 13px;
       padding-bottom: 20px;
       padding-left: 10px;
       padding-right: 10px;
       overflow: hidden;
+
       dt {
         padding: 6px 6px 6px 0;
         font-weight: bold;
         float: left;
         width: 70px;
       }
+
       dd {
         line-height: 20px;
         padding-bottom: 5px;
@@ -434,27 +440,34 @@ export default {
 /* General */
 .main-torrent-info {
   margin: -20px;
+
   table {
     border-collapse: collapse;
     width: 100%;
   }
+
   tr {
     line-height: 24px;
   }
+
   tr td {
     border: 1px solid #f9f9f9;
     padding: 5px;
   }
+
   tr td:nth-child(1) {
     width: 120px;
   }
+
   tr td:nth-child(2) {
     font-size: 14px;
   }
+
   tr:nth-of-type(odd) {
     background: #e9e9e9;
   }
 }
+
 .icon-download {
   transform: rotate(180deg);
 }
@@ -464,31 +477,35 @@ export default {
     height: 300px;
     position: absolute;
     margin: 15px 0;
+
   .box-card-front,
   .box-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
-
     transition: .5s ease-in-out;
   }
+
   .box-card-front {
     z-index: 1;
   }
+
   .box-card-back {
     transform: rotateY(180deg);
   }
+
   .box-card-back.back {
     transform: rotateY(0deg);
   }
+
   .box-card-front.front {
     z-index: 0;
     transform: rotateY(-180deg);
   }
 }
+
 .svg-icon {
   cursor: pointer;
 }

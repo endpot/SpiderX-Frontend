@@ -206,6 +206,7 @@ export default {
   border: 1px solid #dddddd;
   padding: 10px 20px;
   border-radius: 5px;
+
   &:hover {
     box-shadow: 2px 5px 5px 5px #bbb;
   }
@@ -219,9 +220,11 @@ export default {
   @media screen and (min-width: 1600px) {
     width: 33.33333%;
   }
+
   @media screen and (max-width: 1599px) and (min-width: 900px) {
     width: 50%;
   }
+
   @media screen and (max-width: 899px) {
     width: 100%;
   }
@@ -243,6 +246,7 @@ export default {
 .card-info {
   display: flex;
   height: 260px;
+
   .card-poster {
     img {
       height: 260px;
@@ -256,6 +260,7 @@ export default {
     margin-top: -20px;
     height: 260px;
     overflow: hidden;
+
     &:hover {
       overflow: auto;
     }
@@ -263,6 +268,7 @@ export default {
   &-genre {
     span {
       margin: 0 6px;
+
       .el-button {
         border: none;
         box-shadow: 0 0 5px 5px #eee;

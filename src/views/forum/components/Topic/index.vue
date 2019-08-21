@@ -179,25 +179,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container {
-  display: block;
-}
 .main {
   border-radius: 6px;
 }
+
 .md-editor {
   line-height: 0;
 }
+
 .box-card {
   .markdown-grammers {
     font-size: 14px;
     line-height: 20px;
     color: #888;
   }
+
   .markdown-link {
     display: block;
     margin-top: 10px;
     cursor: pointer;
+
     a:hover {
       color: #00FF00;
     }

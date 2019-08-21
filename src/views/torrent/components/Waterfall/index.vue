@@ -193,6 +193,7 @@ export default {
   border: 1px solid #dddddd;
   padding: 10px 20px;
   border-radius: 5px;
+
   &:hover {
     box-shadow: 2px 5px 5px 5px #bbb;
   }
@@ -205,17 +206,21 @@ export default {
 .waterfall {
   column-count: 5;
   column-gap: 0;
+
   .waterfall-item {
     box-sizing: border-box;
     break-inside: avoid;
     transition: .3s;
     padding: 4px;
+
     img {
       width: 100%;
     }
+
     .waterfall-caption {
       font-size: 12px;
     }
+
     .waterfall-user-active {
       font-size: 12px;
       color: #838383;
@@ -227,31 +232,37 @@ export default {
     column-count: 7;
   }
 }
+
 @media screen and(max-width: 1799px) and(min-width: 1600px) {
   .waterfall {
     column-count: 6;
   }
 }
+
 @media screen and(max-width: 1599px) and(min-width: 1200px) {
   .waterfall {
     column-count: 5;
   }
 }
+
 @media screen and(max-width: 1199px) and(min-width: 900px) {
   .waterfall {
     column-count: 4;
   }
 }
+
 @media screen and(max-width: 899px) and(min-width: 700px) {
   .waterfall {
     column-count: 3;
   }
 }
+
 @media screen and(max-width: 699px) and(min-width: 500px) {
   .waterfall {
     column-count: 2;
   }
 }
+
 @media screen and(max-width: 499px) {
   .waterfall {
     column-count: 1;
