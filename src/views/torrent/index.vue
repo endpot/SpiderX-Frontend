@@ -160,7 +160,7 @@ export default {
   },
   data() {
     return {
-      torrentList: null,
+      torrentList: [],
       fullSearch: false,
       total: 0,
       width: 38, // rate circle width
@@ -191,7 +191,7 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(res => {
-        // console.log(res.data)
+        // console.log(res.data.items)
         this.torrentList = res.data.items
         this.total = res.data.total
         this.listLoading = false

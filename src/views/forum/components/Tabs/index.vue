@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      tableData: null, // 全局表格data
+      tableData: [], // 全局表格data
       showHeader: false, // 表格不显示header
       total: 0, // page total
       listLoading: true, // 默认加载中
@@ -108,10 +108,10 @@ export default {
       this.listQuery.tab = tab
       this.getList()
     },
-    // 将tableData设置为null 防止数据污染 之后使用api/forum/fetchList() 请求数据
+    // 将tableData设置为[] 防止数据污染 之后使用api/forum/fetchList() 请求数据
     getList() {
       this.listLoading = true
-      this.tableData = null
+      this.tableData = []
       fetchList(this.listQuery).then(res => {
         console.log(res.data)
         this.tableData = res.data.items
