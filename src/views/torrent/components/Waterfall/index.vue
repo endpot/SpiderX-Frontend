@@ -139,7 +139,7 @@ export default {
       // scrollHeight 滚动条的总高度
       const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
       // 滚动条到底部的条件 多次测试发现会有小于1的偏差以至于无法生效 所以这里对scrollTop 向上取整
-      if (Math.ceil(scrollTop) + windowHeight >= scrollHeight) {
+      if (Math.ceil(scrollTop) + windowHeight >= scrollHeight) { // need debounce
         that.loadMore()
       }
     }
