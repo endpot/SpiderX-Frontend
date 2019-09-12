@@ -211,7 +211,7 @@ export default {
     box-sizing: border-box;
     break-inside: avoid;
     transition: .3s;
-    padding: 4px;
+    padding: 6px;
 
     img {
       width: 100%;

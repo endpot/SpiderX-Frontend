@@ -43,7 +43,7 @@ export default [
       let itemList = []
       if (tab !== 'all') {
         for (const item of forumList) {
-          if (item.topicType === tab) {
+          if (item.topic_type === tab) {
             itemList.push(item)
           }
         }
