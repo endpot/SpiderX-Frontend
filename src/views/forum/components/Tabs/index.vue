@@ -3,13 +3,13 @@
     <el-table v-loading="listLoading" :data="tableData" :show-header="showHeader" fit highlight-current-row style="width: 100%">
 
       <el-table-column align="center" label="Icon" width="60">
-        <template slot-scope="scope">
+        <template #default="{ row }">
           <router-link :to="'#'">
             <el-popover placement="right" trigger="hover">
               <el-card class="user-info-hover" shadow="never">
                 <div slot="header" class="clearfix">
-                  <el-image :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px;" />
-                  <div class="user-name"> {{ scope.row.author.author_name }} </div>
+                  <el-image :src="row.author.avatar_url" fit="fill" style="width: 40px; height: 40px;" />
+                  <div class="user-name"> {{ row.author.author_name }} </div>
                   <div v-for="(role, index) in roles" :key="index" class="user-role" style="float: right; padding: 3px 0">{{ role }}</div>
                 </div>
                 <div class="user-options">
@@ -20,14 +20,14 @@
                   </el-row>
                 </div>
               </el-card>
-              <el-image slot="reference" :src="scope.row.author.avatar_url" fit="fill" style="width: 40px; height: 40px; border-radius: 50%;" />
+              <el-image slot="reference" :src="row.author.avatar_url" fit="fill" style="width: 40px; height: 40px; border-radius: 50%;" />
             </el-popover>
           </router-link>
         </template>
       </el-table-column>
 
       <el-table-column align="left" label="Title" width="auto" min-width="280">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <div class="titlelist">
             <el-button v-if="row.topic_type === 'notice'" type="text" @click="changeTab(row)">[站务公告]</el-button>
             <el-button v-if="row.topic_type === 'guide'" type="text" @click="changeTab(row)">[新手指引]</el-button>
@@ -53,12 +53,12 @@
       </el-table-column>
 
       <el-table-column align="right" label="ReplyOrRead" width="120">
-        <template slot-scope="scope">
+        <template #default="{ row }">
           <div class="reply-read">
             <span>回帖:</span>
-            <span> {{ scope.row.reply_count }} </span>
+            <span> {{ row.reply_count }} </span>
             <span> / </span>
-            <span> {{ scope.row.pageviews }} </span>
+            <span> {{ row.pageviews }} </span>
           </div>
         </template>
       </el-table-column>

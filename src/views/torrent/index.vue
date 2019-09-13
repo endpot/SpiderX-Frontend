@@ -63,13 +63,13 @@
       <el-table v-loading="listLoading" :data="torrentList" border fit highlight-current-row style="width: 100%">
 
         <el-table-column align="center" label="类型" width="80">
-          <template slot-scope="scope">
-            <el-tag>{{ scope.row.category }}</el-tag>
+          <template #default="{ row }">
+            <el-tag>{{ row.category }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Title" min-width="300px">
-          <template slot-scope="{row}">
+          <template #default="{ row }">
             <router-link :to="'/torrent/details/'+row.id" :title="row.title" class="link-type">
               <span>{{ row.title }}</span>
             </router-link>
@@ -87,43 +87,43 @@
         </el-table-column>
 
         <el-table-column align="center" label="Date">
-          <template slot-scope="scope">
-            <span>{{ scope.row.created_at }}</span>
+          <template #default="{ row }">
+            <span>{{ row.created_at }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Size">
-          <template slot-scope="scope">
-            <span>{{ scope.row.size | fileSize(scope.row.size) }}</span>
+          <template #default="{ row }">
+            <span>{{ row.size | fileSize(row.size) }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Seeder">
-          <template slot-scope="scope">
-            <span>{{ scope.row.seeder_count }}</span>
+          <template #default="{ row }">
+            <span>{{ row.seeder_count }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Leecher">
-          <template slot-scope="scope">
-            <span>{{ scope.row.leecher_count }}</span>
+          <template #default="{ row }">
+            <span>{{ row.leecher_count }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Completer">
-          <template slot-scope="scope">
-            <span>{{ scope.row.snatcher_count }}</span>
+          <template #default="{ row }">
+            <span>{{ row.snatcher_count }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Rate">
-          <template slot-scope="scope">
-            <el-progress type="circle" :percentage="scope.row.rate" :width="width" />
+          <template #default="{ row }">
+            <el-progress type="circle" :percentage="row.rate" :width="width" />
           </template>
         </el-table-column>
 
         <el-table-column align="center" label="Uploader">
-          <template slot-scope="{row}">
+          <template #default="{ row }">
             <router-link :to="'/user/details'" class="link-type">
               <span>{{ row.created_by }}</span>
             </router-link>
@@ -131,7 +131,7 @@
         </el-table-column>
 
         <el-table-column align="center" label="Options" fixed="right">
-          <template slot-scope="scope">
+          <template #default="scope">
             <router-link :to="'/torrent/edit/'+scope.row.id" class="link-type">
               <el-button type="text">Edit</el-button>
             </router-link>
