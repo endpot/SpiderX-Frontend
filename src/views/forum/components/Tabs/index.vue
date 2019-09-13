@@ -43,7 +43,7 @@
             <router-link :to="'/user/info/'+row.author_id" :title="row.author" class="link-type">
               <span> {{ row.author.author_name }} </span>
             </router-link>
-            <span> {{ row.create_at }} </span>
+            <span> {{ row.created_at }} </span>
             <span> | </span>
             <span> 最后发表: </span>
             <span>{{ row.author.author_name }}</span>

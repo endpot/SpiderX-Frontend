@@ -10,7 +10,7 @@
                 <el-tag v-else-if="topic_details.topic_type === 'ask'" size="small" type="success">问答</el-tag>
                 <span class="title">{{ topic_details.title }}</span>
                 <div class="title-details">
-                  <span>发布于 {{ topic_details.create_at | formatLocalTime(topic_details.create_at) }}</span>
+                  <span>发布于 {{ topic_details.created_at | formatLocalTime(topic_details.created_at) }}</span>
                   <span>作者<a :href="'#' + topic_details.author.author_name">{{ topic_details.author.author_name }}</a></span>
                   <span>{{ topic_details.pageviews }} 次浏览</span>
                   <span v-if="topic_details.topic_type === 'share'">来自 分享</span>
@@ -38,7 +38,7 @@
                   </a>
                   <div class="user-info">
                     <a class="dark reply-author" :href="'#' + item.author.author_name">{{ item.author.author_name }}</a>
-                    <a class="reply-time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.create_at | formatLocalTime(item.create_at) }}</a>
+                    <a class="reply-time" :href="'#' + item.id">{{ index + 1 }}楼 • {{ item.created_at | formatLocalTime(item.created_at) }}</a>
                   </div>
                   <div class="user-action">
                     <span>

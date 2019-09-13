@@ -138,6 +138,7 @@
             <el-button type="text" @click="handleDelete(scope.$index, torrentList)">Delete</el-button>
           </template>
         </el-table-column>
+
       </el-table>
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />

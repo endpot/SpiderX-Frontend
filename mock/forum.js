@@ -14,7 +14,7 @@ for (let i = 0; i < count; i++) {
     },
     author_id: '@string(lower, 8)', // 作者id
     content: '@cparagraph', // 内容
-    create_at: '@datetime', // 创建时间
+    created_at: '@datetime', // 创建时间
     title: '@ctitle',
     'topic_type|1': ['notice', 'guide', 'discuss', 'hobby', 'working'], // notice: 公告 guide: 新手指引  discuss: 综合交流  hobby: 爱好 working:站务工作
     last_reply_at: '@now', // 最后回复时间
@@ -24,7 +24,7 @@ for (let i = 0; i < count; i++) {
         author_name: '@name' // 评论者用户名
       },
       content: '@csentence', // 评论内容
-      create_at: '@datetime', // 创建时间
+      created_at: '@datetime', // 创建时间
       id: '@string(lower, 8)', // 该条目评论者 用户id
       'is_praised|1': 'true', // 当前登录用户是否 赞
       reply_id: '@string(lower, 8)' // 该条目若不是对上一条目的回复则为null  若是则等同于上一条目(replies)的id

@@ -39,7 +39,7 @@
             <el-card :class="{front:front2Back}" class="box-card-front">
               <div slot="header" class="clearfix">
                 <span>个人信息</span>
-                <span style="float: right; padding: 3px 0">
+                <span style="float: right; padding: 3px 0; cursor: pointer">
                   <svg-icon icon-class="change" @click="changeClick" />
                 </span>
               </div>
@@ -52,7 +52,7 @@
             <el-card :class="{back:front2Back}" class="box-card-back">
               <div slot="header" class="clearfix">
                 <span>UserInfo</span>
-                <span style="float: right; padding: 3px 0">
+                <span style="float: right; padding: 3px 0; cursor: pointer">
                   <svg-icon icon-class="change" @click="changeClick" />
                 </span>
               </div>
