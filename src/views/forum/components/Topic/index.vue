@@ -23,8 +23,8 @@
                 </div>
               </el-form-item>
               <el-form-item label-width="10px">
-                <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
-                <el-button @click="cancelForm">取消</el-button>
+                <el-button v-loading="loading" type="primary" @click="handleSubmit">提交</el-button>
+                <el-button @click="handleCancel">取消</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -152,7 +152,7 @@ export default {
       document.title = `${title} - ${this.form.title}`
     },
     // submit form
-    submitForm() {
+    handleSubmit() {
       console.log(this.form)
       this.$refs.form.validate((valid) => {
         if (valid) {
@@ -171,7 +171,7 @@ export default {
       })
     },
     // router go back
-    cancelForm() {
+    handleCancel() {
       this.$router.go(-1)
     }
   }

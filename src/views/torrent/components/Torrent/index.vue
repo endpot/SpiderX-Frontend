@@ -4,7 +4,7 @@
       <div v-if="isEdit" slot="header" class="clearfix">
         <span>Edit: title</span>
       </div>
-      <el-form ref="form" :model="form">
+      <el-form ref="form" :model="form" :rules="rules">
 
         <el-form-item label="File" prop="file" label-width="70px">
           <el-upload
@@ -57,6 +57,18 @@
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
+import { fetchDetails } from '@/api/torrent'
+
+const defaultForm = {
+  id: undefined,
+  title: '',
+  category: '',
+  type: '',
+  imdb: 'this is imdb link',
+  douban: 'this is douban link',
+  descr: ''
+}
+
 export default {
   components: {
     MarkdownEditor
@@ -68,6 +80,18 @@ export default {
     }
   },
   data() { // 该页面并没有写完
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + '为必填项',
+          type: 'error'
+        })
+        callback(new Error(rule.field + '为必填项'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       fileList: [
         {
@@ -75,14 +99,13 @@ export default {
           url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1j'
         }
       ],
-      form: {
-        title: '',
-        category: 'movie',
-        type: '1080p',
-        imdb: '',
-        douban: '',
-        descr: ''
+      form: Object.assign({}, defaultForm),
+      rules: {
+        title: [{ validator: validateRequire }],
+        category: [{ validator: validateRequire }],
+        type: [{ validator: validateRequire }]
       },
+      tempRoute: {},
       categoryList: [
         { label: 'Movie', value: 'movie' },
         { label: 'Tvseries', value: 'tvseries' },
@@ -98,9 +121,44 @@ export default {
       ]
     }
   },
+  created() {
+    if (this.isEdit) {
+      const id = this.$route.params && this.$route.params.id
+      this.getDetails(id)
+    } else {
+      this.form = Object.assign({}, defaultForm)
+    }
+    this.tempRoute = Object.assign({}, this.$route)
+  },
   methods: {
+    getDetails(id) {
+      fetchDetails(id).then(res => {
+        this.form = res.data
+        this.setPageTitle()
+      })
+    },
+    setPageTitle() {
+      const title = 'Edit Torrent'
+      document.title = `${title} - ${this.form.title}`
+    },
     handleSubmit() {
-      console.log('submit')
+      console.log(this.form)
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          this.$notify({
+            title: '成功',
+            message: '发布种子成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.loading = false
+          this.$router.push('/torrent/details/' + this.$route.params.id)
+        } else {
+          console.log('err submit')
+          return false
+        }
+      })
     },
     handleCancel() {
       this.$router.go(-1)

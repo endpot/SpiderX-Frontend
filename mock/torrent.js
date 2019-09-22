@@ -11,6 +11,7 @@ for (let i = 0; i < count; i++) {
     descr: '@cparagraph', // 资源简介
     'category|1': ['电影', '剧集', '纪录', '综艺', '学习'], // 资源分类
     size: '@integer(1048576, 10737418240)', // 种子大小
+    'type|1': ['1080p', '2160p', '720p', 'Encode'], // 1080p 2160p encode...
     created_by: '@name', // 上传者
     created_at: '@datetime', // 上传时间
     attachments: [], // 附件
