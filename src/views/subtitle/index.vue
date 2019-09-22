@@ -5,6 +5,13 @@
         <span>Subtitles</span>
       </div>
 
+      <div class="search-options">
+        <el-input v-model="listQuery.value" placeholder="Title" style="width: 600px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          Search
+        </el-button>
+      </div>
+
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="text-align: center" @pagination="getList" />
 
       <el-table v-loading="listLoading" :data="subtitleList" border fit highlight-current-row style="width: 100%">
@@ -75,7 +82,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        lang: 'all'
+        value: undefined
       }
     }
   },
@@ -94,6 +101,10 @@ export default {
         console.log(err)
       })
     },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
     handleDelete(index, row) {
       row.splice(index, 1)
       this.$notify({
@@ -106,3 +117,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.search-options {
+  text-align: center;
+}
+</style>

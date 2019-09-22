@@ -20,24 +20,21 @@ export default [
     url: '/subtitle/list',
     type: 'get',
     response: config => {
-      const { page = 1, limit = 20, lang = 'all' } = config.query
+      const { page = 1, limit = 20, value } = config.query
 
-      let itemList = []
-      if (lang !== 'all') {
-        for (const item of subtitleList) {
-          if (item.language === lang) {
-            itemList.push(item)
-          }
+      const mockList = subtitleList.filter(item => {
+        if (value && item.title.toLowerCase().indexOf(value) < 0) {
+          return false
         }
-      } else {
-        itemList = subtitleList
-      }
-      const pageList = itemList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+        return true
+      })
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
 
       return {
         code: 20000,
         data: {
-          total: itemList.length,
+          total: mockList.length,
           items: pageList
         }
       }
