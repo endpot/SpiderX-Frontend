@@ -64,7 +64,7 @@
 
         <el-table-column align="center" label="类型" width="80">
           <template #default="{ row }">
-            <el-tag>{{ row.category }}</el-tag>
+            <el-tag style="cursor: pointer" @click="handleSelectCat(row.category)">{{ row.category }}</el-tag>
           </template>
         </el-table-column>
 
@@ -86,7 +86,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="Date">
+        <el-table-column align="center" label="Date" min-width="140px">
           <template #default="{ row }">
             <span>{{ row.created_at }}</span>
           </template>
@@ -122,7 +122,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="Uploader">
+        <el-table-column align="center" label="Uploader" min-width="120px">
           <template #default="{ row }">
             <router-link :to="'/user/details'" class="link-type">
               <span>{{ row.created_by }}</span>
@@ -211,6 +211,12 @@ export default {
       } else {
         this.bookmark.push(id)
       }
+    },
+    handleSelectCat(category) { // 暂定这样  mock 并未对此字段适配
+      console.log(category)
+      this.listQuery.category = category
+      this.torrentList = null
+      this.getList()
     },
     // 基于多个筛选的查询 待修改
     handleFullSearch() {
