@@ -14,9 +14,9 @@
                 </div>
                 <div class="user-options">
                   <el-row>
-                    <el-button size="small" round>加为好友</el-button>
-                    <el-button size="small" round>发送信息</el-button>
-                    <el-button size="small" round>打个招呼</el-button>
+                    <el-button size="mini" round>加为好友</el-button>
+                    <el-button size="mini" round>发送信息</el-button>
+                    <el-button size="mini" round>打个招呼</el-button>
                   </el-row>
                 </div>
               </el-card>
@@ -151,6 +151,9 @@ export default {
 
 .user-info-hover {
   width: 280px;
+  .el-card__body {
+    padding-left: 10px;
+  }
 }
 
 .clearfix {
@@ -163,6 +166,7 @@ export default {
 
 .user-options {
   .el-row {
+    display: flex;
     .el-button {
       color: #aaa;
       text-shadow: 5px 0 15px #fff;
