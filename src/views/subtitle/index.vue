@@ -22,9 +22,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="Title">
+        <el-table-column align="center" label="Title" min-width="300px">
           <template #default="{ row }">
             <span>{{ row.title }}</span>
+            <span class="icon-options" @click="handleDownload(row.id)">
+              <svg-icon icon-class="download" />
+            </span>
           </template>
         </el-table-column>
 
@@ -46,10 +49,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="Options" width="140">
-          <template #default="{ $index }">
-            <el-button type="text">Tip-Off</el-button>
-            <el-button type="text" @click="handleDelete($index, subtitleList)">Delete</el-button>
+        <el-table-column align="center" label="Options" width="140" fixed="right">
+          <template #default="scope">
+            <el-button type="text" @click="handleTipOff(scope.row.id)">Tip-Off</el-button>
+            <el-button type="text" @click="handleDelete(scope.$index, subtitleList)">Delete</el-button>
           </template>
         </el-table-column>
 
@@ -101,9 +104,27 @@ export default {
         console.log(err)
       })
     },
+    handleDownload(id) {
+      console.log(id)
+      this.$notify({
+        title: '提示',
+        message: '下载触发',
+        type: 'success',
+        duration: 2000
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleTipOff(id) {
+      console.log(id)
+      this.$notify({
+        title: '提示',
+        message: '跳转举报页面',
+        type: 'info',
+        duration: 2000
+      })
     },
     handleDelete(index, row) {
       row.splice(index, 1)
@@ -120,5 +141,9 @@ export default {
 <style lang="scss" scoped>
 .search-options {
   text-align: center;
+}
+
+.icon-options {
+  float: right;
 }
 </style>
