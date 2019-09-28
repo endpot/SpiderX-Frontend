@@ -20,7 +20,7 @@
       </div>
 
       <el-collapse v-model="activeName" v-loading="listLoading">
-        <div v-for="(item, index) in announceList" :key="index" class="items">
+        <div v-for="(item, index) in announcementList" :key="index" class="items">
           <el-collapse-item :name="item.announce_id">
             <template slot="title">
               {{ item.announce_title }}
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { fetchAnnounceList } from '@/api/home'
+import { getAnnouncementList } from '@/api/announcement'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
@@ -61,15 +61,14 @@ export default {
   data() {
     return {
       activeName: '', // 当前激活的collspan
-      announceList: [], // announce list
+      announcementList: [], // announce list
       newTag: [], // 是否是最新的announce  待修改
       total: 0, // 分页 total
       listLoading: true,
       listQuery: { // 默认search 基于 title
         page: 1,
-        limit: 20,
-        value: undefined,
-        type: 'title'
+        perPage: 15,
+        total: 0
       },
       typeOptions: [
         { label: 'Title', value: 'title' },
@@ -79,16 +78,20 @@ export default {
     }
   },
   mounted() {
-    this.getAnnounce()
+    this.fetchAnnouncementList()
   },
   methods: {
-    getAnnounce() {
+    fetchAnnouncementList() {
       this.listLoading = true
-      fetchAnnounceList(this.listQuery).then(res => {
-        this.announceList = res.data.items.reverse()
-        this.total = res.data.total
-        this.activeName = this.announceList[0].announce_id
-        this.newTag[0] = this.announceList[0].announce_id
+      getAnnouncementList(this.listQuery.page, this.listQuery.p).then(res => {
+        debugger
+
+        this.announcementList = res.data.items.reverse()
+        this.listQuery.total = res.data.meta.pagination.total
+
+        this.activeName = this.announcementList[0].announce_id
+        this.newTag[0] = this.announcementList[0].announce_id
+
         this.listLoading = false
       }).catch(err => {
         console.log(err)
@@ -96,9 +99,9 @@ export default {
     },
     deleteAnnounceItem(item) {
       alert('Sure to delete this item?')
-      for (let i = 0; i < this.announceList.length; i++) {
-        if (this.announceList[i].announce_id === item.announce_id) {
-          this.announceList.splice(i, 1)
+      for (let i = 0; i < this.announcementList.length; i++) {
+        if (this.announcementList[i].announce_id === item.announce_id) {
+          this.announcementList.splice(i, 1)
         }
       }
       // 预留一个post 方法

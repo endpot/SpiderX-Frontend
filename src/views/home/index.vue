@@ -3,13 +3,13 @@
     <div class="home-announce">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>最近消息</span>
+          <span>Announcement</span>
           <span style="float: right; padding: 3px 0;">
             <router-link :to="'/announce/create'" class="link-type">
-              [New+]
+              <i class="el-icon-document-add" />
             </router-link>
             <router-link :to="'/announce/list'" class="link-type">
-              [List]
+              <i class="el-icon-s-grid" />
             </router-link>
           </span>
         </div>
@@ -94,7 +94,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchAnnounceList } from '@/api/home'
+import { getAnnouncementList } from '@/api/announcement'
 import permission from '@/directive/permission' // 页面内使用permission指令控制权限
 export default {
   name: 'Home',
@@ -104,7 +104,7 @@ export default {
   data() {
     return {
       activeName: '', // 当前激活的collspan
-      announceList: [] // 存放announce list
+      announcementList: [] // 存放announce list
     }
   },
   computed: {
@@ -116,15 +116,15 @@ export default {
   },
   mounted() {
     // 调用getAnnounce
-    this.getAnnounce()
+    this.fetchAnnouncementList()
   },
   methods: {
-    getAnnounce() {
-      fetchAnnounceList().then(res => {
+    fetchAnnouncementList() {
+      getAnnouncementList().then(res => {
         // console.log(res.data.items)
         // 逆序保证最新数据为0号， 切片显示部分 考虑计算属性 为了方便activeName 直接在这里
-        this.announceList = res.data.items.reverse().slice(0, 4)
-        this.activeName = this.announceList[0].announce_id
+        this.announcementList = res.data.reverse().slice(0, 4)
+        // this.activeName = this.announcementList[0].announce_id
       }).catch(err => {
         console.log(err)
       })
