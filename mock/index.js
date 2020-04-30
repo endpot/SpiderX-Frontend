@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 import { param2Obj } from '../src/utils'
 
-import user from './user'
+import user from './auth'
 import table from './table'
 import forum from './forum'
 import torrent from './torrent'

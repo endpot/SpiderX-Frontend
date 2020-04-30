@@ -116,7 +116,7 @@ export default {
   },
   mounted() {
     // 调用getAnnounce
-    this.fetchAnnouncementList()
+    // this.fetchAnnouncementList()
   },
   methods: {
     fetchAnnouncementList() {
