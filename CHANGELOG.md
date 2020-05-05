@@ -5,6 +5,8 @@
 - update [@vue](https://github.com/vue)/cli-plugin-eslint
 
 ### Docs
+- homepage & publicPath
+- add changelog
 - add all func docs & most data docs
 
 ### Feat
@@ -12,6 +14,8 @@
 - add debounce func & pre style
 
 ### Fix
+- mock.js api
+- homepage & env.prod
 - **mockjs:** fix forum mockjs
 
 ### Style

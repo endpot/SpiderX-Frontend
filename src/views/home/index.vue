@@ -82,7 +82,7 @@
           <el-button v-permission="['admin']" style="float: right; padding: 3px 0" type="text">操作</el-button>
         </div>
         <div class="links-text link-type">
-          <span><a href="https://ajycc20.xyz" target="_blank">ajycc20's Blog</a></span>
+          <span><a href="https://ajycc20.top" target="_blank">ajycc20's Blog</a></span>
         </div>
       </el-card>
 
@@ -104,7 +104,7 @@ export default {
   data() {
     return {
       activeName: '', // 当前激活的collspan
-      announcementList: [] // 存放announce list
+      announceList: [] // 存放announce list
     }
   },
   computed: {
@@ -123,7 +123,7 @@ export default {
       getAnnouncementList().then(res => {
         // console.log(res.data.items)
         // 逆序保证最新数据为0号， 切片显示部分 考虑计算属性 为了方便activeName 直接在这里
-        this.announcementList = res.data.reverse().slice(0, 4)
+        this.announceList = res.data.reverse().slice(0, 4)
         // this.activeName = this.announcementList[0].announce_id
       }).catch(err => {
         console.log(err)
