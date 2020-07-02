@@ -1,4 +1,4 @@
-import Mock from 'mockjs'
+const Mock = require('mockjs')
 
 const subtitleList = []
 const count = 100
@@ -15,7 +15,7 @@ for (let i = 0; i < count; i++) {
   }))
 }
 
-export default [
+module.exports = [
   {
     url: '/subtitle/list',
     type: 'get',

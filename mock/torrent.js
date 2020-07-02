@@ -1,4 +1,4 @@
-import Mock from 'mockjs'
+const Mock = require('mockjs')
 
 const torrentList = []
 const count = 150
@@ -22,7 +22,7 @@ for (let i = 0; i < count; i++) {
   }))
 }
 
-export default [
+module.exports = [
   {
     url: '/torrent/list',
     type: 'get',

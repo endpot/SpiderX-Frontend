@@ -1,15 +1,22 @@
 import { login, logout, getInfo } from '@/api/auth'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 
-const state = {
-  token: getToken(),
-  name: '',
-  avatar: '',
-  roles: []
+const getDefaultState = () => {
+  return {
+    token: getToken(),
+    name: '',
+    avatar: '',
+    roles: []
+  }
 }
 
+const state = getDefaultState()
+
 const mutations = {
+  RESET_STATE: (state) => {
+    Object.assign(state, getDefaultState())
+  },
   SET_TOKEN: (state, token) => {
     state.token = token
   },
@@ -72,10 +79,9 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
         removeToken()
         resetRouter()
+        commit('RESET_STATE')
         resolve()
       }).catch(error => {
         reject(error)
@@ -86,37 +92,36 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
       removeToken()
-      resolve()
-    })
-  },
-
-  // dynamically modify permissions
-  changeRoles({ commit, dispatch }, role) {
-    return new Promise(async resolve => {
-      const token = role + '-token'
-
-      commit('SET_TOKEN', token)
-      setToken(token)
-
-      const { roles } = await dispatch('getInfo')
-
-      resetRouter()
-
-      // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
-
-      // dynamically add accessible routes
-      router.addRoutes(accessRoutes)
-
-      // reset visited views and cached views
-      dispatch('tagsView/delAllViews', null, { root: true })
-
+      commit('RESET_STATE')
       resolve()
     })
   }
+
+  // dynamically modify permissions
+  // changeRoles({ commit, dispatch }, role) {
+  //   return new Promise(async resolve => {
+  //     const token = role + '-token'
+
+  //     commit('SET_TOKEN', token)
+  //     setToken(token)
+
+  //     const { roles } = await dispatch('getInfo')
+
+  //     resetRouter()
+
+  //     // generate accessible routes map based on roles
+  //     const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+
+  //     // dynamically add accessible routes
+  //     router.addRoutes(accessRoutes)
+
+  //     // reset visited views and cached views
+  //     dispatch('tagsView/delAllViews', null, { root: true })
+
+  //     resolve()
+  //   })
+  // }
 }
 
 export default {

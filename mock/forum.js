@@ -1,4 +1,4 @@
-import Mock from 'mockjs'
+const Mock = require('mockjs')
 
 const forumList = []
 const count = 500
@@ -34,7 +34,7 @@ for (let i = 0; i < count; i++) {
   }))
 }
 
-export default [
+module.exports = [
   {
     url: '/forum/list',
     type: 'get',

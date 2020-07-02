@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Bump
+- update dependencies
 - update [@vue](https://github.com/vue)/cli-plugin-eslint
 
 ### Docs

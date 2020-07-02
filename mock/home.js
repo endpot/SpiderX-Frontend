@@ -1,4 +1,4 @@
-import Mock from 'mockjs'
+const Mock = require('mockjs')
 
 const homeList = []
 const count = 50
@@ -14,7 +14,7 @@ for (let i = 0; i < count; i++) {
   }))
 }
 
-export default [
+module.exports = [
   {
     url: '/home/announce/list',
     type: 'get',
