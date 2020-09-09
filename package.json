@@ -29,6 +29,7 @@
     "vuex": "3.1.0"
   },
   "devDependencies": {
+    "@ls-lint/ls-lint": "^1.9.2",
     "@vue/cli-plugin-babel": "^4.4.6",
     "@vue/cli-plugin-eslint": "^4.4.6",
     "@vue/cli-plugin-unit-jest": "^4.4.6",
@@ -43,7 +44,9 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "html-webpack-plugin": "3.2.0",
+    "lint-staged": "^10.3.0",
     "mockjs": "1.0.1-beta3",
+    "prettier": "^2.1.1",
     "runjs": "^4.4.2",
     "sass": "^1.26.9",
     "sass-loader": "^8.0.2",

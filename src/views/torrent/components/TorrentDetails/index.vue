@@ -35,7 +35,7 @@
                 <dd>
                   <div class="rating">
                     <el-rate v-model="doubanRating" :max="ratingMax" disabled text-color="#ff9900" />
-                    <div class="rating-text">{{ doubanInfo.douban_rating}}</div>
+                    <div class="rating-text">{{ doubanInfo.douban_rating }}</div>
                   </div>
                 </dd>
                 <dt>Year</dt>
@@ -244,25 +244,25 @@
   </div>
 </template>
 <script>
-import { fetchDouban, fetchOMDB } from "@/api/main";
-import { fetchDetails } from "@/api/torrent";
-import { calcFileSize, formatTime, timeStamp } from "@/utils";
+import { fetchDouban, fetchOMDB } from '@/api/main'
+import { fetchDetails } from '@/api/torrent'
+import { calcFileSize, formatTime, timeStamp } from '@/utils'
 export default {
   filters: {
     fileSize(size) {
-      return calcFileSize(size);
+      return calcFileSize(size)
     },
     formatLocalTime(time) {
-      return formatTime(timeStamp(time));
-    },
+      return formatTime(timeStamp(time))
+    }
   },
   data() {
     // 该页面并没有写完
     return {
       torrentDetail: [],
       doubanInfo: {},
-      imdbPoster: "",
-      doubanPoster: "",
+      imdbPoster: '',
+      doubanPoster: '',
       doubanId: 26931786,
       doubanRating: 0, // 豆瓣电影评分
       ratingMax: 10,
@@ -270,8 +270,8 @@ export default {
       width: 38,
       showHeader: false,
       front2Back: false,
-      tipCount: 0,
-    };
+      tipCount: 0
+    }
   },
   computed: {
     // imdbImg() {
@@ -283,89 +283,89 @@ export default {
     //     .replace(/s_ratio_poster/g, "l_ratio_poster");
     // },
     doubanMovieType() {
-      return this.doubanInfo.genre.join(" / ");
+      return this.doubanInfo.genre.join(' / ')
     },
     doubanMovieDirectors() {
-      let arr = Array.isArray(this.doubanInfo.director);
-      return arr;
+      const arr = Array.isArray(this.doubanInfo.director)
+      return arr
       // return Array.isArray(this.doubanInfo.director).map((val) =>
       //   val.name.join(" / ")
       // );
     },
     doubanMovieLanguage() {
-      return this.doubanInfo.language.join(" / ");
+      return this.doubanInfo.language.join(' / ')
     },
     doubanMovieCountry() {
-      return this.doubanInfo.region.join(" / ");
+      return this.doubanInfo.region.join(' / ')
     },
     doubanMoviePubDate() {
-      return this.doubanInfo.playdate.join(" / ");
+      return this.doubanInfo.playdate.join(' / ')
     },
     doubanMovieTags() {
-      return this.doubanInfo.tags.join(" | ");
+      return this.doubanInfo.tags.join(' | ')
     },
     doubanMovieStarring() {
-      let arr = this.doubanInfo.cast;
-      let ansArr = [];
-      arr.map((val) => ansArr.push(val.name));
-      return ansArr.slice(0, 10).join(" / ");
-    },
+      const arr = this.doubanInfo.cast
+      const ansArr = []
+      arr.map((val) => ansArr.push(val.name))
+      return ansArr.slice(0, 10).join(' / ')
+    }
   },
   created() {
-    this.getDouban();
+    this.getDouban()
     // this.getOMDB()
 
-    const id = this.$route.params && this.$route.params.id;
-    this.getDetails(id);
+    const id = this.$route.params && this.$route.params.id
+    this.getDetails(id)
   },
   methods: {
     getDetails(id) {
       fetchDetails(id)
         .then((res) => {
           // console.log(res.data)
-          this.torrentDetail.push(res.data);
-          this.setPageTitle();
+          this.torrentDetail.push(res.data)
+          this.setPageTitle()
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     getOMDB() {
       fetchOMDB(this.imdbId)
         .then((res) => {
-          this.imdbPoster = res.data.Poster;
+          this.imdbPoster = res.data.Poster
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     getDouban() {
       fetchDouban(this.doubanId)
         .then((res) => {
-          console.log(res.data);
-          this.doubanInfo = res.data;
-          this.doubanPoster = res.data.poster;
-          this.doubanRating = +res.data.douban_rating_average;
+          console.log(res.data)
+          this.doubanInfo = res.data
+          this.doubanPoster = res.data.poster
+          this.doubanRating = +res.data.douban_rating_average
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     setPageTitle() {
-      const title = "Torrent Details";
-      document.title = `${title} - ${this.torrentDetail[0].title}`;
+      const title = 'Torrent Details'
+      document.title = `${title} - ${this.torrentDetail[0].title}`
     },
     handleDelete() {
-      alert("Sure to delete");
+      alert('Sure to delete')
     },
     searchSubTitles() {
-      alert("This is subtitles search");
+      alert('This is subtitles search')
     },
     changeClick() {
-      this.front2Back = !this.front2Back;
-    },
-  },
-};
+      this.front2Back = !this.front2Back
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .app-container {

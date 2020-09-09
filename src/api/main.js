@@ -22,7 +22,7 @@ export function fetchDouban(id) {
   return request({
     // url: '/douban/' + id,
     url: `https://ptgen.rhilip.info/?url=https://movie.douban.com/subject/${id}`,
-    method: 'get',
+    method: 'get'
     // params: {
     //   apikey: douBanapikey
     // }
