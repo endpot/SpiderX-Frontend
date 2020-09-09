@@ -15,91 +15,72 @@
             </span>
           </div>
           <div class="info-container">
-            <el-image :src="doubanImg" fit="contain" />
+            <el-image :src="doubanPoster" fit="contain" />
             <div class="info">
-              <div class="douban-title">{{ doubanInfo.title }}
-                <a class="douban-icon" target="_blank" :href="'https://movie.douban.com/subject/' + doubanId">
-                  <svg-icon icon-class="douban" :title="doubanInfo.title" />
+              <div class="douban-title">
+                {{ doubanInfo.this_title[0] }}
+                <a
+                  class="douban-icon"
+                  target="_blank"
+                  :href="'https://movie.douban.com/subject/' + doubanId"
+                >
+                  <svg-icon icon-class="douban" :title="doubanInfo.this_title" />
                 </a>
               </div>
               <div class="sub-title">
-                <p>{{ doubanInfo.alt_title }}</p>
+                <p>{{ doubanInfo.chinese_title }}</p>
               </div>
               <dl>
                 <dt>Rating</dt>
                 <dd>
                   <div class="rating">
                     <el-rate v-model="doubanRating" :max="ratingMax" disabled text-color="#ff9900" />
-                    <div class="rating-text">
-                      {{ doubanRating }} / 10 ({{ doubanInfo.rating.numRaters }} votes)
-                    </div>
+                    <div class="rating-text">{{ doubanInfo.douban_rating}}</div>
                   </div>
                 </dd>
                 <dt>Year</dt>
                 <dd>
-                  <div class="movie-year">
-                    {{ doubanMovieYear }}
-                  </div>
+                  <div class="movie-year">{{ doubanInfo.year }}</div>
                 </dd>
                 <dt>Place</dt>
                 <dd>
-                  <div class="movie-country">
-                    {{ doubanMovieCountry }}
-                  </div>
+                  <div class="movie-country">{{ doubanMovieCountry }}</div>
                 </dd>
                 <dt>Genres</dt>
                 <dd>
-                  <div class="movie-type">
-                    {{ doubanMovieType }}
-                  </div>
+                  <div class="movie-type">{{ doubanMovieType }}</div>
                 </dd>
                 <dt>Director</dt>
                 <dd>
-                  <div class="movie-directors">
-                    {{ doubanMovieDirectors }}
-                  </div>
+                  <div class="movie-directors">{{ doubanMovieDirectors }}</div>
                 </dd>
                 <dt>Language</dt>
                 <dd>
-                  <div class="movie-language">
-                    {{ doubanMovieLanguage }}
-                  </div>
+                  <div class="movie-language">{{ doubanMovieLanguage }}</div>
                 </dd>
                 <dt>PubDate</dt>
                 <dd>
-                  <div class="movie-pubdate">
-                    {{ doubanMoviePubDate }}
-                  </div>
+                  <div class="movie-pubdate">{{ doubanMoviePubDate }}</div>
                 </dd>
                 <dt>Duration</dt>
                 <dd>
-                  <div class="movie-duration">
-                    {{ doubanMovieDuration }}
-                  </div>
+                  <div class="movie-duration">{{ doubanInfo.duration }}</div>
                 </dd>
-                <dt v-if="doubanInfo.attrs.episodes">Episodes</dt>
-                <dd v-if="doubanInfo.attrs.episodes">
-                  <div class="movie-episode">
-                    {{ doubanMovieEpisode }}
-                  </div>
+                <dt v-if="doubanInfo.episodes">Episodes</dt>
+                <dd v-if="doubanInfo.episodes">
+                  <div class="movie-episode">{{ doubanInfo.episodes }}</div>
                 </dd>
                 <dt>Starring</dt>
                 <dd>
-                  <div class="movie-cast">
-                    {{ doubanMovieStarring }}
-                  </div>
+                  <div class="movie-cast">{{ doubanMovieStarring }}</div>
                 </dd>
                 <dt>Tags</dt>
                 <dd>
-                  <div class="movie-tags">
-                    {{ doubanMovieTags }}
-                  </div>
+                  <div class="movie-tags">{{ doubanMovieTags }}</div>
                 </dd>
                 <dt>Plot</dt>
                 <dd>
-                  <div class="movie-plot">
-                    {{ doubanInfo.summary }}
-                  </div>
+                  <div class="movie-plot">{{ doubanInfo.summary }}</div>
                 </dd>
               </dl>
             </div>
@@ -115,11 +96,15 @@
               <tbody>
                 <tr>
                   <!-- first line is title column -->
-                  <td><strong>Title</strong></td>
+                  <td>
+                    <strong>Title</strong>
+                  </td>
                   <td>{{ torrentDetail[0].title }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Staff Tools</strong></td>
+                  <td>
+                    <strong>Staff Tools</strong>
+                  </td>
                   <td>
                     <el-button type="primary" size="mini">
                       <svg-icon icon-class="star-pick" title="free" />Free
@@ -134,11 +119,14 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Uploader</strong></td>
+                  <td>
+                    <strong>Uploader</strong>
+                  </td>
                   <td>
                     <router-link :to="'#'">
                       <el-button type="primary" size="mini">
-                        <svg-icon icon-class="user" title="user" />{{ torrentDetail[0].created_by }}
+                        <svg-icon icon-class="user" title="user" />
+                        {{ torrentDetail[0].created_by }}
                       </el-button>
                       <el-button type="primary" size="mini">
                         <svg-icon icon-class="heart" title="heart" style="color: red;" />Thanks
@@ -147,39 +135,48 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Uploaded</strong></td>
+                  <td>
+                    <strong>Uploaded</strong>
+                  </td>
                   <td>{{ torrentDetail[0].created_at }}({{ torrentDetail[0].created_at | formatLocalTime(torrentDetail[0].created_at) }})</td>
                 </tr>
                 <tr>
-                  <td><strong>Size</strong></td>
+                  <td>
+                    <strong>Size</strong>
+                  </td>
                   <td>{{ torrentDetail[0].size | fileSize(torrentDetail[0].size) }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Category</strong></td>
+                  <td>
+                    <strong>Category</strong>
+                  </td>
                   <td>Movie</td>
                 </tr>
                 <tr>
-                  <td><strong>Peers</strong></td>
+                  <td>
+                    <strong>Peers</strong>
+                  </td>
                   <td>
                     <el-button type="primary" size="mini" round>
-                      <svg-icon icon-class="card-up" />{{ torrentDetail[0].seeder_count }}
+                      <svg-icon icon-class="card-up" />
+                      {{ torrentDetail[0].seeder_count }}
                     </el-button>
                     <el-button type="primary" size="mini" round>
-                      <svg-icon icon-class="card-up" class="icon-download" />{{ torrentDetail[0].leecher_count }}
+                      <svg-icon icon-class="card-up" class="icon-download" />
+                      {{ torrentDetail[0].leecher_count }}
                     </el-button>
                     <el-button type="primary" size="mini" round>
-                      <svg-icon icon-class="card-snatch" />{{ torrentDetail[0].snatcher_count }}
+                      <svg-icon icon-class="card-snatch" />
+                      {{ torrentDetail[0].snatcher_count }}
                     </el-button>
-                    <el-button type="primary" size="mini" round>
-                      View Peers
-                    </el-button>
-                    <el-button type="primary" size="mini" round>
-                      View Snatchers
-                    </el-button>
+                    <el-button type="primary" size="mini" round>View Peers</el-button>
+                    <el-button type="primary" size="mini" round>View Snatchers</el-button>
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Tip Amount</strong></td>
+                  <td>
+                    <strong>Tip Amount</strong>
+                  </td>
                   <td>
                     <el-popover placement="top-start" trigger="click">
                       <el-row style="display:flex;">
@@ -189,7 +186,11 @@
                         <el-button type="success">500</el-button>
                         <el-button type="success">1000</el-button>
                         <el-button type="success">2000</el-button>
-                        <el-input v-model="tipCount" style="margin-left:5px;" placeholder="Enter a num for tip amount">
+                        <el-input
+                          v-model="tipCount"
+                          style="margin-left:5px;"
+                          placeholder="Enter a num for tip amount"
+                        >
                           <template slot="append">
                             <el-button type="success">Leave tip</el-button>
                           </template>
@@ -213,8 +214,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>Comments</span>
-          </div>
-          list the comments just like forum details list
+          </div>list the comments just like forum details list
         </el-card>
       </el-col>
       <el-col :span="6">
@@ -226,9 +226,7 @@
                 <svg-icon icon-class="change" @click="changeClick" />
               </span>
             </div>
-            <div class="user-info">
-              aaaaa
-            </div>
+            <div class="user-info">aaaaa</div>
           </el-card>
 
           <el-card :class="{back:front2Back}" class="box-card-back">
@@ -238,9 +236,7 @@
                 <svg-icon icon-class="change" @click="changeClick" />
               </span>
             </div>
-            <div class="user-info">
-              user info
-            </div>
+            <div class="user-info">user info</div>
           </el-card>
         </div>
       </el-col>
@@ -248,24 +244,25 @@
   </div>
 </template>
 <script>
-import { fetchDouban, fetchOMDB } from '@/api/main'
-import { fetchDetails } from '@/api/torrent'
-import { calcFileSize, formatTime, timeStamp } from '@/utils'
+import { fetchDouban, fetchOMDB } from "@/api/main";
+import { fetchDetails } from "@/api/torrent";
+import { calcFileSize, formatTime, timeStamp } from "@/utils";
 export default {
   filters: {
     fileSize(size) {
-      return calcFileSize(size)
+      return calcFileSize(size);
     },
     formatLocalTime(time) {
-      return formatTime(timeStamp(time))
-    }
+      return formatTime(timeStamp(time));
+    },
   },
-  data() { // 该页面并没有写完
+  data() {
+    // 该页面并没有写完
     return {
       torrentDetail: [],
       doubanInfo: {},
-      imdbPoster: '',
-      doubanPoster: '',
+      imdbPoster: "",
+      doubanPoster: "",
       doubanId: 26931786,
       doubanRating: 0, // 豆瓣电影评分
       ratingMax: 10,
@@ -273,104 +270,106 @@ export default {
       width: 38,
       showHeader: false,
       front2Back: false,
-      tipCount: 0
-    }
+      tipCount: 0,
+    };
   },
   computed: {
-    imdbImg() {
-      return this.imdbPoster.replace(/SX300/g, 'SX1000')
-    },
-    doubanImg() {
-      return this.doubanPoster.replace(/img3/g, 'img1').replace(/s_ratio_poster/g, 'l_ratio_poster')
-    },
+    // imdbImg() {
+    //   return this.imdbPoster.replace(/SX300/g, "SX1000");
+    // },
+    // doubanImg() {
+    //   return this.doubanPoster
+    //     .replace(/img3/g, "img1")
+    //     .replace(/s_ratio_poster/g, "l_ratio_poster");
+    // },
     doubanMovieType() {
-      return this.doubanInfo.attrs.movie_type.join(' / ')
+      return this.doubanInfo.genre.join(" / ");
     },
     doubanMovieDirectors() {
-      return this.doubanInfo.attrs.director.join(' / ')
+      let arr = Array.isArray(this.doubanInfo.director);
+      return arr;
+      // return Array.isArray(this.doubanInfo.director).map((val) =>
+      //   val.name.join(" / ")
+      // );
     },
     doubanMovieLanguage() {
-      return this.doubanInfo.attrs.language.join(' / ')
+      return this.doubanInfo.language.join(" / ");
     },
     doubanMovieCountry() {
-      return this.doubanInfo.attrs.country.join(' / ')
-    },
-    doubanMovieYear() {
-      return this.doubanInfo.attrs.year.join(' / ')
+      return this.doubanInfo.region.join(" / ");
     },
     doubanMoviePubDate() {
-      return this.doubanInfo.attrs.pubdate.join(' / ')
+      return this.doubanInfo.playdate.join(" / ");
     },
     doubanMovieTags() {
-      const movieTags = []
-      for (let i = 0; i < this.doubanInfo.tags.length; i++) {
-        movieTags.push(this.doubanInfo.tags[i].name)
-      }
-      return movieTags.join(' | ')
+      return this.doubanInfo.tags.join(" | ");
     },
     doubanMovieStarring() {
-      return this.doubanInfo.attrs.cast.slice(0, 10).join(' / ')
+      let arr = this.doubanInfo.cast;
+      let ansArr = [];
+      arr.map((val) => ansArr.push(val.name));
+      return ansArr.slice(0, 10).join(" / ");
     },
-    doubanMovieDuration() {
-      return this.doubanInfo.attrs.movie_duration.join(' / ')
-    },
-    doubanMovieEpisode() {
-      return this.doubanInfo.attrs.episodes.join(' / ')
-    }
   },
   created() {
-    this.getDouban()
-    this.getOMDB()
+    this.getDouban();
+    // this.getOMDB()
 
-    const id = this.$route.params && this.$route.params.id
-    this.getDetails(id)
+    const id = this.$route.params && this.$route.params.id;
+    this.getDetails(id);
   },
   methods: {
     getDetails(id) {
-      fetchDetails(id).then(res => {
-        // console.log(res.data)
-        this.torrentDetail.push(res.data)
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
-      })
+      fetchDetails(id)
+        .then((res) => {
+          // console.log(res.data)
+          this.torrentDetail.push(res.data);
+          this.setPageTitle();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getOMDB() {
-      fetchOMDB(this.imdbId).then(res => {
-        this.imdbPoster = res.data.Poster
-      }).catch(err => {
-        console.log(err)
-      })
+      fetchOMDB(this.imdbId)
+        .then((res) => {
+          this.imdbPoster = res.data.Poster;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getDouban() {
-      fetchDouban(this.doubanId).then(res => {
-        // console.log(res.data)
-        this.doubanInfo = res.data
-        this.doubanPoster = res.data.image
-        this.doubanRating = +res.data.rating.average
-      }).catch(err => {
-        console.log(err)
-      })
+      fetchDouban(this.doubanId)
+        .then((res) => {
+          console.log(res.data);
+          this.doubanInfo = res.data;
+          this.doubanPoster = res.data.poster;
+          this.doubanRating = +res.data.douban_rating_average;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     setPageTitle() {
-      const title = 'Torrent Details'
-      document.title = `${title} - ${this.torrentDetail[0].title}`
+      const title = "Torrent Details";
+      document.title = `${title} - ${this.torrentDetail[0].title}`;
     },
     handleDelete() {
-      alert('Sure to delete')
+      alert("Sure to delete");
     },
     searchSubTitles() {
-      alert('This is subtitles search')
+      alert("This is subtitles search");
     },
     changeClick() {
-      this.front2Back = !this.front2Back
-    }
-  }
-}
+      this.front2Back = !this.front2Back;
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .app-container {
-  >h1 {
+  > h1 {
     text-align: center;
     color: #ddd;
     text-shadow: 5px 0 15px #fff;
@@ -473,10 +472,10 @@ export default {
 }
 /* 可翻转的用户信息栏 */
 .card-item {
-    width: 25%;
-    height: 300px;
-    position: absolute;
-    margin: 15px 0;
+  width: 25%;
+  height: 300px;
+  position: absolute;
+  margin: 15px 0;
 
   .box-card-front,
   .box-card-back {
@@ -485,7 +484,7 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
-    transition: .5s ease-in-out;
+    transition: 0.5s ease-in-out;
   }
 
   .box-card-front {

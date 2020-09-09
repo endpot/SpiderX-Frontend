@@ -51,13 +51,13 @@ module.exports = {
           '^/omdb': '/'
         }
       },
-      '/douban': {
-        target: 'http://api.douban.com/v2/movie',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/douban': '/'
-        }
-      }
+      // '/douban': {
+      //   target: 'http://api.douban.com/v2/movie',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/douban': '/'
+      //   }
+      // },
     },
     before: require('./mock/mock-server.js')
   },
