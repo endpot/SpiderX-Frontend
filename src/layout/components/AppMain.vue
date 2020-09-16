@@ -25,12 +25,12 @@ export default {
   position: relative;
   overflow: hidden;
   /* added background-img */
-  background-image: url(https://api.neweb.top/bing.php);
+  background-image: url(https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
 }
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 </style>
